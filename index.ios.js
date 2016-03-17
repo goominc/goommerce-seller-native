@@ -11,21 +11,35 @@ import React, {
   View
 } from 'react-native';
 
-class GoommerceSeller extends Component {
+import { Provider, connect } from 'react-redux'
+import { config as configApiClient } from 'goommerce-api-client';
+import configureStore, { authActions } from 'goommerce-redux';
+
+configApiClient({ apiRoot: 'http://localhost:8080'})
+const store = configureStore();
+
+class Signin extends Component {
+  componentDidMount() {
+    this.props.login('ss@gmail.com', 'ss').then((res) => console.log(res));
+  }
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
         <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
+         {this.props.auth.email}
         </Text>
       </View>
+    );
+  }
+}
+const SigninWrap = connect((state) => ({ auth: state.auth }), authActions)(Signin);
+
+class GoommerceSeller extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <SigninWrap />
+      </Provider>
     );
   }
 }
