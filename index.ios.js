@@ -13,7 +13,7 @@ import { Provider } from 'react-redux'
 import { config as configApiClient } from 'goommerce-api-client';
 import configureStore from 'goommerce-redux';
 
-import Signin from './containers/Signin';
+import Root from './containers/Root';
 
 configApiClient({ apiRoot: 'http://localhost:8080'})
 const store = configureStore();
@@ -22,7 +22,7 @@ class GoommerceSeller extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Signin />
+        <Root />
       </Provider>
     );
   }
