@@ -688,7 +688,10 @@
 				);
 				INFOPLIST_FILE = GoommerceSeller/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"$(inherited)",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkshops.seller;
 				PRODUCT_NAME = GoommerceSeller;
 			};
@@ -707,7 +710,10 @@
 				);
 				INFOPLIST_FILE = GoommerceSeller/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"$(inherited)",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkshops.seller;
 				PRODUCT_NAME = GoommerceSeller;
 			};
