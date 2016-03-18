@@ -10,14 +10,15 @@
 #import "AppDelegate.h"
 
 #import "RCTRootView.h"
+#import "RCTOneSignal.h"
 
 @implementation AppDelegate
+@synthesize oneSignal = _oneSignal;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  self.oneSignal = [[OneSignal alloc] initWithLaunchOptions:launchOptions
-                                      appId:@"0ed460dc-5077-4503-9d2d-27e048334395"
-                                      handleNotification:nil];
+  self.oneSignal = [[RCTOneSignal alloc] initWithLaunchOptions:launchOptions
+                                         appId:@"0ed460dc-5077-4503-9d2d-27e048334395"];
   
   NSURL *jsCodeLocation;
 
@@ -56,6 +57,11 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   return YES;
+}
+
+// Required for the notification event.
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification {
+  [RCTOneSignal didReceiveRemoteNotification:notification];
 }
 
 @end
