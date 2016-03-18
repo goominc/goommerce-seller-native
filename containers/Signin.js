@@ -1,10 +1,11 @@
 'use strict';
 
 import React, {
+  AsyncStorage,
   StyleSheet,
   Text,
   TextInput,
-  View
+  View,
 } from 'react-native';
 import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
@@ -15,7 +16,9 @@ const Signin = React.createClass({
   },
   signin() {
     const { email, password } = this.state;
-    this.props.login(email, password).then((res) => console.log(res));
+    this.props.login(email, password).then(
+      (auth) => AsyncStorage.setItem('bearer', auth.bearer)
+    );
   },
   render() {
     return (
