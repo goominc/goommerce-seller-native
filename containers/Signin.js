@@ -9,6 +9,7 @@ import React, {
 } from 'react-native';
 import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
+import OneSignal from 'react-native-onesignal';
 
 const Signin = React.createClass({
   getInitialState() {
@@ -16,9 +17,11 @@ const Signin = React.createClass({
   },
   signin() {
     const { email, password } = this.state;
-    this.props.login(email, password).then(
-      (auth) => AsyncStorage.setItem('bearer', auth.bearer)
-    );
+    OneSignal.idsAvailable(({ pushToken, playerId }) => {
+      this.props.login(email, password, pushToken && playerId).then(
+        (auth) => AsyncStorage.setItem('bearer', auth.bearer)
+      );
+    });
   },
   render() {
     return (
