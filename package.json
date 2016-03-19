@@ -10,8 +10,9 @@
     "goommerce-redux": "goominc/goommerce-redux",
     "lodash": "^4.6.1",
     "react": "^0.14.7",
-    "react-native": "^0.21.0",
+    "react-native": "^0.22.0-rc",
     "react-native-onesignal": "^1.1.1",
+    "react-native-router-flux": "^3.0.15",
     "react-redux": "^4.4.1",
     "redux": "^3.3.1"
   }
