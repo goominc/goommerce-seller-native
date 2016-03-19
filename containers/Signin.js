@@ -17,8 +17,8 @@ const Signin = React.createClass({
   },
   signin() {
     const { email, password } = this.state;
-    OneSignal.idsAvailable(({ pushToken, playerId }) => {
-      this.props.login(email, password, pushToken && playerId).then(
+    OneSignal.idsAvailable(({ pushToken, playerId, userId }) => {
+      this.props.login(email, password, pushToken && (playerId || userId)).then(
         (auth) => AsyncStorage.setItem('bearer', auth.bearer)
       );
     });
