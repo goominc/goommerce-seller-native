@@ -5,73 +5,50 @@
 'use strict';
 import React, {
   AppRegistry,
+  AsyncStorage,
   Component,
   StyleSheet,
   Text,
-  View
+  View,
 } from 'react-native';
 
-import OneSignal from 'react-native-onesignal'; // Import package from node modules
-// var _navigator; // If applicable, declare a variable for accessing your navigator object to handle payload.
+import { Provider } from 'react-redux'
+import { config as configApiClient } from 'goommerce-api-client';
+import configureStore from 'goommerce-redux';
 
-console.log('test');
-OneSignal.idsAvailable((idsAvailable) => {
-    console.log(idsAvailable.pushToken);
-    console.log(idsAvailable.playerId);
-});
+import Root from './containers/Root';
 
-OneSignal.configure({
-  onNotificationOpened: function(message, data, isActive) {
-      console.log('MESSAGE: ', message);
-      console.log('DATA: ', data);
-      console.log('ISACTIVE: ', isActive);
-      // Do whatever you want with the objects here
-      // _navigator.to('main.post', data.title, { // If applicable
-      //  article: {
-      //    title: data.title,
-      //    link: data.url,
-      //    action: data.actionSelected
-      //  }
-      // });
-  }
-});
-console.log('yo');
+configApiClient({ apiRoot: 'http://10.0.3.2:8080'})
+const store = configureStore();
 
-class GoommerceSeller extends Component {
+const GoommerceSeller = React.createClass({
+  getInitialState() {
+    return { loading: true };
+  },
+  componentDidMount() {
+    AsyncStorage.getItem('bearer').then(
+      (bearer) => {
+        store.dispatch({ type: 'LOGIN', payload: { bearer } });
+        this.setState({ loading: false });
+      }
+    );
+  },
   render() {
+    if (this.state.loading) {
+      return (
+        <View>
+          <Text>
+            Loading...
+          </Text>
+        </View>
+      );
+    }
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
+      <Provider store={store}>
+        <Root />
+      </Provider>
     );
   }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
 });
 
 AppRegistry.registerComponent('GoommerceSeller', () => GoommerceSeller);
