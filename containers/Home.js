@@ -1,6 +1,7 @@
 'use strict';
 
 import React, {
+  ListView,
   StyleSheet,
   Text,
   TextInput,
@@ -10,13 +11,14 @@ import { connect } from 'react-redux'
 
 const _ = require('lodash');
 
-const SelectBrand = React.createClass({
+const Home = React.createClass({
   render() {
-    const { auth } = this.props;
-    const brands = _.filter(auth.roles,
+    const { auth: { roles, email }, navigator } = this.props;
+    const brands = _.filter(roles,
       (r) => r.type === 'owner' || r.type === 'staff').map((r) => r.brand);
     return (
       <View style={styles.container}>
+        <Text>{email}</Text>
         {brands.map((b, idx) => (<Text key={idx}>{b.id}</Text>))}
       </View>
     );
@@ -34,4 +36,4 @@ const styles = StyleSheet.create({
 
 export default connect(
   (state) => ({ auth: state.auth })
-)(SelectBrand);
+)(Home);

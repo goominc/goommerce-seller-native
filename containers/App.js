@@ -7,9 +7,12 @@ import React, {
   TouchableOpacity,
   View
 } from 'react-native';
+import { connect } from 'react-redux'
+import { authActions } from 'goommerce-redux';
 
+import Home from './Home';
 
-var NavigationBarRouteMapper = {
+const NavigationBarRouteMapper = {
   LeftButton(route, navigator, index, navState) {
     if (index === 0) {
       return null;
@@ -38,18 +41,26 @@ var NavigationBarRouteMapper = {
   },
 };
 
-export default React.createClass({
+const App = React.createClass({
+  componentDidMount() {
+    const { auth, whoami } = this.props;
+    if (!auth.email) {
+      whoami();
+    }
+  },
+  pushOrderStats(brandId) {
+  },
   renderScene(route, navigator) {
     return (
       <View style={styles.container}>
-        <Text onPress={() => { navigator.push({ title: 'test' })}}>{route.title}</Text>
+        <route.component />
       </View>
     );
   },
   render() {
     return (
       <Navigator
-        initialRoute={{title: 'select brand'}}
+        initialRoute={{title: 'select brand', component: Home}}
         navigationBar={
           <Navigator.NavigationBar
             routeMapper={NavigationBarRouteMapper}
@@ -91,3 +102,7 @@ const styles = StyleSheet.create({
     color: '#5890FF',
   },
 });
+
+export default connect(
+  (state) => ({ auth: state.auth }) , authActions
+)(App);
