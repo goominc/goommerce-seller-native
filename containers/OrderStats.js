@@ -9,6 +9,8 @@ import React, {
 import { connect } from 'react-redux'
 import { orderActions } from 'goommerce-redux';
 
+import routes from '../routes';
+
 const OrderStats = React.createClass({
   componentDidMount() {
     this.props.loadBrandOrderStats(this.props.brandId);
@@ -17,11 +19,12 @@ const OrderStats = React.createClass({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
   renderStat(stat) {
-    const { date, count } = stat;
+    const { brandId } = this.props;
+    const date = stat.data && stat.date.substr(0, 10);
     return  (
-      <View>
-        <Text style={styles.title}>Date: {date && date.substr(0, 10)}</Text>
-        <Text style={styles.year}>Count: {count}</Text>
+      <View onPress={() => push(routes.list({ brandId, date }))}>
+        <Text style={styles.date}>Date: {date}</Text>
+        <Text style={styles.count}>Count: {stat.count}</Text>
       </View>
     );
   },
@@ -57,12 +60,12 @@ const OrderStats = React.createClass({
 });
 
 const styles = StyleSheet.create({
-  title: {
+  date: {
     fontSize: 20,
     marginBottom: 8,
     textAlign: 'center',
   },
-  year: {
+  count: {
     textAlign: 'center',
   },
   listView: {

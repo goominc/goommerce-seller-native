@@ -34,7 +34,7 @@ const NavigationBarRouteMapper = {
   Title(route, navigator, index, navState) {
     return (
       <Text style={[styles.navBarText, styles.navBarTitleText]}>
-        {route.title} [{index}]
+        {route.title}
       </Text>
     );
   },
