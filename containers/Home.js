@@ -47,9 +47,14 @@ const Home = React.createClass({
       <View style={styles.container}>
         <Text>{email}</Text>
         {brands.map((b, idx) => (
-          <Text key={idx} onPress={() => push(routes.stats({ brandId: b.id }))}>
-            {b.id}
-          </Text>
+          <View key={idx}>
+            <Text onPress={() => push(routes.stats({ brandId: b.id }))}>
+              {b.id}
+            </Text>
+            <Text onPress={() => push(routes.list({ brandId: b.id }))}>
+              New Orders
+            </Text>
+          </View>
         ))}
       </View>
     );
