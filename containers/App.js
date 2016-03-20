@@ -8,9 +8,8 @@ import React, {
   View
 } from 'react-native';
 import { connect } from 'react-redux'
-import { authActions } from 'goommerce-redux';
 
-import Home from './Home';
+import routes from '../routes';
 
 const NavigationBarRouteMapper = {
   LeftButton(route, navigator, index, navState) {
@@ -41,26 +40,18 @@ const NavigationBarRouteMapper = {
   },
 };
 
-const App = React.createClass({
-  componentDidMount() {
-    const { auth, whoami } = this.props;
-    if (!auth.email) {
-      whoami();
-    }
-  },
-  pushOrderStats(brandId) {
-  },
+export default React.createClass({
   renderScene(route, navigator) {
     return (
       <View style={styles.container}>
-        <route.component />
+        <route.component {...route.props} push={navigator.push} />
       </View>
     );
   },
   render() {
     return (
       <Navigator
-        initialRoute={{title: 'select brand', component: Home}}
+        initialRoute={routes.home()}
         navigationBar={
           <Navigator.NavigationBar
             routeMapper={NavigationBarRouteMapper}
@@ -75,9 +66,10 @@ const App = React.createClass({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-    flex: 1,
+    flexDirection: 'row',
     justifyContent: 'center',
   },
   navBar: {
@@ -102,7 +94,3 @@ const styles = StyleSheet.create({
     color: '#5890FF',
   },
 });
-
-export default connect(
-  (state) => ({ auth: state.auth }) , authActions
-)(App);
