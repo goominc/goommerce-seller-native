@@ -6,6 +6,7 @@ import React, {
   TextInput,
   View
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default React.createClass({
   getInitialState() {
@@ -36,9 +37,9 @@ export default React.createClass({
           style={{height: 40, borderColor: 'gray', borderWidth: 1}}
           value={this.state.password}
         />
-        <Text style={styles.signin} onPress={this.signin}>
-          Sign In
-        </Text>
+        <Icon.Button name="sign-in" backgroundColor="#3b5998" onPress={this.signin}>
+          <Text style={styles.signin}>Sign In</Text>
+        </Icon.Button>
       </View>
     );
   },
@@ -52,9 +53,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   signin: {
-    borderColor: '#00ff00',
-    borderWidth: 2,
-    color: '#333333',
-    textAlign: 'center',
+    fontSize: 15,
   },
 });
