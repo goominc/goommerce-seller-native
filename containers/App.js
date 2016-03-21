@@ -43,7 +43,7 @@ const NavigationBarRouteMapper = {
 export default React.createClass({
   renderScene(route, navigator) {
     return (
-      <View style={styles.container}>
+      <View style={styles.scene}>
         <route.component {...route.props} push={navigator.push} />
       </View>
     );
@@ -65,12 +65,10 @@ export default React.createClass({
 });
 
 const styles = StyleSheet.create({
-  container: {
+  scene: {
     flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-    flexDirection: 'row',
-    justifyContent: 'center',
+    paddingTop: 20,
+    backgroundColor: '#EAEAEA',
   },
   navBar: {
     backgroundColor: 'white',
