@@ -10,6 +10,7 @@ import React, {
 import { connect } from 'react-redux'
 
 import routes from '../routes';
+import NavBarBack from '../components/NavBarBack'
 
 const NavigationBarRouteMapper = {
   LeftButton(route, navigator, index, navState) {
@@ -17,16 +18,8 @@ const NavigationBarRouteMapper = {
       return null;
     }
 
-    var previousRoute = navState.routeStack[index - 1];
-    return (
-      <TouchableOpacity
-        onPress={() => navigator.pop()}
-        style={styles.navBarLeftButton}>
-        <Text style={[styles.navBarText, styles.navBarButtonText]}>
-          {previousRoute.title}
-        </Text>
-      </TouchableOpacity>
-    );
+    const { title }= navState.routeStack[index - 1];
+    return (<NavBarBack title={title} pop={navigator.pop}/>);
   },
   RightButton(route, navigator, index, navState) {
     return undefined;
