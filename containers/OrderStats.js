@@ -22,7 +22,7 @@ const OrderStats = React.createClass({
     const { brandId } = this.props;
     const date = stat.data && stat.date.substr(0, 10);
     return  (
-      <View onPress={() => push(routes.list({ brandId, date }))}>
+      <View onPress={() => push(routes.list({ brandId, date }))} style={styles.container}>
         <Text style={styles.date}>Date: {date}</Text>
         <Text style={styles.count}>Count: {stat.count}</Text>
       </View>
@@ -32,7 +32,7 @@ const OrderStats = React.createClass({
     const { stats } = this.props;
     if (!stats) {
       return (
-        <View>
+        <View style={styles.container}>
           <Text>
             Loading...
           </Text>
@@ -41,7 +41,7 @@ const OrderStats = React.createClass({
     }
     if (!stats.length) {
       return (
-        <View>
+        <View style={styles.container}>
           <Text>
             No orders...
           </Text>
@@ -60,6 +60,12 @@ const OrderStats = React.createClass({
 });
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   date: {
     fontSize: 20,
     marginBottom: 8,
@@ -69,7 +75,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   listView: {
-    paddingTop: 20,
     backgroundColor: '#F5FCFF',
   },
 });

@@ -32,7 +32,7 @@ const OrderList = React.createClass({
     const { orders } = this.props;
     if (!orders) {
       return (
-        <View>
+        <View style={styles.container}>
           <Text>
             Loading...
           </Text>
@@ -41,7 +41,7 @@ const OrderList = React.createClass({
     }
     if (!orders.length) {
       return (
-        <View>
+        <View style={styles.container}>
           <Text>
             No orders...
           </Text>
@@ -60,8 +60,13 @@ const OrderList = React.createClass({
 });
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   listView: {
-    paddingTop: 20,
     backgroundColor: '#F5FCFF',
   },
 });
