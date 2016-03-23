@@ -21,7 +21,9 @@ export default React.createClass({
         <Text>color: {productVariant.data.color}</Text>
         <Text>size: {productVariant.data.size}</Text>
         <Text>Unit Price(KRW): {order.KRW}</Text>
+        <Icon.Button name="minus" />
         <Text>Count: {order.orderedCount}</Text>
+        <Icon.Button name="plus" />
         <Text>Total(KRW): {order.totalKRW}</Text>
         <Text>Total(USD): {order.totalUSD}</Text>
         <Image
