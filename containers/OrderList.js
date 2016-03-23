@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
 
 import EmptyView from '../components/EmptyView';
+import OrderItem from '../components/OrderItem';
 
 const OrderList = React.createClass({
   componentDidMount() {
@@ -19,15 +20,7 @@ const OrderList = React.createClass({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
   renderOrder(order) {
-    return  (
-      <View>
-        <Text>id: {order.id}</Text>
-        <Text>Unit Price(KRW): {order.KRW}</Text>
-        <Text>Count: {order.orderedCount}</Text>
-        <Text>Total(KRW): {order.totalKRW}</Text>
-        <Text>Total(USD): {order.totalUSD}</Text>
-      </View>
-    );
+    return <OrderItem order={order} />;
   },
   render() {
     const { orders } = this.props;
