@@ -11,6 +11,7 @@ import React, {
 import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
 import OneSignal from 'react-native-onesignal';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import BrandItem from '../components/BrandItem';
 import Signin from '../components/Signin';
@@ -36,6 +37,13 @@ const Home = React.createClass({
       );
     });
   },
+  signout() {
+    OneSignal.idsAvailable(({ pushToken, playerId, userId }) => {
+      this.props.logout(pushToken && (playerId || userId)).then(
+        () => AsyncStorage.removeItem('bearer')
+      );
+    });
+  },
   render() {
     const { auth: { bearer, roles, email }, push } = this.props;
     if (!bearer) {
@@ -47,6 +55,9 @@ const Home = React.createClass({
     return (
       <View style={styles.container}>
         <Text>{email}</Text>
+        <Icon.Button name="sign-out" onPress={this.signout}>
+          <Text style={styles.signout}>Sign Out</Text>
+        </Icon.Button>
         {brands.map((b, idx) => (
           <BrandItem key={idx} brand={b}
             onOrderStats={() => push(routes.stats({ brandId: b.id }))}
@@ -64,6 +75,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
     flex: 1,
     justifyContent: 'center',
+  },
+  signout: {
+    fontSize: 15,
   },
 });
 
