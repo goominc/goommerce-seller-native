@@ -6,8 +6,9 @@ import React, {
 } from 'react-native';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-
 import { orderActions } from 'goommerce-redux';
+
+import EmptyView from '../components/EmptyView';
 
 const OrderList = React.createClass({
   componentDidMount() {
@@ -31,22 +32,10 @@ const OrderList = React.createClass({
   render() {
     const { orders } = this.props;
     if (!orders) {
-      return (
-        <View style={styles.container}>
-          <Text>
-            Loading...
-          </Text>
-        </View>
-      );
+      return <EmptyView text='Loading...' />;
     }
     if (!orders.length) {
-      return (
-        <View style={styles.container}>
-          <Text>
-            No orders...
-          </Text>
-        </View>
-      );
+      return <EmptyView text='No orders...' />;
     }
     const dataSource = this.dataSource.cloneWithRows(orders);
     return (
@@ -60,12 +49,6 @@ const OrderList = React.createClass({
 });
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   listView: {
     backgroundColor: '#F5FCFF',
   },

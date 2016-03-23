@@ -9,6 +9,7 @@ import React, {
 import { connect } from 'react-redux'
 import { orderActions } from 'goommerce-redux';
 
+import EmptyView from '../components/EmptyView';
 import routes from '../routes';
 
 const OrderStats = React.createClass({
@@ -22,7 +23,7 @@ const OrderStats = React.createClass({
     const { brandId } = this.props;
     const date = stat.data && stat.date.substr(0, 10);
     return  (
-      <View onPress={() => push(routes.list({ brandId, date }))} style={styles.container}>
+      <View onPress={() => push(routes.list({ brandId, date }))}>
         <Text style={styles.date}>Date: {date}</Text>
         <Text style={styles.count}>Count: {stat.count}</Text>
       </View>
@@ -31,22 +32,10 @@ const OrderStats = React.createClass({
   render() {
     const { stats } = this.props;
     if (!stats) {
-      return (
-        <View style={styles.container}>
-          <Text>
-            Loading...
-          </Text>
-        </View>
-      );
+      return <EmptyView text='Loading...' />;
     }
     if (!stats.length) {
-      return (
-        <View style={styles.container}>
-          <Text>
-            No orders...
-          </Text>
-        </View>
-      );
+      return <EmptyView text='No orders...' />;
     }
     const dataSource = this.dataSource.cloneWithRows(stats);
     return (
@@ -60,12 +49,6 @@ const OrderStats = React.createClass({
 });
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   date: {
     fontSize: 20,
     marginBottom: 8,
