@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   signout: {
-    fontSize: 15,
+    fontSize: 20,
   },
 });
 
