@@ -12,6 +12,7 @@ import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
 import OneSignal from 'react-native-onesignal';
 
+import BrandItem from '../components/BrandItem';
 import Signin from '../components/Signin';
 
 import routes from '../routes';
@@ -47,15 +48,11 @@ const Home = React.createClass({
       <View style={styles.container}>
         <Text>{email}</Text>
         {brands.map((b, idx) => (
-          <View key={idx}>
-            <Text onPress={() => push(routes.stats({ brandId: b.id }))}>
-              Order Stats
-            </Text>
-            <Text onPress={() => push(routes.list({ brandId: b.id }))}>
-              New Orders
-            </Text>
-          </View>
-        ))}
+          <BrandItem key={idx} brand={b}
+            onOrderStats={() => push(routes.stats({ brandId: b.id }))}
+            onNewOrders={() => push(routes.list({ brandId: b.id }))}
+          />
+      ))}
       </View>
     );
   }
