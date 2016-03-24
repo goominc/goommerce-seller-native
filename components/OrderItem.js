@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   confirmContainer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   thumbnail: {
     width: 90,
