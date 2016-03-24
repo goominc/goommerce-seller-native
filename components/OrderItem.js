@@ -29,7 +29,7 @@ export default React.createClass({
       <View style={styles.container}>
         <CloudinaryImageNative
           publicId={image.publicId}
-          options={{ width: 100, height: 100 }}
+          options={{ width: 200, height: 200 }}
           style={styles.thumbnail}
         />
         <View style={styles.descContainer}>
