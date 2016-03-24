@@ -18,8 +18,8 @@ const NavigationBarRouteMapper = {
       return null;
     }
 
-    const { title }= navState.routeStack[index - 1];
-    return (<NavBarBack title={title} pop={navigator.pop}/>);
+    const { title } = navState.routeStack[index - 1];
+    return (<NavBarBack title={index > 1 && title} pop={navigator.pop}/>);
   },
   RightButton(route, navigator, index, navState) {
     return undefined;
