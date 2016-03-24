@@ -10,17 +10,13 @@ import React, {
 import DefaultText from './DefaultText';
 
 export default React.createClass({
-  getInitialState() {
-    const { value } = this.props;
-    return { value };
-  },
   renderPicker() {
-    const { start, end } = this.props;
+    const { start, end, selectedValue, onValueChange } = this.props;
     return (
       <View style={{ flex: 1 }}>
         <Picker
-          selectedValue={this.state.value}
-          onValueChange={(value) => this.setState({ value })}
+          selectedValue={selectedValue}
+          onValueChange={onValueChange}
         >
           {_.range(start, end + 1).map((c) =>
             (<Picker.Item key={c} label={c.toString()} value={c} />)

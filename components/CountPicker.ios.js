@@ -13,20 +13,18 @@ import DefaultText from './DefaultText';
 
 export default React.createClass({
   getInitialState() {
-    const { value } = this.props;
-    return { show: false, value };
+    return { show: false };
   },
   toggle() {
-    console.log('toggle');
     this.setState({ show: !this.state.show });
   },
   renderPicker() {
-    const { start, end } = this.props;
+    const { start, end, selectedValue, onValueChange } = this.props;
     return (
       <View style={{ flex: 1 }}>
         <Picker
-          selectedValue={this.state.value}
-          onValueChange={(value) => this.setState({ value })}
+          selectedValue={selectedValue}
+          onValueChange={onValueChange}
         >
           {_.range(start, end + 1).map((c) =>
             (<Picker.Item key={c} label={c.toString()} value={c} />)
@@ -44,7 +42,7 @@ export default React.createClass({
           <View style={styles.container}>
             <DefaultText text={this.props.prefix} style={styles.text} />
             <View style={styles.valueContainer}>
-              <DefaultText text={this.state.value} style={styles.text} />
+              <DefaultText text={this.props.selectedValue} style={styles.text} />
               <Icon name='sort' />
             </View>
           </View>

@@ -17,7 +17,7 @@ const _ = require('lodash');
 
 export default React.createClass({
   getInitialState() {
-    return { count: this.props.order.orderedCount };
+    return { orderedCount: this.props.order.orderedCount };
   },
   render() {
     const { order } = this.props;
@@ -39,7 +39,8 @@ export default React.createClass({
             prefix={`₩${order.KRW} X `}
             start={1}
             end={order.orderedCount}
-            value={order.orderedCount}
+            selectedValue={this.state.orderedCount}
+            onValueChange={(value) => this.setState({ orderedCount: value })}
           />
           <View style={styles.confirmContainer}>
             <Icon.Button name="check">
