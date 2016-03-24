@@ -7,6 +7,8 @@ import React, {
   View,
 } from 'react-native';
 
+import DefaultText from './DefaultText';
+
 export default React.createClass({
   getInitialState() {
     const { value } = this.props;
@@ -30,7 +32,7 @@ export default React.createClass({
   render() {
     return (
       <View style={styles.container}>
-        <Text>{this.props.prefix}</Text>
+        <DefaultText text={this.props.prefix} style={styles.text} />
         {this.renderPicker()}
       </View>
     );
@@ -42,5 +44,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  text: {
+    fontSize: 25,
+    fontWeight: 'bold',
   },
 });
