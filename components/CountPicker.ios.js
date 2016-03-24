@@ -7,6 +7,9 @@ import React, {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+import DefaultText from './DefaultText';
 
 export default React.createClass({
   getInitialState() {
@@ -39,8 +42,11 @@ export default React.createClass({
           onPress={this.toggle}
         >
           <View style={styles.container}>
-            <Text>{this.props.prefix}</Text>
-            <Text>{this.state.value}</Text>
+            <DefaultText text={this.props.prefix} style={styles.text} />
+            <View style={styles.valueContainer}>
+              <DefaultText text={this.state.value} style={styles.text} />
+              <Icon name='sort' />
+            </View>
           </View>
         </TouchableOpacity>
         {this.state.show && this.renderPicker()}
@@ -54,5 +60,18 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  valueContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 25,
+    fontWeight: 'bold',
+  },
+  sortIcon: {
+    paddingLeft: 30,
   },
 });

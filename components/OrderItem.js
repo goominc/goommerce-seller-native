@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { CloudinaryImageNative } from 'react-cloudinary';
 
 import CountPicker from './CountPicker';
+import DefaultText from './DefaultText';
 
 const _ = require('lodash');
 
@@ -32,8 +33,8 @@ export default React.createClass({
           style={styles.thumbnail}
         />
         <View style={styles.descContainer}>
-          <Text>#: {order.id}</Text>
-          <Text>{nickname.ko}: {color}-{size}</Text>
+          <DefaultText text={`#: ${order.id}`} />
+          <DefaultText text={`${nickname.ko}: ${color}-${size}`} />
           <CountPicker
             prefix={`₩${order.KRW} X `}
             start={1}
@@ -64,11 +65,6 @@ const styles = StyleSheet.create({
   },
   descContainer: {
     flex: 1,
-  },
-  counterContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   confirmContainer: {
     flex: 1,
