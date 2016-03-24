@@ -2,6 +2,7 @@
 
 import React, {
   Image,
+  Picker,
   StyleSheet,
   Text,
   View,
@@ -12,6 +13,9 @@ import { CloudinaryImageNative } from 'react-cloudinary';
 const _ = require('lodash');
 
 export default React.createClass({
+  getInitialState() {
+    return { count: this.props.order.orderedCount };
+  },
   render() {
     const { order } = this.props;
     const { product, productVariant } = order;
@@ -30,11 +34,17 @@ export default React.createClass({
           <Text>{nickname.ko}: {color}-{size}</Text>
           <View style={styles.counterContainer}>
             <Text>₩{order.KRW} X </Text>
-            <Text>Count: {order.orderedCount}</Text>
-            <Icon.Button name="minus" />
-            <Icon.Button name="plus" />
+            <View style={{ flex: 1 }}>
+              <Picker
+                selectedValue={this.state.count}
+                onValueChange={(count) => this.setState({ count })}
+              >
+                {_.range(1, order.orderedCount + 1).map((c) =>
+                  (<Picker.Item key={c} label={c.toString()} value={c} />)
+                )}
+              </Picker>
+            </View>
           </View>
-          <Text>₩{order.totalKRW}</Text>
           <View style={styles.confirmContainer}>
             <Icon.Button name="check">
               <Text style={styles.signin}>In Stock</Text>
