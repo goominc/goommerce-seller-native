@@ -28,6 +28,7 @@ const OrderList = React.createClass({
     const { brandId, updateStock, removeBrandPendingOrder } = this.props;
     return (
       <OrderItem
+        key={order.id}
         order={order}
         confirm={(cnt) => updateStock(order.id, cnt).then(
           () => removeBrandPendingOrder(brandId, order.id))}
