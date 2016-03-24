@@ -10,6 +10,8 @@ import React, {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { CloudinaryImageNative } from 'react-cloudinary';
 
+import CountPicker from './CountPicker';
+
 const _ = require('lodash');
 
 export default React.createClass({
@@ -32,19 +34,12 @@ export default React.createClass({
         <View style={styles.descContainer}>
           <Text>#: {order.id}</Text>
           <Text>{nickname.ko}: {color}-{size}</Text>
-          <View style={styles.counterContainer}>
-            <Text>₩{order.KRW} X </Text>
-            <View style={{ flex: 1 }}>
-              <Picker
-                selectedValue={this.state.count}
-                onValueChange={(count) => this.setState({ count })}
-              >
-                {_.range(1, order.orderedCount + 1).map((c) =>
-                  (<Picker.Item key={c} label={c.toString()} value={c} />)
-                )}
-              </Picker>
-            </View>
-          </View>
+          <CountPicker
+            prefix={`₩${order.KRW} X `}
+            start={1}
+            end={order.orderedCount}
+            value={order.orderedCount}
+          />
           <View style={styles.confirmContainer}>
             <Icon.Button name="check">
               <Text style={styles.signin}>In Stock</Text>
