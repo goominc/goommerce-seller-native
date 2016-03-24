@@ -7,6 +7,7 @@ import React, {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { CloudinaryImageNative } from 'react-cloudinary';
 
 const _ = require('lodash');
 
@@ -14,6 +15,7 @@ export default React.createClass({
   render() {
     const { order } = this.props;
     const { product, productVariant } = order;
+    const image = productVariant.appImages.default[0];
     return (
       <View>
         <Text>id: {order.id}</Text>
@@ -26,9 +28,10 @@ export default React.createClass({
         <Icon.Button name="plus" />
         <Text>Total(KRW): {order.totalKRW}</Text>
         <Text>Total(USD): {order.totalUSD}</Text>
-        <Image
+        <CloudinaryImageNative
+          publicId={image.publicId}
+          options={{ width: 100, height: 100 }}
           style={styles.image}
-          source={{ uri: `https://${_.get(productVariant.appImages.default, '0.url')}` }}
         />
         <Icon.Button name="check">
           <Text style={styles.signin}>In Stock</Text>
