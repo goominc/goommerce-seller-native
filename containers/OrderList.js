@@ -11,16 +11,28 @@ import { orderActions } from 'goommerce-redux';
 import EmptyView from '../components/EmptyView';
 import OrderItem from '../components/OrderItem';
 
+function loadOrders(props) {
+  const { brandId, date } = props;
+  const { loadBrandOrders, loadBrandPendingOrders } = orderActions;
+  return date ? loadBrandOrders(brandId, date) : loadBrandPendingOrders(brandId);
+}
+
 const OrderList = React.createClass({
   componentDidMount() {
-    const { loadOrders, dispatch } = this.props;
-    bindActionCreators(loadOrders, dispatch)();
+    this.props.loadOrders(this.props);
   },
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
   renderOrder(order) {
-    return <OrderItem order={order} />;
+    const { brandId, updateStock, removeBrandPendingOrder } = this.props;
+    return (
+      <OrderItem
+        order={order}
+        confirm={(cnt) => updateStock(order.id, cnt).then(
+          () => removeBrandPendingOrder(brandId, order.id))}
+      />
+    );
   },
   render() {
     const { orders } = this.props;
@@ -48,12 +60,6 @@ const styles = StyleSheet.create({
 });
 
 export default connect(
-  (state, ownProps) => {
-    const { brandId, date } = ownProps;
-    const { loadBrandOrders, loadBrandPendingOrders } = orderActions;
-    const loadOrders = () =>
-      date ? loadBrandOrders(brandId, date) : loadBrandPendingOrders(brandId);
-    const { key } = loadOrders();
-    return { loadOrders, orders: state.order[key] };
-  }
+  (state, ownProps) => ({ orders: state.order[loadOrders(ownProps).key] }),
+  Object.assign({ loadOrders }, orderActions)
 )(OrderList);
