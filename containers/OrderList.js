@@ -45,18 +45,17 @@ const OrderList = React.createClass({
     }
     const dataSource = this.dataSource.cloneWithRows(orders);
     return (
-      <ListView
-        dataSource={dataSource}
-        renderRow={this.renderOrder}
-        style={styles.listView}
-      />
+      <View style={styles.container}>
+        <ListView dataSource={dataSource} renderRow={this.renderOrder} />
+      </View>
     );
   },
 });
 
 const styles = StyleSheet.create({
-  listView: {
-    backgroundColor: '#F5FCFF',
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
   },
 });
 

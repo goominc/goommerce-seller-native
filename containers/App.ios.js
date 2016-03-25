@@ -7,7 +7,6 @@ import React, {
   TouchableOpacity,
   View
 } from 'react-native';
-import { connect } from 'react-redux'
 
 import routes from '../routes';
 import NavBarBack from '../components/NavBarBack'
@@ -17,7 +16,6 @@ const NavigationBarRouteMapper = {
     if (index === 0) {
       return null;
     }
-
     const { title } = navState.routeStack[index - 1];
     return (<NavBarBack title={index > 1 && title} pop={navigator.pop}/>);
   },
@@ -52,16 +50,21 @@ export default React.createClass({
           />
         }
         renderScene={this.renderScene}
+        style={styles.container}
       />
     );
   }
 });
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
   scene: {
     flex: 1,
-    paddingTop: 20,
-    backgroundColor: '#EAEAEA',
+    marginTop: 64,
+    backgroundColor: 'white',
   },
   navBar: {
     backgroundColor: 'white',
