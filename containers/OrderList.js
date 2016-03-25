@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
 
 import EmptyView from '../components/EmptyView';
-import OrderItem from '../components/OrderItem';
+import OrderCell from '../components/OrderCell';
 
 function loadOrders(props) {
   const { brandId, date } = props;
@@ -24,15 +24,24 @@ const OrderList = React.createClass({
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
-  renderOrder(order) {
+  renderRow(order) {
     const { brandId, updateStock, removeBrandPendingOrder } = this.props;
     return (
-      <OrderItem
+      <OrderCell
         key={order.id}
         order={order}
         confirm={(cnt) => updateStock(order.id, cnt).then(
           () => removeBrandPendingOrder(brandId, order.id))}
       />
+    );
+  },
+  renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
+    var style = styles.rowSeparator;
+    if (adjacentRowHighlighted) {
+        style = [style, styles.rowSeparatorHide];
+    }
+    return (
+      <View key={'SEP_' + sectionID + '_' + rowID}  style={style}/>
     );
   },
   render() {
@@ -46,7 +55,11 @@ const OrderList = React.createClass({
     const dataSource = this.dataSource.cloneWithRows(orders);
     return (
       <View style={styles.container}>
-        <ListView dataSource={dataSource} renderRow={this.renderOrder} />
+        <ListView
+          dataSource={dataSource}
+          renderRow={this.renderRow}
+          renderSeparator={this.renderSeparator}
+        />
       </View>
     );
   },
@@ -56,6 +69,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  rowSeparator: {
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    height: 1,
+    marginLeft: 4,
+  },
+  rowSeparatorHide: {
+    opacity: 0.0,
   },
 });
 

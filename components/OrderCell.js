@@ -58,11 +58,9 @@ export default React.createClass({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    padding: 5,
   },
   descContainer: {
     flex: 1,
@@ -75,5 +73,7 @@ const styles = StyleSheet.create({
   thumbnail: {
     width: 90,
     height: 90,
+    marginRight: 10,
+    backgroundColor: '#dddddd',
   },
 });

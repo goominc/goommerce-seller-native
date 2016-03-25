@@ -72,7 +72,6 @@ const Home = React.createClass({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
     flex: 1,
     justifyContent: 'center',
   },

@@ -68,6 +68,8 @@ const styles = StyleSheet.create({
   },
   navBar: {
     backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eeeeee'
   },
   navBarText: {
     fontSize: 16,
