@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import { orderActions } from 'goommerce-redux';
 
 import EmptyView from '../components/EmptyView';
+import OrderStatCell from '../components/OrderStatCell';
 import routes from '../routes';
 
 const OrderStats = React.createClass({
@@ -19,14 +20,26 @@ const OrderStats = React.createClass({
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
-  renderStat(stat) {
-    const { brandId } = this.props;
-    const date = stat.data && stat.date.substr(0, 10);
+  renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
+    var style = styles.rowSeparator;
+    if (adjacentRowHighlighted) {
+        style = [style, styles.rowSeparatorHide];
+    }
+    return (
+      <View key={'SEP_' + sectionID + '_' + rowID}  style={style}/>
+    );
+  },
+  renderRow(stat, sectionID, rowID, highlightRow) {
+    const { brandId, push } = this.props;
+    const date = (stat.date && stat.date.substr(0, 10)) || 'EMPTY';
     return  (
-      <View onPress={() => push(routes.list({ brandId, date }))}>
-        <Text style={styles.date}>Date: {date}</Text>
-        <Text style={styles.count}>Count: {stat.count}</Text>
-      </View>
+      <OrderStatCell
+        key={date}
+        stat={stat}
+        onHighlight={() => highlightRow(sectionID, rowID)}
+        onUnhighlight={() => highlightRow(null, null)}
+        onSelect={() => push(routes.list({ brandId, date }))}
+      />
     );
   },
   render() {
@@ -41,8 +54,8 @@ const OrderStats = React.createClass({
     return (
       <ListView
         dataSource={dataSource}
-        renderRow={this.renderStat}
-        style={styles.listView}
+        renderRow={this.renderRow}
+        renderSeparator={this.renderSeparator}
       />
     );
   }
@@ -50,15 +63,20 @@ const OrderStats = React.createClass({
 
 const styles = StyleSheet.create({
   date: {
-    fontSize: 20,
+    fontSize: 25,
     marginBottom: 8,
     textAlign: 'center',
   },
-  count: {
-    textAlign: 'center',
+  row: {
+    padding: 5,
   },
-  listView: {
-    backgroundColor: '#F5FCFF',
+  rowSeparator: {
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    height: 1,
+    marginLeft: 4,
+  },
+  rowSeparatorHide: {
+    opacity: 0.0,
   },
 });
 
