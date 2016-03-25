@@ -41,6 +41,7 @@ export default React.createClass({
             end={order.orderedCount}
             selectedValue={this.state.orderedCount}
             onValueChange={(value) => this.setState({ orderedCount: value })}
+            enabled={order.status === 1}
           />
           <View style={styles.confirmContainer}>
             <Icon.Button name="check" onPress={() => confirm(this.state.orderedCount)}>

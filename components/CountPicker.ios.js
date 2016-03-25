@@ -16,7 +16,9 @@ export default React.createClass({
     return { show: false };
   },
   toggle() {
-    this.setState({ show: !this.state.show });
+    if (this.props.enabled) {
+      this.setState({ show: !this.state.show });
+    }
   },
   renderPicker() {
     const { start, end, selectedValue, onValueChange } = this.props;
@@ -43,7 +45,7 @@ export default React.createClass({
             <DefaultText text={this.props.prefix} style={styles.text} />
             <View style={styles.valueContainer}>
               <DefaultText text={this.props.selectedValue} style={styles.text} />
-              <Icon name='sort' />
+              {this.props.enabled && <Icon name='sort' />}
             </View>
           </View>
         </TouchableOpacity>

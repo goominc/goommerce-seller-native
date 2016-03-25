@@ -11,18 +11,24 @@ import DefaultText from './DefaultText';
 
 export default React.createClass({
   renderPicker() {
-    const { start, end, selectedValue, onValueChange } = this.props;
+    const { start, end, selectedValue, enabled, onValueChange } = this.props;
+    if (enabled) {
+      return (
+        <View style={{ flex: 1 }}>
+          <Picker
+            selectedValue={selectedValue}
+            onValueChange={onValueChange}
+          >
+            {_.range(start, end + 1).map((c) =>
+              (<Picker.Item key={c} label={c.toString()} value={c} />)
+            )}
+          </Picker>
+        </View>
+      );
+    }
+
     return (
-      <View style={{ flex: 1 }}>
-        <Picker
-          selectedValue={selectedValue}
-          onValueChange={onValueChange}
-        >
-          {_.range(start, end + 1).map((c) =>
-            (<Picker.Item key={c} label={c.toString()} value={c} />)
-          )}
-        </Picker>
-      </View>
+      <DefaultText text={this.props.selectedValue} style={styles.text} />
     );
   },
   render() {
