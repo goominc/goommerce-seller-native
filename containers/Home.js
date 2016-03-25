@@ -61,7 +61,10 @@ const Home = React.createClass({
         {brands.map((b, idx) => (
           <BrandItem key={idx} brand={b}
             onOrderStats={() => push(routes.stats({ brandId: b.id }))}
-            onNewOrders={() => push(routes.list({ brandId: b.id }))}
+            onNewOrders={() => push(routes.list({
+              brandId: b.id,
+              filter: (o) => o.status === 1,
+            }))}
           />
       ))}
       </View>

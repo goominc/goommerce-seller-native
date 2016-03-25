@@ -19,8 +19,21 @@ export default React.createClass({
   getInitialState() {
     return { orderedCount: this.props.order.orderedCount };
   },
+  renderButtons() {
+    const { confirm } = this.props;
+    return (
+      <View style={styles.confirmContainer}>
+        <Icon.Button name="check" onPress={() => confirm(this.state.orderedCount)}>
+          <Text style={styles.signin}>In Stock</Text>
+        </Icon.Button>
+        <Icon.Button name="times" onPress={() => confirm(0)}>
+          <Text style={styles.signin}>Out Of Stock</Text>
+        </Icon.Button>
+      </View>
+    );
+  },
   render() {
-    const { order, confirm } = this.props;
+    const { order } = this.props;
     const { product, productVariant } = order;
     const { nickname } = product.data;
     const { color, size } = productVariant.data;
@@ -43,14 +56,7 @@ export default React.createClass({
             onValueChange={(value) => this.setState({ orderedCount: value })}
             enabled={order.status === 1}
           />
-          <View style={styles.confirmContainer}>
-            <Icon.Button name="check" onPress={() => confirm(this.state.orderedCount)}>
-              <Text style={styles.signin}>In Stock</Text>
-            </Icon.Button>
-            <Icon.Button name="times" onPress={() => confirm(0)}>
-              <Text style={styles.signin}>Out Of Stock</Text>
-            </Icon.Button>
-          </View>
+          {order.status === 1 && this.renderButtons()}
         </View>
       </View>
     );

@@ -25,13 +25,15 @@ const OrderList = React.createClass({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
   renderRow(order) {
-    const { brandId, updateStock, removeBrandPendingOrder } = this.props;
+    const { brandId, updateStock } = this.props;
     return (
       <OrderCell
         key={order.id}
         order={order}
-        confirm={(cnt) => updateStock(order.id, cnt).then(
-          () => removeBrandPendingOrder(brandId, order.id))}
+        confirm={(cnt) => {
+          const { key } = loadOrders(this.props);
+          updateStock(order.id, cnt, key);
+        }}
       />
     );
   },
@@ -45,14 +47,16 @@ const OrderList = React.createClass({
     );
   },
   render() {
-    const { orders } = this.props;
+    const { orders, filter } = this.props;
     if (!orders) {
       return <EmptyView text='Loading...' />;
     }
     if (!orders.length) {
       return <EmptyView text='No orders...' />;
     }
-    const dataSource = this.dataSource.cloneWithRows(orders);
+    // FIXME: possible performance issue...
+    const dataSource = this.dataSource.cloneWithRows(
+      filter ? orders.filter(filter) : orders);
     return (
       <View style={styles.container}>
         <ListView
