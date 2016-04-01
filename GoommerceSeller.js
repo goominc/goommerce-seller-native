@@ -18,7 +18,7 @@ import App from './containers/App';
 
 cloudinaryConfig({ cloud_name: 'linkshops', crop: 'limit' });
 
-configApiClient({ apiRoot: (Platform.OS === 'ios') ? 'http://localhost:8080' : 'http://10.0.3.2:8080' });
+configApiClient({ apiRoot: 'http://v1.linkshops.com' });
 const store = configureStore();
 
 store.subscribe(() => {
