@@ -35,7 +35,7 @@ export default React.createClass({
   render() {
     const { order } = this.props;
     const { product, productVariant } = order;
-    const { nickname } = product.data;
+    const { name } = product;
     const { color, size } = productVariant.data;
     const image = productVariant.appImages.default[0];
     return (
@@ -47,7 +47,7 @@ export default React.createClass({
         />
         <View style={styles.descContainer}>
           <DefaultText text={`#: ${order.id}`} />
-          <DefaultText text={`${nickname.ko}: ${color}-${size}`} />
+          <DefaultText text={`${name.ko}: ${color}-${size}`} />
           <CountPicker
             prefix={`₩${order.KRW} X `}
             start={1}
