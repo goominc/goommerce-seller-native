@@ -50,6 +50,7 @@ const ProductDetail = React.createClass({
         <ListView
           dataSource={dataSource}
           renderRow={this.renderRow}
+          renderSeparator={this.renderSeparator}
         />
       </View>
     );
