@@ -18,7 +18,7 @@ export default React.createClass({
   render() {
     const TouchableElement = Platform.OS === 'android' ?
       TouchableNativeFeedback : TouchableHighlight;
-    const { product: { appImages, name } } = this.props;
+    const { product: { appImages, name, KRW } } = this.props;
     const image = appImages.default[0];
     return (
       <View>
@@ -35,6 +35,7 @@ export default React.createClass({
             />
             <View style={styles.descContainer}>
               <DefaultText text={name.ko} />
+              {KRW && <DefaultText text={`₩${KRW}`} />}
             </View>
           </View>
         </TouchableElement>
