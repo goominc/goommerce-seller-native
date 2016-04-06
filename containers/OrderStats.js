@@ -38,7 +38,7 @@ const OrderStats = React.createClass({
         stat={stat}
         onHighlight={() => highlightRow(sectionID, rowID)}
         onUnhighlight={() => highlightRow(null, null)}
-        onSelect={() => push(routes.list({ brandId, date }))}
+        onSelect={() => push(routes.orders({ brandId, date }))}
       />
     );
   },

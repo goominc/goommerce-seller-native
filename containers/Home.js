@@ -61,10 +61,11 @@ const Home = React.createClass({
         {brands.map((b, idx) => (
           <BrandItem key={idx} brand={b}
             onOrderStats={() => push(routes.stats({ brandId: b.id }))}
-            onNewOrders={() => push(routes.list({
+            onNewOrders={() => push(routes.orders({
               brandId: b.id,
               filter: (o) => o.status === 1,
             }))}
+            onProductList={() => push(routes.products({ brandId: b.id }))}
           />
       ))}
       </View>

@@ -9,9 +9,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default React.createClass({
   render() {
-    const { onNewOrders, onOrderStats } = this.props;
+    const { onNewOrders, onOrderStats, onProductList } = this.props;
     return (
       <View>
+        <Icon.Button name="list" onPress={onProductList} style={styles.button}>
+          <Text style={styles.text}>Products</Text>
+        </Icon.Button>
         <Icon.Button name="calendar" onPress={onOrderStats} style={styles.button}>
           <Text style={styles.text}>Order Stats</Text>
         </Icon.Button>
