@@ -10,6 +10,7 @@ import { productActions } from 'goommerce-redux';
 
 import EmptyView from '../components/EmptyView';
 import ProductCell from '../components/ProductCell';
+import routes from '../routes';
 
 const ProductList = React.createClass({
   getDefaultProps() {
@@ -27,7 +28,6 @@ const ProductList = React.createClass({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
   onEndReached() {
-    console.log('onEndReached');
     const { brandId, limit, pagination, loadBrandProducts } = this.props;
     if (!pagination.hasMore || this.state.isLoadingTail) {
       return;
@@ -52,12 +52,15 @@ const ProductList = React.createClass({
       );
     }
   },
-  renderRow(product) {
-    const { brandId, updateStock } = this.props;
+  renderRow(product, sectionID, rowID, highlightRow) {
+    const { brandId, push } = this.props;
     return (
       <ProductCell
         key={product.id}
         product={product}
+        onHighlight={() => highlightRow(sectionID, rowID)}
+        onUnhighlight={() => highlightRow(null, null)}
+        onSelect={() => push(routes.product({ productId: product.id }))}
       />
     );
   },
