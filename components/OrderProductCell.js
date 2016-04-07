@@ -17,13 +17,13 @@ const _ = require('lodash');
 
 export default React.createClass({
   getInitialState() {
-    return { orderedCount: this.props.orderProduct.orderedCount };
+    return { quantity: this.props.orderProduct.quantity };
   },
   renderButtons() {
     const { confirm } = this.props;
     return (
       <View style={styles.confirmContainer}>
-        <Icon.Button name="check" onPress={() => confirm(this.state.orderedCount)}>
+        <Icon.Button name="check" onPress={() => confirm(this.state.quantity)}>
           <Text style={styles.signin}>In Stock</Text>
         </Icon.Button>
         <Icon.Button name="times" onPress={() => confirm(0)}>
@@ -51,9 +51,9 @@ export default React.createClass({
           <CountPicker
             prefix={`₩${orderProduct.KRW} X `}
             start={1}
-            end={orderProduct.orderedCount}
-            selectedValue={this.state.orderedCount}
-            onValueChange={(value) => this.setState({ orderedCount: value })}
+            end={300}  // FIXME
+            selectedValue={this.state.quantity}
+            onValueChange={(value) => this.setState({ quantity: value })}
             enabled={orderProduct.status === 1}
           />
           {orderProduct.status === 1 && this.renderButtons()}
