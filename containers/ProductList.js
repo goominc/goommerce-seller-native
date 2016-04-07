@@ -116,8 +116,7 @@ const styles = StyleSheet.create({
 
 export default connect(
   (state, ownProps) => {
-    const { brandId } = ownProps;
-    const { key } = productActions.loadBrandProducts(brandId);
+    const { key } = productActions.loadBrandProducts(ownProps.brandId);
     return { ...state.product[key] };
   },
   productActions

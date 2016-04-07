@@ -10,30 +10,57 @@ import { orderActions } from 'goommerce-redux';
 
 import EmptyView from '../components/EmptyView';
 import OrderCell from '../components/OrderCell';
-
-function loadOrders(props) {
-  const { brandId, date } = props;
-  const { loadBrandOrders, loadBrandPendingOrders } = orderActions;
-  return date ? loadBrandOrders(brandId, date) : loadBrandPendingOrders(brandId);
-}
+import routes from '../routes';
 
 const OrderList = React.createClass({
+  getDefaultProps() {
+    return { limit: 20 };
+  },
+  getInitialState() {
+    // TODO: move this into redux?
+    return { isLoadingTail: false };
+  },
   componentDidMount() {
-    this.props.loadOrders(this.props);
+    const { brandId, limit, loadBrandOrders } = this.props;
+    loadBrandOrders(brandId, 0, limit);
   },
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
-  renderRow(order) {
-    const { brandId, updateStock } = this.props;
+  onEndReached() {
+    const { brandId, limit, pagination, loadBrandOrders } = this.props;
+    if (!pagination.hasMore || this.state.isLoadingTail) {
+      return;
+    }
+    this.setState({ isLoadingTail: true });
+    loadBrandOrders(brandId, pagination.offset + pagination.limit, limit).then(
+      () => this.setState({ isLoadingTail: false })
+    );
+  },
+  renderFooter() {
+    const { pagination } = this.props;
+    if (!pagination.hasMore || !this.state.isLoadingTail) {
+      return <View style={styles.scrollSpinner} />;
+    }
+    if (Platform.OS === 'ios') {
+      return <ActivityIndicatorIOS style={styles.scrollSpinner} />;
+    } else {
+      return (
+        <View  style={{alignItems: 'center'}}>
+          <ProgressBarAndroid styleAttr="Large"/>
+        </View>
+      );
+    }
+  },
+  renderRow(order, sectionID, rowID, highlightRow) {
+    const { brandId, push } = this.props;
     return (
       <OrderCell
         key={order.id}
         order={order}
-        confirm={(cnt) => {
-          const { key } = loadOrders(this.props);
-          updateStock(order.id, cnt, key);
-        }}
+        onHighlight={() => highlightRow(sectionID, rowID)}
+        onUnhighlight={() => highlightRow(null, null)}
+        onSelect={() => push(routes.order({ brandId, orderId: order.id }))}
       />
     );
   },
@@ -47,22 +74,22 @@ const OrderList = React.createClass({
     );
   },
   render() {
-    const { orders, filter } = this.props;
-    if (!orders) {
+    const { list } = this.props;
+    if (!list) {
       return <EmptyView text='Loading...' />;
     }
-    if (!orders.length) {
+    if (!list.length) {
       return <EmptyView text='No orders...' />;
     }
     // FIXME: possible performance issue...
-    const dataSource = this.dataSource.cloneWithRows(
-      filter ? orders.filter(filter) : orders);
+    const dataSource = this.dataSource.cloneWithRows(list);
     return (
       <View style={styles.container}>
         <ListView
           dataSource={dataSource}
           renderRow={this.renderRow}
           renderSeparator={this.renderSeparator}
+          onEndReached={this.onEndReached}
         />
       </View>
     );
@@ -82,9 +109,14 @@ const styles = StyleSheet.create({
   rowSeparatorHide: {
     opacity: 0.0,
   },
+  scrollSpinner: {
+    marginVertical: 20,
+  },
 });
 
 export default connect(
-  (state, ownProps) => ({ orders: state.order[loadOrders(ownProps).key] }),
-  Object.assign({ loadOrders }, orderActions)
+  (state, ownProps) => {
+    const { key } = orderActions.loadBrandOrders(ownProps.brandId);
+    return { ...state.order[key] };
+  }, orderActions
 )(OrderList);

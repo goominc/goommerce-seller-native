@@ -49,7 +49,7 @@ export default React.createClass({
             </View>
           </View>
         </TouchableOpacity>
-        {this.state.show && this.renderPicker()}
+        {this.props.enabled && this.state.show && this.renderPicker()}
       </View>
     );
   }

@@ -9,17 +9,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default React.createClass({
   render() {
-    const { onNewOrders, onOrderStats, onProductList } = this.props;
+    const { onOrderList, onOrderStats, onProductList } = this.props;
     return (
       <View>
         <Icon.Button name="list" onPress={onProductList} style={styles.button}>
           <Text style={styles.text}>Products</Text>
         </Icon.Button>
-        <Icon.Button name="calendar" onPress={onOrderStats} style={styles.button}>
-          <Text style={styles.text}>Order Stats</Text>
-        </Icon.Button>
-        <Icon.Button name="shopping-cart" onPress={onNewOrders} style={styles.button}>
-          <Text style={styles.text}>New Orders</Text>
+        <Icon.Button name="shopping-cart" onPress={onOrderList} style={styles.button}>
+          <Text style={styles.text}>Orders</Text>
         </Icon.Button>
       </View>
     );
