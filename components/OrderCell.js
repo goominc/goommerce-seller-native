@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'lodash';
 import React, {
   Image,
   Picker,
@@ -18,7 +19,8 @@ export default React.createClass({
   render() {
     const TouchableElement = Platform.OS === 'android' ?
       TouchableNativeFeedback : TouchableHighlight;
-    const { order: { buyer, itemCount, count, totalKRW } } = this.props;
+    const { order: { quantity, totalKRW, orderProductStatus } } = this.props;
+    const status = _.countBy(orderProductStatus);
     return (
       <View>
         <TouchableElement
@@ -28,9 +30,9 @@ export default React.createClass({
         >
           <View style={styles.container}>
             <View style={styles.descContainer}>
-              <DefaultText text={`BUYER: ${buyer.name || buyer.id}`} />
-              <DefaultText text={`COUNT: ${count} / ${itemCount}`} />
+              <DefaultText text={`QUANTITY: ${quantity}`} />
               <DefaultText text={`TOTAL: ₩${totalKRW}`} />
+              {status[100] && <DefaultText text={'!!NEW!!'} />}
             </View>
           </View>
         </TouchableElement>
