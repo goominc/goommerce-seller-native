@@ -51,12 +51,12 @@ export default React.createClass({
           <CountPicker
             prefix={`₩${orderProduct.KRW} X `}
             start={1}
-            end={300}  // FIXME
+            end={orderProduct.count}
             selectedValue={this.state.quantity}
             onValueChange={(value) => this.setState({ quantity: value })}
-            enabled={orderProduct.status === 1}
+            enabled={orderProduct.status === 101}
           />
-          {orderProduct.status === 1 && this.renderButtons()}
+          {orderProduct.status === 101 && this.renderButtons()}
         </View>
       </View>
     );

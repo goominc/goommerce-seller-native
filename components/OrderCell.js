@@ -19,8 +19,8 @@ export default React.createClass({
   render() {
     const TouchableElement = Platform.OS === 'android' ?
       TouchableNativeFeedback : TouchableHighlight;
-    const { order: { quantity, totalKRW, orderProductStatus } } = this.props;
-    const status = _.countBy(orderProductStatus);
+    const { order: { quantity, totalKRW, orderProducts } } = this.props;
+    const status = _.countBy(orderProducts, 'status');
     return (
       <View>
         <TouchableElement

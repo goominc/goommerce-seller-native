@@ -1,4 +1,5 @@
 import React, {
+  Alert,
   ListView,
   StyleSheet,
   Text,
@@ -53,14 +54,31 @@ const OrderList = React.createClass({
     }
   },
   renderRow(order, sectionID, rowID, highlightRow) {
-    const { brandId, push } = this.props;
+    const { brandId, push, reduxKey, updateBrandOrderStatus } = this.props;
+
+    function onSelect() {
+      function onConfirm() {
+        updateBrandOrderStatus(brandId, order.id, 100, 101, reduxKey);
+        push(routes.order({ brandId, orderId: order.id }));
+      }
+      if (_.find(order.orderProducts, { status: 100 })) {
+        Alert.alert(
+          'Info',
+          'Do you want to check this order?',
+          [ { text: 'OK', onPress: onConfirm }, { text: 'CANCEL' } ]
+        );
+      } else {
+        push(routes.order({ brandId, orderId: order.id }));
+      }
+    }
+
     return (
       <OrderCell
         key={order.id}
         order={order}
         onHighlight={() => highlightRow(sectionID, rowID)}
         onUnhighlight={() => highlightRow(null, null)}
-        onSelect={() => push(routes.order({ brandId, orderId: order.id }))}
+        onSelect={onSelect}
       />
     );
   },
@@ -117,6 +135,6 @@ const styles = StyleSheet.create({
 export default connect(
   (state, ownProps) => {
     const { key } = orderActions.loadBrandOrders(ownProps.brandId);
-    return { ...state.order[key] };
+    return { reduxKey: key, ...state.order[key] };
   }, orderActions
 )(OrderList);
