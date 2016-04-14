@@ -20,13 +20,16 @@ const OrderDetail = React.createClass({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
   renderRow(orderProduct) {
-    const { reduxKey, updateStock } = this.props;
+    const { reduxKey, createOrderProductLog } = this.props;
     return (
       <OrderProductCell
         key={orderProduct.id}
         orderProduct={orderProduct}
         confirm={(cnt) => {
-          updateStock(orderProduct.id, cnt, reduxKey);
+          createOrderProductLog(orderProduct.id, reduxKey, {
+            type: 1101,
+            data: { quantity: cnt },
+          });
         }}
       />
     );
