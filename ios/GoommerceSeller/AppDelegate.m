@@ -18,8 +18,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   self.oneSignal = [[RCTOneSignal alloc] initWithLaunchOptions:launchOptions
-                                         appId:@"0ed460dc-5077-4503-9d2d-27e048334395"];
-  
+                                         appId:@"2ee44d8b-9d90-4692-8cc8-d09f93834a0f"];
+
   NSURL *jsCodeLocation;
 
   /**

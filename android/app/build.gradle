@@ -90,8 +90,8 @@ android {
             abiFilters "armeabi-v7a", "x86"
         }
         manifestPlaceholders = [manifestApplicationId: "${applicationId}",
-                                onesignal_app_id: "0ed460dc-5077-4503-9d2d-27e048334395",
-                                onesignal_google_project_number: "965117749353"]
+                                onesignal_app_id: "2ee44d8b-9d90-4692-8cc8-d09f93834a0f",
+                                onesignal_google_project_number: "98939502673"]
     }
     signingConfigs {
       release {
