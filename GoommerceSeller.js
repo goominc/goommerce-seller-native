@@ -25,6 +25,9 @@ OneSignal.configure({
     }
   }
 });
+if (__DEV__) {
+  OneSignal.idsAvailable = (cb) => cb({});
+}
 
 if (__DEV__) {
   configApiClient({ apiRoot: (Platform.OS === 'ios') ? 'http://localhost:8080' : 'http://10.0.3.2:8080' });
