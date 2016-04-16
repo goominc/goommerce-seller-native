@@ -29,7 +29,7 @@ OneSignal.configure({
 if (__DEV__) {
   configApiClient({ apiRoot: (Platform.OS === 'ios') ? 'http://localhost:8080' : 'http://10.0.3.2:8080' });
 } else {
-  configApiClient({ apiRoot: 'http://v1.linkshops.com' });
+  configApiClient({ apiRoot: 'http://t.linkshops.com' });
 }
 const store = configureStore();
 
