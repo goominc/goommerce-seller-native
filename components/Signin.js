@@ -6,7 +6,7 @@ import React, {
   TextInput,
   View
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Button from 'react-native-button';
 
 export default React.createClass({
   getInitialState() {
@@ -24,22 +24,27 @@ export default React.createClass({
           autoCorrect={false}
           keyboardType='email-address'
           onChangeText={(email) => this.setState({ email })}
-          placeholder='Email address'
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          placeholder='e-mail'
+          style={styles.input}
           value={this.state.email}
         />
         <TextInput
           autoCapitalize='none'
           autoCorrect={false}
           onChangeText={(password) => this.setState({ password })}
-          placeholder='Password'
+          placeholder='password'
           secureTextEntry={true}
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          style={styles.input}
           value={this.state.password}
         />
-        <Icon.Button name="sign-in" backgroundColor="#3b5998" onPress={this.signin}>
-          <Text style={styles.signin}>Sign In</Text>
-        </Icon.Button>
+        <Button
+          style={{color: 'white'}}
+          styleDisabled={{color: 'red'}}
+          containerStyle={styles.signinContainer}
+          onPress={this.signin}
+        >
+          Login
+        </Button>
       </View>
     );
   },
@@ -48,11 +53,25 @@ export default React.createClass({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: 'white',
     flex: 1,
     justifyContent: 'center',
   },
-  signin: {
-    fontSize: 15,
+  input: {
+    backgroundColor: '#eeeeee',
+    borderRadius: 6,
+    height: 50,
+    marginHorizontal: 20,
+    marginVertical: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  signinContainer: {
+    backgroundColor: '#1fcbf6',
+    borderRadius: 6,
+    marginTop: 20,
+    overflow:'hidden',
+    paddingHorizontal: 60,
+    paddingVertical: 10,
   },
 });
