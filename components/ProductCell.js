@@ -5,6 +5,7 @@ import React, {
   Picker,
   Platform,
   StyleSheet,
+  Switch,
   Text,
   TouchableHighlight,
   TouchableNativeFeedback,
@@ -18,7 +19,7 @@ export default React.createClass({
   render() {
     const TouchableElement = Platform.OS === 'android' ?
       TouchableNativeFeedback : TouchableHighlight;
-    const { product: { appImages, name, KRW } } = this.props;
+    const { product: { appImages, name, KRW, isActive } } = this.props;
     const image = appImages.default[0];
     return (
       <View>
@@ -35,7 +36,10 @@ export default React.createClass({
             />
             <View style={styles.descContainer}>
               <DefaultText text={name.ko} />
-              {KRW && <DefaultText text={`₩${KRW}`} />}
+              {KRW && <DefaultText text={`${KRW}원`} />}
+            </View>
+            <View style={{ marginRight: 10 }}>
+              <Switch value={isActive} />
             </View>
           </View>
         </TouchableElement>

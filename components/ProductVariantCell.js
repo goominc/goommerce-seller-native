@@ -26,7 +26,7 @@ export default React.createClass({
         />
         <View style={styles.descContainer}>
           <DefaultText text={`${color}-${size}`} />
-          <DefaultText text={`₩${KRW}`} />
+          <DefaultText text={`${KRW}원`} />
         </View>
       </View>
     );
