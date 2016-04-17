@@ -5,13 +5,16 @@ import React, {
   Picker,
   StyleSheet,
   Text,
+  TextInput,
+  Switch,
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { CloudinaryImageNative } from 'react-cloudinary';
+import numeral from 'numeral';
+import Button from 'react-native-button';
 
 import CountPicker from './CountPicker';
-import DefaultText from './DefaultText';
 
 const _ = require('lodash');
 
@@ -45,18 +48,32 @@ export default React.createClass({
           options={{ width: 200, height: 200 }}
           style={styles.thumbnail}
         />
-        <View style={styles.descContainer}>
-          <DefaultText text={`#: ${orderProduct.id}`} />
-          <DefaultText text={`${name.ko}: ${color}-${size}`} />
-          <CountPicker
-            prefix={`₩${orderProduct.KRW} X `}
-            start={1}
-            end={orderProduct.count}
-            selectedValue={this.state.quantity}
-            onValueChange={(value) => this.setState({ quantity: value })}
-            enabled={orderProduct.status === 101}
+        <View style={{ flex: 1 }}>
+          <Text>{color}</Text>
+          <Text>{size}</Text>
+          <Text>{`${numeral(orderProduct.KRW).format('0,0')}원`}</Text>
+        </View>
+        <View style={{ flex: 1 }}>
+          <TextInput
+            autoCapitalize='none'
+            autoCorrect={false}
+            keyboardType='numeric'
+            value={orderProduct.quantity.toString()}
+            style={{ height: 50 }}
           />
-          {orderProduct.status === 101 && this.renderButtons()}
+        </View>
+        <View style={{ marginHorizontal: 5 }}>
+          <Switch />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Button
+            style={{color: 'blue'}}
+            styleDisabled={{color: 'red'}}
+            containerStyle={styles.signinContainer}
+            onPress={this.signin}
+          >
+            Save
+          </Button>
         </View>
       </View>
     );
@@ -68,9 +85,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 5,
-  },
-  descContainer: {
-    flex: 1,
   },
   confirmContainer: {
     flex: 1,

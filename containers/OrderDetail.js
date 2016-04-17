@@ -18,6 +18,7 @@ const OrderDetail = React.createClass({
   },
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
+    sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
   }),
   renderRow(orderProduct) {
     const { reduxKey, createOrderProductLog } = this.props;
@@ -32,6 +33,15 @@ const OrderDetail = React.createClass({
           });
         }}
       />
+    );
+  },
+  renderSectionHeader(sectionData, sectionID) {
+    return (
+      <View style={styles.section}>
+        <Text style={{ fontSize: 17 }}>
+          {sectionData[0].product.name.ko}
+        </Text>
+      </View>
     );
   },
   renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
@@ -53,12 +63,14 @@ const OrderDetail = React.createClass({
       return <EmptyView text='No orders...' />;
     }
     // FIXME: possible performance issue...
-    const dataSource = this.dataSource.cloneWithRows(orderProducts);
+    const dataBlob = _.groupBy(orderProducts, (o) => o.product.id);
+    const dataSource = this.dataSource.cloneWithRowsAndSections(dataBlob);
     return (
       <View style={styles.container}>
         <ListView
           dataSource={dataSource}
           renderRow={this.renderRow}
+          renderSectionHeader={this.renderSectionHeader}
           renderSeparator={this.renderSeparator}
         />
       </View>
@@ -78,6 +90,9 @@ const styles = StyleSheet.create({
   },
   rowSeparatorHide: {
     opacity: 0.0,
+  },
+  section: {
+    marginTop: 10,
   },
 });
 
