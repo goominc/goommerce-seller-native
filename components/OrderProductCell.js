@@ -57,7 +57,7 @@ export default React.createClass({
           <TextInput
             autoCapitalize='none'
             autoCorrect={false}
-            keyboardType='numeric'
+            keyboardType='number-pad'
             value={orderProduct.quantity.toString()}
             style={{ height: 50 }}
           />
