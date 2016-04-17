@@ -20,7 +20,9 @@ const NavigationBarRouteMapper = {
     return (<NavBarBack title={index > 1 && title} pop={navigator.pop}/>);
   },
   RightButton(route, navigator, index, navState) {
-    return undefined;
+    const { component } = route;
+    const rightButton = component.rightButton || component.WrappedComponent.rightButton;
+    return rightButton && rightButton(navigator);
   },
   Title(route, navigator, index, navState) {
     return (

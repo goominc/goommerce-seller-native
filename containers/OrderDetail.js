@@ -2,6 +2,7 @@ import React, {
   ListView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View
 } from 'react-native';
 import { bindActionCreators } from 'redux'
@@ -12,6 +13,18 @@ import EmptyView from '../components/EmptyView';
 import OrderProductCell from '../components/OrderProductCell';
 
 const OrderDetail = React.createClass({
+  statics: {
+    rightButton() {
+      return (
+        <TouchableOpacity
+          style={styles.navBarRightButton}>
+          <Text style={styles.navBarButtonText}>
+            포장완료
+          </Text>
+        </TouchableOpacity>
+      );
+    },
+  },
   componentDidMount() {
     const { loadBrandOrder, brandId, orderId } = this.props;
     loadBrandOrder(brandId, orderId);
@@ -93,6 +106,14 @@ const styles = StyleSheet.create({
   },
   section: {
     marginTop: 10,
+  },
+  navBarRightButton: {
+    paddingRight: 10,
+  },
+  navBarButtonText: {
+    fontSize: 16,
+    marginVertical: 10,
+    color: '#5890FF',
   },
 });
 
