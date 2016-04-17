@@ -27,6 +27,7 @@ const OrderList = React.createClass({
   },
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
+    sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
   }),
   onEndReached() {
     const { brandId, limit, pagination, loadBrandOrders } = this.props;
@@ -37,6 +38,10 @@ const OrderList = React.createClass({
     loadBrandOrders(brandId, pagination.offset + pagination.limit, limit).then(
       () => this.setState({ isLoadingTail: false })
     );
+  },
+  listToDataBlob() {
+    const { list } = this.props;
+    return _.groupBy(list, (p) => p.processedDate.substr(0, 10));
   },
   renderFooter() {
     const { pagination } = this.props;
@@ -82,6 +87,15 @@ const OrderList = React.createClass({
       />
     );
   },
+  renderSectionHeader(sectionData, sectionID) {
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionText}>
+          {sectionID}
+        </Text>
+      </View>
+    );
+  },
   renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
     var style = styles.rowSeparator;
     if (adjacentRowHighlighted) {
@@ -100,12 +114,13 @@ const OrderList = React.createClass({
       return <EmptyView text='No orders...' />;
     }
     // FIXME: possible performance issue...
-    const dataSource = this.dataSource.cloneWithRows(list);
+    const dataSource = this.dataSource.cloneWithRowsAndSections(this.listToDataBlob());
     return (
       <View style={styles.container}>
         <ListView
           dataSource={dataSource}
           renderRow={this.renderRow}
+          renderSectionHeader={this.renderSectionHeader}
           renderSeparator={this.renderSeparator}
           onEndReached={this.onEndReached}
         />
@@ -129,6 +144,17 @@ const styles = StyleSheet.create({
   },
   scrollSpinner: {
     marginVertical: 20,
+  },
+  section: {
+    alignItems: 'center',
+  },
+  sectionText: {
+    width: 200,
+    textAlign: 'center',
+    paddingVertical: 6,
+    borderRadius: 10,
+    marginVertical: 6,
+    backgroundColor: '#f2f2f2',
   },
 });
 
