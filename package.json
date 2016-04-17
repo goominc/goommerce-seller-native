@@ -9,6 +9,7 @@
     "goommerce-api-client": "goominc/goommerce-api-client",
     "goommerce-redux": "goominc/goommerce-redux",
     "lodash": "^4.6.1",
+    "numeral": "^1.5.3",
     "react": "^0.14.7",
     "react-cloudinary": "^0.3.0",
     "react-native": "^0.23.1",

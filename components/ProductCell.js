@@ -12,6 +12,7 @@ import React, {
   View,
 } from 'react-native';
 import { CloudinaryImageNative } from 'react-cloudinary';
+import numeral from 'numeral';
 
 import DefaultText from './DefaultText';
 
@@ -36,7 +37,7 @@ export default React.createClass({
             />
             <View style={styles.descContainer}>
               <DefaultText text={name.ko} />
-              {KRW && <DefaultText text={`${KRW}원`} />}
+              {KRW && <DefaultText text={`${numeral(KRW).format('0,0')}원`} />}
             </View>
             <View style={{ marginRight: 10 }}>
               <Switch value={isActive} />
