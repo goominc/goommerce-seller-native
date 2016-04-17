@@ -1,3 +1,5 @@
+'use strict';
+
 import React, {
   Alert,
   ListView,
@@ -11,6 +13,7 @@ import { orderActions } from 'goommerce-redux';
 
 import EmptyView from '../components/EmptyView';
 import OrderCell from '../components/OrderCell';
+import RefreshableList from '../components/RefreshableList';
 import routes from '../routes';
 
 const OrderList = React.createClass({
@@ -38,6 +41,10 @@ const OrderList = React.createClass({
     loadBrandOrders(brandId, pagination.offset + pagination.limit, limit).then(
       () => this.setState({ isLoadingTail: false })
     );
+  },
+  onRefresh() {
+    const { brandId, limit, loadBrandOrders } = this.props;
+    return loadBrandOrders(brandId, 0, limit);
   },
   listToDataBlob() {
     const { list } = this.props;
@@ -117,12 +124,13 @@ const OrderList = React.createClass({
     const dataSource = this.dataSource.cloneWithRowsAndSections(this.listToDataBlob());
     return (
       <View style={styles.container}>
-        <ListView
+        <RefreshableList
           dataSource={dataSource}
           renderRow={this.renderRow}
           renderSectionHeader={this.renderSectionHeader}
           renderSeparator={this.renderSeparator}
           onEndReached={this.onEndReached}
+          onRefresh={this.onRefresh}
         />
       </View>
     );

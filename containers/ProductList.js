@@ -11,6 +11,7 @@ import _ from 'lodash';
 
 import EmptyView from '../components/EmptyView';
 import ProductCell from '../components/ProductCell';
+import RefreshableList from '../components/RefreshableList';
 import routes from '../routes';
 
 const ProductList = React.createClass({
@@ -38,6 +39,10 @@ const ProductList = React.createClass({
     loadBrandProducts(brandId, pagination.offset + pagination.limit, limit).then(
       () => this.setState({ isLoadingTail: false })
     );
+  },
+  onRefresh() {
+    const { brandId, limit, loadBrandProducts } = this.props;
+    return loadBrandProducts(brandId, 0, limit);
   },
   listToDataBlob() {
     const { list } = this.props;
@@ -100,12 +105,13 @@ const ProductList = React.createClass({
     const dataSource = this.dataSource.cloneWithRowsAndSections(this.listToDataBlob());
     return (
       <View style={styles.container}>
-        <ListView
+        <RefreshableList
           dataSource={dataSource}
           renderRow={this.renderRow}
           renderSectionHeader={this.renderSectionHeader}
           renderSeparator={this.renderSeparator}
           onEndReached={this.onEndReached}
+          onRefresh={this.onRefresh}
         />
       </View>
     );

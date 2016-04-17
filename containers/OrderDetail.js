@@ -11,6 +11,7 @@ import { orderActions } from 'goommerce-redux';
 
 import EmptyView from '../components/EmptyView';
 import OrderProductCell from '../components/OrderProductCell';
+import RefreshableList from '../components/RefreshableList';
 
 const OrderDetail = React.createClass({
   statics: {
@@ -33,6 +34,10 @@ const OrderDetail = React.createClass({
     rowHasChanged: (row1, row2) => row1 !== row2,
     sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
   }),
+  onRefresh() {
+    const { loadBrandOrder, brandId, orderId } = this.props;
+    return loadBrandOrder(brandId, orderId);
+  },
   renderRow(orderProduct) {
     const { reduxKey, createOrderProductLog } = this.props;
     return (
@@ -80,11 +85,12 @@ const OrderDetail = React.createClass({
     const dataSource = this.dataSource.cloneWithRowsAndSections(dataBlob);
     return (
       <View style={styles.container}>
-        <ListView
+        <RefreshableList
           dataSource={dataSource}
           renderRow={this.renderRow}
           renderSectionHeader={this.renderSectionHeader}
           renderSeparator={this.renderSeparator}
+          onRefresh={this.onRefresh}
         />
       </View>
     );
