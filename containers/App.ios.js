@@ -1,94 +1,85 @@
 'use strict';
 
-import React, {
-  Navigator,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import React, { AsyncStorage, TabBarIOS } from 'react-native';
+import { connect } from 'react-redux'
+import { authActions } from 'goommerce-redux';
+import OneSignal from 'react-native-onesignal';
 
+import EmptyView from '../components/EmptyView';
+import Navigator from '../components/Navigator';
+import Signin from '../components/Signin';
 import routes from '../routes';
-import NavBarBack from '../components/NavBarBack'
 
-const NavigationBarRouteMapper = {
-  LeftButton(route, navigator, index, navState) {
-    if (index === 0) {
-      return null;
+const App = React.createClass({
+  getInitialState: function() {
+    return {
+      selectedTab: 'orders',
+    };
+  },
+  componentDidMount() {
+    const { auth, whoami } = this.props;
+    if (auth.bearer && !auth.email) {
+      whoami();
     }
-    const { title } = navState.routeStack[index - 1];
-    return (<NavBarBack title={index > 1 && title} pop={navigator.pop}/>);
   },
-  RightButton(route, navigator, index, navState) {
-    const { component } = route;
-    const rightButton = component.rightButton || component.WrappedComponent.rightButton;
-    return rightButton && rightButton(navigator);
-  },
-  Title(route, navigator, index, navState) {
-    return (
-      <Text style={[styles.navBarText, styles.navBarTitleText]}>
-        {route.title}
-      </Text>
-    );
-  },
-};
-
-export default React.createClass({
-  renderScene(route, navigator) {
-    return (
-      <View style={styles.scene}>
-        <route.component {...route.props} push={navigator.push} />
-      </View>
-    );
+  signin(email, password) {
+    OneSignal.idsAvailable(({ pushToken, playerId, userId }) => {
+      this.props.login(email, password, pushToken && (playerId || userId)).then(
+        (auth) => AsyncStorage.setItem('bearer', auth.bearer)
+      );
+    });
   },
   render() {
+    const { auth: { bearer, email, roles } } = this.props;
+    if (!bearer) {
+      return (<Signin signin={this.signin} />);
+    }
+    if (!email) {
+      return <EmptyView text={'Loading...'} />;
+    }
+
+    const brands = _.filter(roles,
+      (r) => r.type === 'owner' || r.type === 'staff').map((r) => r.brand);
+    if (brands.length === 0) {
+      return (<View>Not brand owner</View>);
+    }
+
+    const brandId = brands[0].id;
     return (
-      <Navigator
-        initialRoute={routes.home()}
-        navigationBar={
-          <Navigator.NavigationBar
-            routeMapper={NavigationBarRouteMapper}
-            style={styles.navBar}
-          />
-        }
-        renderScene={this.renderScene}
-        style={styles.container}
-      />
+      <TabBarIOS
+        barTintColor="white">
+        <TabBarIOS.Item
+          systemIcon='recents'
+          title="주문조회"
+          selected={this.state.selectedTab === 'orders'}
+          onPress={() => {
+            this.setState({ selectedTab: 'orders' });
+          }}>
+          <Navigator initialRoute={routes.orders({ brandId })} />
+        </TabBarIOS.Item>
+        <TabBarIOS.Item
+          systemIcon="featured"
+          title="상품관리"
+          selected={this.state.selectedTab === 'products'}
+          onPress={() => {
+            this.setState({ selectedTab: 'products' });
+          }}>
+          <Navigator initialRoute={routes.products({ brandId })} />
+        </TabBarIOS.Item>
+        <TabBarIOS.Item
+          systemIcon='contacts'
+          title="내 정보"
+          selected={this.state.selectedTab === 'profile'}
+          onPress={() => {
+            this.setState({ selectedTab: 'profile' });
+          }}>
+          <Navigator initialRoute={routes.profile()} />
+        </TabBarIOS.Item>
+      </TabBarIOS>
     );
   }
 });
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  scene: {
-    flex: 1,
-    marginTop: 64,
-    backgroundColor: 'white',
-  },
-  navBar: {
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eeeeee'
-  },
-  navBarText: {
-    fontSize: 16,
-    marginVertical: 10,
-  },
-  navBarTitleText: {
-    color: '#373E4D',
-    fontWeight: '500',
-    marginVertical: 9,
-  },
-  navBarLeftButton: {
-    paddingLeft: 10,
-  },
-  navBarRightButton: {
-    paddingRight: 10,
-  },
-  navBarButtonText: {
-    color: '#5890FF',
-  },
-});
+export default connect(
+  (state) => ({ auth: state.auth }) , authActions
+)(App);
