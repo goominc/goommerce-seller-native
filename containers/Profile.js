@@ -9,11 +9,15 @@ import React, {
 import { connect } from 'react-redux'
 import OneSignal from 'react-native-onesignal';
 import Button from 'react-native-button';
-import { authActions } from 'goommerce-redux';
+import { authActions, brandActions } from 'goommerce-redux';
 
-const _ = require('lodash');
+import _ from 'lodash';
 
 const Profile = React.createClass({
+  componentDidMount() {
+    const { brands, loadBrand } = this.props;
+    brands.forEach((b) => loadBrand(b.id));
+  },
   signout() {
     OneSignal.idsAvailable(({ pushToken, playerId, userId }) => {
       this.props.logout(pushToken && (playerId || userId)).then(
@@ -22,12 +26,16 @@ const Profile = React.createClass({
     });
   },
   render() {
-    const { auth: { roles = [] } } = this.props;
-
-    const brands = _.filter(roles,
-      (r) => r.type === 'owner' || r.type === 'staff').map((r) => r.brand);
+    const { brands = [] } = this.props;
     return (
       <View style={styles.container}>
+        {brands.map((b, idx) => (
+          <View key={b.id}>
+            <Text>{_.get(b, 'name.ko')}</Text>
+            <Text>{b.pathname && `https://www.linkshops.com/${b.pathname}`}</Text>
+            <Text>{_.get(b, 'data.building.name')}</Text>
+          </View>
+        ))}
         <Button
           style={{color: 'white'}}
           styleDisabled={{color: 'red'}}
@@ -58,5 +66,14 @@ const styles = StyleSheet.create({
 });
 
 export default connect(
-  (state) => ({ auth: state.auth }) , authActions
+  (state) => {
+    const { roles = [] } = state.auth;
+    const brands = _.filter(roles,
+      (r) => r.type === 'owner' || r.type === 'staff').map((r) => r.brand);
+    brands.forEach((b) => {
+      const { key } = brandActions.loadBrand(b.id);
+      _.assign(b, state.brand[key]);
+    });
+    return { auth: state.auth, brands };
+  }, _.assign({}, authActions, brandActions)
 )(Profile);

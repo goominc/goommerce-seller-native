@@ -41,7 +41,7 @@ const App = React.createClass({
     const brands = _.filter(roles,
       (r) => r.type === 'owner' || r.type === 'staff').map((r) => r.brand);
     if (brands.length === 0) {
-      return (<View>Not brand owner</View>);
+      return <EmptyView text={'Not brand owner...'} />;
     }
 
     const brandId = brands[0].id;
