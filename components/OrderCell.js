@@ -65,11 +65,11 @@ const styles = StyleSheet.create({
   orderNumContainer: {
     alignItems: 'center',
     backgroundColor: '#dddddd',
-    borderRadius: 45,
-    height: 90,
+    borderRadius: 30,
+    height: 60,
     justifyContent: 'center',
     marginRight: 10,
-    width: 90,
+    width: 60,
   },
   descContainer: {
     flex: 1,
