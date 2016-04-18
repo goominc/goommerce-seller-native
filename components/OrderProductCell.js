@@ -35,19 +35,27 @@ export default React.createClass({
       </View>
     );
   },
-  render() {
-    const { orderProduct } = this.props;
-    const { product, productVariant } = orderProduct;
-    const { name } = product;
-    const { color, size } = productVariant.data;
-    const image = productVariant.appImages.default[0];
-    return (
-      <View style={styles.container}>
+  renderThumbnail({ product, productVariant }) {
+    const image = _.get(productVariant, 'appImages.default.0');
+    if (image) {
+      return (
         <CloudinaryImageNative
           publicId={image.publicId}
           options={{ width: 200, height: 200 }}
           style={styles.thumbnail}
         />
+      );
+    }
+  },
+  render() {
+    const { orderProduct } = this.props;
+    const { product, productVariant } = orderProduct;
+    const { name } = product;
+    const { color, size } = productVariant.data;
+    const image = _.get(productVariant, 'appImages.default.0');
+    return (
+      <View style={styles.container}>
+        {this.renderThumbnail(orderProduct)}
         <View style={{ flex: 1 }}>
           <Text>{color}</Text>
           <Text>{size}</Text>
