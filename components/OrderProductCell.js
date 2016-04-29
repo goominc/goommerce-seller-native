@@ -2,7 +2,6 @@
 
 import React, {
   Image,
-  Picker,
   StyleSheet,
   Text,
   TextInput,
@@ -13,27 +12,32 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { CloudinaryImageNative } from 'react-cloudinary';
 import numeral from 'numeral';
 import Button from 'react-native-button';
+import _ from 'lodash';
 
 import CountPicker from './CountPicker';
 
-const _ = require('lodash');
+function getInitialState(props) {
+  const { orderProduct } = props;
+  const quantity = _.get(orderProduct, "intermediateQuantities.stock", orderProduct.quantity);
+  return {
+    quantity: quantity.toString(),
+    confirmed: orderProduct.status === 102 || orderProduct.status === 104,
+  };
+}
 
 export default React.createClass({
   getInitialState() {
-    return { quantity: this.props.orderProduct.quantity };
+    return getInitialState(this.props);
   },
-  renderButtons() {
-    const { confirm } = this.props;
-    return (
-      <View style={styles.confirmContainer}>
-        <Icon.Button name="check" onPress={() => confirm(this.state.quantity)}>
-          <Text style={styles.signin}>In Stock</Text>
-        </Icon.Button>
-        <Icon.Button name="times" onPress={() => confirm(0)}>
-          <Text style={styles.signin}>Out Of Stock</Text>
-        </Icon.Button>
-      </View>
-    );
+  popupReasonModal() {
+  },
+  toggleConfirm(confirmed) {
+    this.setState({confirmed});
+    if (confirmed) {
+      this.props.confirm(this.state.quantity).then(
+        () => this.setState(getInitialState(this.props))
+      );
+    }
   },
   renderThumbnail({ product, productVariant }) {
     const image = _.get(productVariant, 'appImages.default.0');
@@ -41,7 +45,7 @@ export default React.createClass({
       return (
         <CloudinaryImageNative
           publicId={image.publicId}
-          options={{ width: 200, height: 200 }}
+          options={{ width: 100, height: 100 }}
           style={styles.thumbnail}
         />
       );
@@ -55,33 +59,42 @@ export default React.createClass({
     const image = _.get(productVariant, 'appImages.default.0');
     return (
       <View style={styles.container}>
-        {this.renderThumbnail(orderProduct)}
         <View style={{ flex: 1 }}>
-          <Text>{color}</Text>
-          <Text>{size}</Text>
+          <Text>{name.ko}</Text>
+          <Text>{color} / {size}</Text>
           <Text>{`${numeral(orderProduct.KRW).format('0,0')}원`}</Text>
+          {this.renderThumbnail(orderProduct)}
         </View>
         <View style={{ flex: 1 }}>
+          <Text>주문수량: {orderProduct.quantity}</Text>
           <TextInput
             autoCapitalize='none'
             autoCorrect={false}
             keyboardType='number-pad'
-            value={orderProduct.quantity.toString()}
-            style={{ height: 50 }}
+            onChangeText={(quantity) => this.setState({quantity})}
+            value={this.state.quantity}
+            style={styles.quantityInput}
+            editable={!this.state.confirmed}
           />
         </View>
-        <View style={{ marginHorizontal: 5 }}>
-          <Switch />
-        </View>
         <View style={{ flex: 1 }}>
+          <Text>수량 변경 사유</Text>
           <Button
-            style={{color: 'blue'}}
+            style={{color: 'black'}}
             styleDisabled={{color: 'red'}}
-            containerStyle={styles.signinContainer}
-            onPress={this.signin}
+            containerStyle={styles.popupButton}
+            onPress={this.popupReasonModal}
+            disabled={this.state.confirmed || this.state.quantity == orderProduct.quantity}
           >
-            Save
+            재입고예정
           </Button>
+        </View>
+        <View style={{ marginHorizontal: 5 }}>
+          <Text>주문확인</Text>
+          <Switch
+            onValueChange={this.toggleConfirm}
+            value={this.state.confirmed}
+          />
         </View>
       </View>
     );
@@ -94,15 +107,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 5,
   },
-  confirmContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
   thumbnail: {
-    width: 90,
-    height: 90,
-    marginRight: 10,
     backgroundColor: '#dddddd',
+    borderColor: 'gray',
+    borderWidth: 1,
+    height: 50,
+    width: 50,
+  },
+  quantityInput: {
+    borderColor: 'gray',
+    borderRadius: 6,
+    borderWidth: 1,
+    height: 45,
+    marginHorizontal: 5,
+    textAlign: 'center',
+  },
+  popupButton: {
+    borderColor: 'gray',
+    borderRadius: 6,
+    borderWidth: 1,
+    overflow:'hidden',
+    height: 45,
+    marginHorizontal: 5,
+    justifyContent:'center',
   },
 });

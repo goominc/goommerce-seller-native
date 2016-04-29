@@ -64,7 +64,8 @@ const styles = StyleSheet.create({
   },
   scene: {
     flex: 1,
-    marginTop: 64,
+    paddingTop: 64, // NavigationBar
+    paddingBottom: 50, // TabBarIOS
     backgroundColor: 'white',
   },
   navBar: {

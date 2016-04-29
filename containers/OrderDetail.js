@@ -8,24 +8,13 @@ import React, {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
+import Button from 'react-native-button';
 
 import EmptyView from '../components/EmptyView';
 import OrderProductCell from '../components/OrderProductCell';
 import RefreshableList from '../components/RefreshableList';
 
 const OrderDetail = React.createClass({
-  statics: {
-    rightButton() {
-      return (
-        <TouchableOpacity
-          style={styles.navBarRightButton}>
-          <Text style={styles.navBarButtonText}>
-            포장완료
-          </Text>
-        </TouchableOpacity>
-      );
-    },
-  },
   componentDidMount() {
     const { loadBrandOrder, brandId, orderId } = this.props;
     loadBrandOrder(brandId, orderId);
@@ -39,17 +28,12 @@ const OrderDetail = React.createClass({
     return loadBrandOrder(brandId, orderId);
   },
   renderRow(orderProduct) {
-    const { reduxKey, createOrderProductLog } = this.props;
+    const { reduxKey, brandId, orderId, updateOrderProductStock } = this.props;
     return (
       <OrderProductCell
         key={orderProduct.id}
         orderProduct={orderProduct}
-        confirm={(cnt) => {
-          createOrderProductLog(orderProduct.id, reduxKey, {
-            type: 1101,
-            data: { quantity: cnt },
-          });
-        }}
+        confirm={(quantity) => updateOrderProductStock(brandId, orderId, orderProduct.id, quantity)}
       />
     );
   },
@@ -81,17 +65,30 @@ const OrderDetail = React.createClass({
       return <EmptyView text='No orders...' />;
     }
     // FIXME: possible performance issue...
-    const dataBlob = _.groupBy(orderProducts, (o) => o.product.id);
-    const dataSource = this.dataSource.cloneWithRowsAndSections(dataBlob);
+    const dataSource = this.dataSource.cloneWithRows(orderProducts);
+    // const dataBlob = _.groupBy(orderProducts, (o) => o.product.id);
+    // const dataSource = this.dataSource.cloneWithRowsAndSections(dataBlob);
     return (
       <View style={styles.container}>
         <RefreshableList
           dataSource={dataSource}
           renderRow={this.renderRow}
-          renderSectionHeader={this.renderSectionHeader}
           renderSeparator={this.renderSeparator}
           onRefresh={this.onRefresh}
         />
+        <View style={styles.footer}>
+          <View style={styles.footerDescContainer}>
+            <Text style={{color: 'white', flex: 1}}>총 주문수량: {order.totalQuantity}</Text>
+            <Text style={{color: 'white', flex: 1}}>총 주문금액: {order.totalKRW}</Text>
+          </View>
+          <Button
+            style={{color: 'white'}}
+            styleDisabled={{color: 'red'}}
+            containerStyle={styles.confirmButton}
+          >
+            포장완료
+          </Button>
+        </View>
       </View>
     );
   },
@@ -120,6 +117,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginVertical: 10,
     color: '#5890FF',
+  },
+  footer: {
+    backgroundColor: '#3f4c5d',
+    height: 80,
+  },
+  footerDescContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+  },
+  confirmButton: {
+    flex: 1,
+    backgroundColor: '#1fcbf6',
+    borderRadius: 6,
+    overflow:'hidden',
+    marginHorizontal: 60,
+    justifyContent:'center',
   },
 });
 
