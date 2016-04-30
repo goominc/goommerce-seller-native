@@ -36,7 +36,7 @@ export default React.createClass({
   renderScene(route, navigator) {
     return (
       <View style={styles.scene}>
-        <route.component {...route.props} push={navigator.push} />
+        <route.component {...route.props} push={navigator.push} pop={navigator.pop} />
       </View>
     );
   },

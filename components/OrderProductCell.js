@@ -21,7 +21,7 @@ function getInitialState(props) {
   const quantity = _.get(orderProduct, "intermediateQuantities.stock", orderProduct.quantity);
   return {
     quantity: quantity.toString(),
-    confirmed: orderProduct.status === 102 || orderProduct.status === 104,
+    confirmed: orderProduct.status !== 101,
   };
 }
 
@@ -66,7 +66,7 @@ export default React.createClass({
           {this.renderThumbnail(orderProduct)}
         </View>
         <View style={{ flex: 1 }}>
-          <Text>주문수량: {orderProduct.quantity}</Text>
+          <Text>주문수량: {numeral(orderProduct.quantity).format('0,0')}</Text>
           <TextInput
             autoCapitalize='none'
             autoCorrect={false}
@@ -94,6 +94,8 @@ export default React.createClass({
           <Switch
             onValueChange={this.toggleConfirm}
             value={this.state.confirmed}
+            disabled={orderProduct.status !== 101 &&
+              orderProduct.status !== 102 && orderProduct.status !== 104}
           />
         </View>
       </View>

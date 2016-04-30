@@ -70,8 +70,9 @@ const OrderList = React.createClass({
 
     function onSelect() {
       function onConfirm() {
-        updateBrandOrderStatus(brandId, order.id, reduxKey, 100, 101);
-        push(routes.order({ brandId, orderId: order.id }));
+        updateBrandOrderStatus(brandId, order.id, reduxKey, 100, 101).then(
+          () => push(routes.order({ brandId, orderId: order.id }))
+        );
       }
       if (_.find(order.orderProducts, { status: 100 })) {
         Alert.alert(

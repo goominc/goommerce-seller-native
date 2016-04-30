@@ -8,6 +8,7 @@
   "dependencies": {
     "goommerce-api-client": "goominc/goommerce-api-client",
     "goommerce-redux": "goominc/goommerce-redux",
+    "decimal.js": "^5.0.8",
     "lodash": "^4.6.1",
     "numeral": "^1.5.3",
     "react": "^0.14.7",

@@ -1,4 +1,5 @@
 import React, {
+  Alert,
   ListView,
   StyleSheet,
   Text,
@@ -9,6 +10,8 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
 import Button from 'react-native-button';
+import Decimal from 'decimal.js';
+import numeral from 'numeral';
 
 import EmptyView from '../components/EmptyView';
 import OrderProductCell from '../components/OrderProductCell';
@@ -23,6 +26,29 @@ const OrderDetail = React.createClass({
     rowHasChanged: (row1, row2) => row1 !== row2,
     sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
   }),
+  onConfirm() {
+    const { brandId, reduxKey, order, updateBrandOrderStatus, pop } = this.props;
+    const counts = _.countBy(order.orderProducts, 'status');
+    if (counts[101]) {
+      Alert.alert(
+        '확인되지 않은 주문이 있습니다.',
+      );
+    } else if (!counts[102]) {
+      Alert.alert(
+        '출고가능 상품이 없습니다.',
+        '주문확인 감사합니다.',
+      );
+    } else {
+      function onConfirm() {
+        updateBrandOrderStatus(brandId, order.id, reduxKey, 102, 103).then(() => pop());
+      }
+      Alert.alert(
+        '주문확인 및 포장이 완료되었습니까?',
+        '"링크# xxx" 봉투에 적으셨나요?',
+        [ { text: '확인', onPress: onConfirm }, { text: '취소' } ]
+      );
+    }
+  },
   onRefresh() {
     const { loadBrandOrder, brandId, orderId } = this.props;
     return loadBrandOrder(brandId, orderId);
@@ -33,7 +59,7 @@ const OrderDetail = React.createClass({
       <OrderProductCell
         key={orderProduct.id}
         orderProduct={orderProduct}
-        confirm={(quantity) => updateOrderProductStock(brandId, orderId, orderProduct.id, quantity)}
+        confirm={(quantity) => updateOrderProductStock(orderProduct.id, reduxKey, quantity)}
       />
     );
   },
@@ -68,6 +94,8 @@ const OrderDetail = React.createClass({
     const dataSource = this.dataSource.cloneWithRows(orderProducts);
     // const dataBlob = _.groupBy(orderProducts, (o) => o.product.id);
     // const dataSource = this.dataSource.cloneWithRowsAndSections(dataBlob);
+    const totalQuantity = _.sumBy(orderProducts, 'quantity');
+    const totalKRW = _.reduce(orderProducts, (sum, o) => sum.add(o.totalKRW), new Decimal(0)).toNumber();
     return (
       <View style={styles.container}>
         <RefreshableList
@@ -78,13 +106,18 @@ const OrderDetail = React.createClass({
         />
         <View style={styles.footer}>
           <View style={styles.footerDescContainer}>
-            <Text style={{color: 'white', flex: 1}}>총 주문수량: {order.totalQuantity}</Text>
-            <Text style={{color: 'white', flex: 1}}>총 주문금액: {order.totalKRW}</Text>
+            <Text style={{color: 'white', flex: 1}}>
+              총 주문수량: {numeral(totalQuantity).format('0,0')}
+            </Text>
+            <Text style={{color: 'white', flex: 1}}>
+              총 주문금액: {numeral(totalKRW).format('0,0')}원
+            </Text>
           </View>
           <Button
             style={{color: 'white'}}
             styleDisabled={{color: 'red'}}
             containerStyle={styles.confirmButton}
+            onPress={this.onConfirm}
           >
             포장완료
           </Button>
