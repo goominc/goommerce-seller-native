@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
 import Button from 'react-native-button';
-import Decimal from 'decimal.js';
+import Decimal from 'decimal.js-light';
 import numeral from 'numeral';
 
 import EmptyView from '../components/EmptyView';

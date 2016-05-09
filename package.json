@@ -6,7 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
-    "decimal.js": "^5.0.8",
+    "decimal.js-light": "^1.0.4",
     "goommerce-api-client": "goominc/goommerce-api-client",
     "goommerce-redux": "goominc/goommerce-redux",
     "lodash": "^4.6.1",
