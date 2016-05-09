@@ -59,7 +59,7 @@ const OrderDetail = React.createClass({
       <OrderProductCell
         key={orderProduct.id}
         orderProduct={orderProduct}
-        confirm={(quantity) => updateOrderProductStock(orderProduct.id, reduxKey, quantity)}
+        confirm={(quantity, reason) => updateOrderProductStock(orderProduct.id, reduxKey, quantity, reason)}
       />
     );
   },

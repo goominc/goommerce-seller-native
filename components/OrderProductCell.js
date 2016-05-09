@@ -8,19 +8,21 @@ import React, {
   Switch,
   View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { CloudinaryImageNative } from 'react-cloudinary';
-import numeral from 'numeral';
-import Button from 'react-native-button';
 import _ from 'lodash';
+import Button from 'react-native-button';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import ModalPicker from 'react-native-modal-picker'
+import numeral from 'numeral';
 
 import CountPicker from './CountPicker';
 
 function getInitialState(props) {
   const { orderProduct } = props;
-  const quantity = _.get(orderProduct, "data.stock.quantity", orderProduct.quantity);
+  const quantity = _.get(orderProduct, 'data.stock.quantity', orderProduct.quantity);
   return {
     quantity: quantity.toString(),
+    reason: _.get(orderProduct, 'data.stock.reason', 0),
     confirmed: orderProduct.status !== 101,
   };
 }
@@ -29,15 +31,21 @@ export default React.createClass({
   getInitialState() {
     return getInitialState(this.props);
   },
-  popupReasonModal() {
-  },
   toggleConfirm(confirmed) {
     this.setState({confirmed});
     if (confirmed) {
-      this.props.confirm(+this.state.quantity).then(
+      const { quantity, reason } = this.state;
+      this.props.confirm(+quantity, reason).then(
         () => this.setState(getInitialState(this.props))
       );
     }
+  },
+  setQuantity(quantity) {
+    const { orderProduct } = this.props;
+    this.setState({
+      quantity,
+      reason: quantity == orderProduct.quantity ? 0 : (this.state.reason || 10),
+    });
   },
   renderThumbnail({ product, productVariant }) {
     const image = _.get(productVariant, 'appImages.default.0');
@@ -50,6 +58,33 @@ export default React.createClass({
         />
       );
     }
+  },
+  renderReasonModal() {
+    const { orderProduct } = this.props;
+    const disabled= this.state.confirmed || this.state.quantity == orderProduct.quantity;
+    const data = {
+      0: { key: 0, label: '재고 있음' },
+      10: { key: 10, label: '재입고 예정' },
+      30: { key: 30, label: '품절' },
+    };
+    const selected = data[this.state.reason].label;
+    const button = (
+      <View style={styles.reasonButton}>
+        <Text style={styles.reasonButtonText}>{selected}</Text>
+      </View>
+    );
+    if (disabled) {
+      return button;
+    }
+    return (
+      <ModalPicker
+        data={_.values(data).slice(1)}
+        initValue={selected}
+        onChange={(option)=> this.setState({ reason: option.key })}
+      >
+        {button}
+      </ModalPicker>
+    );
   },
   render() {
     const { orderProduct } = this.props;
@@ -71,7 +106,7 @@ export default React.createClass({
             autoCapitalize='none'
             autoCorrect={false}
             keyboardType='number-pad'
-            onChangeText={(quantity) => this.setState({quantity})}
+            onChangeText={this.setQuantity}
             value={this.state.quantity}
             style={styles.quantityInput}
             editable={!this.state.confirmed}
@@ -79,15 +114,7 @@ export default React.createClass({
         </View>
         <View style={{ flex: 1 }}>
           <Text>수량 변경 사유</Text>
-          <Button
-            style={{color: 'black'}}
-            styleDisabled={{color: 'red'}}
-            containerStyle={styles.popupButton}
-            onPress={this.popupReasonModal}
-            disabled={this.state.confirmed || this.state.quantity == orderProduct.quantity}
-          >
-            재입고예정
-          </Button>
+          {this.renderReasonModal()}
         </View>
         <View style={{ marginHorizontal: 5 }}>
           <Text>주문확인</Text>
@@ -124,13 +151,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     textAlign: 'center',
   },
-  popupButton: {
+  reasonButton: {
     borderColor: 'gray',
     borderRadius: 6,
     borderWidth: 1,
-    overflow:'hidden',
     height: 45,
     marginHorizontal: 5,
     justifyContent:'center',
+  },
+  reasonButtonText: {
+    textAlign: 'center',
   },
 });

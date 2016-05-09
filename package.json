@@ -6,15 +6,16 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
+    "decimal.js": "^5.0.8",
     "goommerce-api-client": "goominc/goommerce-api-client",
     "goommerce-redux": "goominc/goommerce-redux",
-    "decimal.js": "^5.0.8",
     "lodash": "^4.6.1",
     "numeral": "^1.5.3",
     "react": "^0.14.7",
     "react-cloudinary": "^0.3.0",
     "react-native": "^0.24.1",
     "react-native-button": "^1.4.2",
+    "react-native-modal-picker": "0.0.14",
     "react-native-onesignal": "^1.1.1",
     "react-native-vector-icons": "^1.3.2",
     "react-redux": "^4.4.1",
