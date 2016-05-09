@@ -18,7 +18,7 @@ import CountPicker from './CountPicker';
 
 function getInitialState(props) {
   const { orderProduct } = props;
-  const quantity = _.get(orderProduct, "intermediateQuantities.stock", orderProduct.quantity);
+  const quantity = _.get(orderProduct, "data.stock.quantity", orderProduct.quantity);
   return {
     quantity: quantity.toString(),
     confirmed: orderProduct.status !== 101,
@@ -34,7 +34,7 @@ export default React.createClass({
   toggleConfirm(confirmed) {
     this.setState({confirmed});
     if (confirmed) {
-      this.props.confirm(this.state.quantity).then(
+      this.props.confirm(+this.state.quantity).then(
         () => this.setState(getInitialState(this.props))
       );
     }
