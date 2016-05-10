@@ -14,6 +14,7 @@ import { orderActions } from 'goommerce-redux';
 import EmptyView from '../components/EmptyView';
 import OrderCell from '../components/OrderCell';
 import RefreshableList from '../components/RefreshableList';
+import RefreshableView from '../components/RefreshableView';
 import routes from '../routes';
 
 const OrderList = React.createClass({
@@ -119,7 +120,11 @@ const OrderList = React.createClass({
       return <EmptyView text='Loading...' />;
     }
     if (!list.length) {
-      return <EmptyView text='No orders...' />;
+      return (
+        <RefreshableView onRefresh={this.onRefresh} contentContainerStyle={{ flex: 1 }}>
+          <EmptyView text='No orders...' />
+        </RefreshableView>
+      );
     }
     // FIXME: possible performance issue...
     const dataSource = this.dataSource.cloneWithRowsAndSections(this.listToDataBlob());
