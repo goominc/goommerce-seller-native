@@ -11,7 +11,7 @@ import React, {
 
 import { Provider } from 'react-redux'
 import { config as configApiClient } from 'goommerce-api-client';
-import configureStore, { errorActions } from 'goommerce-redux';
+import configureStore, { errorActions, orderActions } from 'goommerce-redux';
 import { cloudinaryConfig } from 'react-cloudinary';
 import OneSignal from 'react-native-onesignal';
 
@@ -20,6 +20,14 @@ import App from './containers/App';
 cloudinaryConfig({ cloud_name: 'linkshops', crop: 'limit' });
 OneSignal.configure({
   onNotificationOpened(message, data, isActive) {
+    const roles = _.get(store.getState(), 'auth.roles');
+    if (roles) {
+      // FIXME: code dup.
+      const brands = _.filter(roles,
+        (r) => r.type === 'owner' || r.type === 'staff').map((r) => r.brand);
+      const brandId = brands[0].id;
+      orderActions.loadBrandOrders(brandId)(store.dispatch, store.getState);
+    }
     if (isActive) {
       Alert.alert('New Order!!!', message);
     }
