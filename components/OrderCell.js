@@ -23,7 +23,7 @@ export default React.createClass({
     if (status[100]) {
       return <Text style={[styles.descStatusText, { backgroundColor: '#23bcee'}]}>신규주문</Text>;
     } else {
-      return <Text style={[styles.descStatusText, { backgroundColor: '#3f4c5d'}]}>정산대기</Text>;
+      return <Text style={[styles.descStatusText, { backgroundColor: '#3f4c5d'}]}>출고대기</Text>;
     }
   },
   render() {
