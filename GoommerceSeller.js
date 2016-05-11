@@ -29,7 +29,7 @@ OneSignal.configure({
       orderActions.loadBrandOrders(brandId)(store.dispatch, store.getState);
     }
     if (isActive) {
-      Alert.alert('New Order!!!', message);
+      Alert.alert('새로운 주문.', message);
     }
   }
 });

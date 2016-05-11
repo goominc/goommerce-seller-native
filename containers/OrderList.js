@@ -31,7 +31,6 @@ const OrderList = React.createClass({
   },
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
-    sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
   }),
   onEndReached() {
     const { brandId, limit, pagination, loadBrandOrders } = this.props;
@@ -62,9 +61,9 @@ const OrderList = React.createClass({
       }
       if (_.find(order.orderProducts, { status: 100 })) {
         Alert.alert(
-          'Info',
-          'Do you want to check this order?',
-          [ { text: 'OK', onPress: onConfirm }, { text: 'CANCEL' } ]
+          '알림',
+          '주문을 확인하시겠습니까?',
+          [ { text: '확인', onPress: onConfirm }, { text: '취소' } ]
         );
       } else {
         push(routes.order({ brandId, orderId: order.id }));
@@ -84,8 +83,11 @@ const OrderList = React.createClass({
   renderSectionHeader(sectionData, sectionID) {
     return (
       <View style={styles.section}>
-        <Text style={styles.sectionText}>
-          {sectionID}
+        <Text style={[styles.sectionText, { width: 60 }]}>
+          주문자명
+        </Text>
+        <Text style={[styles.sectionText, { flex: 1} ]}>
+          주문내용
         </Text>
       </View>
     );
@@ -112,7 +114,7 @@ const OrderList = React.createClass({
       );
     }
     // FIXME: possible performance issue...
-    const dataSource = this.dataSource.cloneWithRowsAndSections(this.listToDataBlob());
+    const dataSource = this.dataSource.cloneWithRows(list);
     return (
       <View style={styles.container}>
         <RefreshableList
@@ -145,15 +147,14 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   section: {
+    flexDirection: 'row',
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+    paddingVertical: 3,
   },
   sectionText: {
-    width: 200,
     textAlign: 'center',
-    paddingVertical: 6,
-    borderRadius: 10,
-    marginVertical: 6,
-    backgroundColor: '#f2f2f2',
   },
 });
 

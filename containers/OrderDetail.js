@@ -42,9 +42,10 @@ const OrderDetail = React.createClass({
       function onConfirm() {
         updateBrandOrderStatus(brandId, order.id, reduxKey, 102, 103).then(() => pop());
       }
+
       Alert.alert(
         '주문확인 및 포장이 완료되었습니까?',
-        '"링크# xxx" 봉투에 적으셨나요?',
+        `"링크# ${_.padStart(order.id, 3, '0').substr(-3)}" 봉투에 적으셨나요?`,
         [ { text: '확인', onPress: onConfirm }, { text: '취소' } ]
       );
     }

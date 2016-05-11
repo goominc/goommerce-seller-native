@@ -17,11 +17,19 @@ import numeral from 'numeral';
 import DefaultText from './DefaultText';
 
 export default React.createClass({
+  renderStatus() {
+    const { order: { orderProducts } } = this.props;
+    const status = _.countBy(orderProducts, 'status');
+    if (status[100]) {
+      return <Text style={[styles.descStatusText, { backgroundColor: '#23bcee'}]}>신규주문</Text>;
+    } else {
+      return <Text style={[styles.descStatusText, { backgroundColor: '#3f4c5d'}]}>정산대기</Text>;
+    }
+  },
   render() {
     const TouchableElement = Platform.OS === 'android' ?
       TouchableNativeFeedback : TouchableHighlight;
-    const { order: { id, totalQuantity, totalKRW, orderProducts } } = this.props;
-    const status = _.countBy(orderProducts, 'status');
+    const { order: { id, totalQuantity, totalKRW, orderProducts, processedDate } } = this.props;
     const name = () => {
       if (orderProducts.length === 1) {
         return orderProducts[0].name;
@@ -38,15 +46,17 @@ export default React.createClass({
         >
           <View style={styles.container}>
             <View style={styles.orderNumContainer}>
-              <DefaultText text={id} />
+              <Text style={styles.orderNumText}>링크#</Text>
+              <Text style={styles.orderNumText}>{_.padStart(id, 3, '0').substr(-3)}</Text>
             </View>
             <View style={styles.descContainer}>
-              <DefaultText text={name()} />
-              <DefaultText text={`${numeral(totalQuantity).format('0,0')}개`} />
-              <DefaultText text={`${numeral(totalKRW).format('0,0')}원`} />
+              <Text style={styles.descNameText}>{name()}</Text>
+              <Text style={styles.descQuantityText}>{`${numeral(totalQuantity).format('0,0')}개`}</Text>
+              <Text style={styles.descPriceText}>{`${numeral(totalKRW).format('0,0')}원`}</Text>
             </View>
             <View>
-              {status[100] && <DefaultText text={'신규주문'} />}
+              <Text>{processedDate.substring(5, 10)}</Text>
+              {this.renderStatus()}
             </View>
           </View>
         </TouchableElement>
@@ -64,14 +74,34 @@ const styles = StyleSheet.create({
   },
   orderNumContainer: {
     alignItems: 'center',
-    backgroundColor: '#dddddd',
+    backgroundColor: '#3f4c5d',
     borderRadius: 30,
     height: 60,
     justifyContent: 'center',
     marginRight: 10,
     width: 60,
   },
+  orderNumText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
   descContainer: {
     flex: 1,
+  },
+  descNameText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 5,
+  },
+  descQuantityText: {
+    color: 'grey',
+  },
+  descPriceText: {
+    fontWeight: 'bold',
+  },
+  descStatusText: {
+    borderRadius: 16,
+    padding: 7,
+    color: 'white',
   },
 });
