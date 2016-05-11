@@ -162,12 +162,12 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     flexDirection: 'row',
     justifyContent:'space-between',
+    paddingHorizontal: 3,
     paddingVertical: 5,
   },
   columnContainer: {
     alignItems: 'center',
     flexDirection: 'column',
-    marginHorizontal: 5,
   },
   columnMainContainer: {
     flex: 1,
@@ -197,13 +197,13 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 1,
     height: 45,
-    width: 90,
+    width: 80,
     marginHorizontal: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
   reasonButtonText: {
     textAlign: 'center',
-    marginHorizontal: 3,
+    marginRight: 3,
   },
 });
