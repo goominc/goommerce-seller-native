@@ -97,48 +97,56 @@ export default React.createClass({
     const image = _.get(productVariant, 'appImages.default.0');
     return (
       <View style={styles.container}>
-        <View style={{ flex: 1 }}>
+        <View style={styles.columnContainer}>
           <Text>{name.ko}</Text>
-          <Text>{color} / {size}</Text>
-          <Text>{`${numeral(orderProduct.KRW).format('0,0')}원`}</Text>
-          {this.renderThumbnail(orderProduct)}
+          <View style={styles.columnMainContainer}>
+            <Text>{color} / {size}</Text>
+            <Text>{`${numeral(orderProduct.KRW).format('0,0')}원`}</Text>
+            {this.renderThumbnail(orderProduct)}
+          </View>
         </View>
-        <View style={{ flex: 1, alignItems: 'center' }}>
+        <View style={styles.columnContainer}>
           <Text>주문수량: {numeral(orderProduct.quantity).format('0,0')}</Text>
-          <Button
-            containerStyle={styles.quantityButton}
-            onPress={() => this.setQuantity(this.state.quantity + 1)}
-          >
-            <Icon name='chevron-up' size={20} />
-          </Button>
-          <TextInput
-            autoCapitalize='none'
-            autoCorrect={false}
-            keyboardType='number-pad'
-            onChangeText={this.setQuantity}
-            value={this.state.quantity}
-            style={styles.quantityInput}
-            editable={!this.state.confirmed}
-          />
-          <Button
-            containerStyle={styles.quantityButton}
-            onPress={() => this.setQuantity(this.state.quantity - 1)}
-          >
-            <Icon name='chevron-down' size={20} />
-          </Button>
+          <View style={styles.columnMainContainer}>
+            <Button
+              containerStyle={styles.quantityButton}
+              onPress={() => this.setQuantity(this.state.quantity + 1)}
+            >
+              <Icon name='chevron-up' size={20} />
+            </Button>
+            <TextInput
+              autoCapitalize='none'
+              autoCorrect={false}
+              keyboardType='number-pad'
+              onChangeText={this.setQuantity}
+              value={this.state.quantity}
+              style={styles.quantityInput}
+              editable={!this.state.confirmed}
+            />
+            <Button
+              containerStyle={styles.quantityButton}
+              onPress={() => this.setQuantity(this.state.quantity - 1)}
+            >
+              <Icon name='chevron-down' size={20} />
+            </Button>
+          </View>
         </View>
-        <View style={{ flex: 1, alignItems: 'center' }}>
-          <Text>수량 변경 사유</Text>
-          {this.renderReasonModal()}
+        <View style={styles.columnContainer}>
+            <Text>수량 변경 사유</Text>
+          <View style={styles.columnMainContainer}>
+            {this.renderReasonModal()}
+          </View>
         </View>
-        <View style={{ marginHorizontal: 5 }}>
+        <View style={styles.columnContainer}>
           <Text>주문확인</Text>
-          <Switch
-            onValueChange={this.toggleConfirm}
-            value={this.state.confirmed}
-            disabled={orderProduct.status !== 101 &&
-              orderProduct.status !== 102 && orderProduct.status !== 104}
-          />
+          <View style={styles.columnMainContainer}>
+            <Switch
+              onValueChange={this.toggleConfirm}
+              value={this.state.confirmed}
+              disabled={orderProduct.status !== 101 &&
+                orderProduct.status !== 102 && orderProduct.status !== 104}
+            />
+          </View>
         </View>
       </View>
     );
@@ -147,9 +155,19 @@ export default React.createClass({
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'stretch',
     flexDirection: 'row',
+    justifyContent:'space-between',
+  },
+  columnContainer: {
     alignItems: 'center',
-    padding: 5,
+    flexDirection: 'column',
+    marginHorizontal: 5,
+  },
+  columnMainContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent:'center',
   },
   thumbnail: {
     backgroundColor: '#dddddd',
