@@ -90,6 +90,20 @@ export default React.createClass({
       </ModalPicker>
     );
   },
+  renderConfirm() {
+    const { orderProduct: { status } } = this.props;
+    if (status !== 101 && status !== 102 && status !== 104) {
+      return undefined;
+    }
+    return (
+      <View style={styles.columnContainer}>
+        <Text>주문확인</Text>
+        <View style={styles.columnMainContainer}>
+          <Switch onValueChange={this.toggleConfirm} value={this.state.confirmed} />
+        </View>
+      </View>
+    );
+  },
   render() {
     const { orderProduct } = this.props;
     const { product, productVariant } = orderProduct;
@@ -141,17 +155,7 @@ export default React.createClass({
             {this.renderReasonModal()}
           </View>
         </View>
-        <View style={styles.columnContainer}>
-          <Text>주문확인</Text>
-          <View style={styles.columnMainContainer}>
-            <Switch
-              onValueChange={this.toggleConfirm}
-              value={confirmed}
-              disabled={orderProduct.status !== 101 &&
-                orderProduct.status !== 102 && orderProduct.status !== 104}
-            />
-          </View>
-        </View>
+        {this.renderConfirm()}
       </View>
     );
   }
