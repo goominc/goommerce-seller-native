@@ -103,8 +103,14 @@ export default React.createClass({
           <Text>{`${numeral(orderProduct.KRW).format('0,0')}원`}</Text>
           {this.renderThumbnail(orderProduct)}
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, alignItems: 'center' }}>
           <Text>주문수량: {numeral(orderProduct.quantity).format('0,0')}</Text>
+          <Button
+            containerStyle={styles.quantityButton}
+            onPress={() => this.setQuantity(this.state.quantity + 1)}
+          >
+            <Icon name='chevron-up' size={20} />
+          </Button>
           <TextInput
             autoCapitalize='none'
             autoCorrect={false}
@@ -114,8 +120,14 @@ export default React.createClass({
             style={styles.quantityInput}
             editable={!this.state.confirmed}
           />
+          <Button
+            containerStyle={styles.quantityButton}
+            onPress={() => this.setQuantity(this.state.quantity - 1)}
+          >
+            <Icon name='chevron-down' size={20} />
+          </Button>
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, alignItems: 'center' }}>
           <Text>수량 변경 사유</Text>
           {this.renderReasonModal()}
         </View>
@@ -146,12 +158,14 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
   },
+  quantityButton: {
+    paddingHorizontal: 15,
+  },
   quantityInput: {
     borderColor: 'gray',
     borderRadius: 6,
     borderWidth: 1,
     height: 45,
-    marginHorizontal: 5,
     textAlign: 'center',
   },
   reasonButton: {
@@ -159,6 +173,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 1,
     height: 45,
+    width: 80,
     marginHorizontal: 5,
     justifyContent:'center',
   },
