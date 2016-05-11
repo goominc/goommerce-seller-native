@@ -51,21 +51,6 @@ const OrderList = React.createClass({
     const { list } = this.props;
     return _.groupBy(list, (p) => p.processedDate.substr(0, 10));
   },
-  renderFooter() {
-    const { pagination } = this.props;
-    if (!pagination.hasMore || !this.state.isLoadingTail) {
-      return <View style={styles.scrollSpinner} />;
-    }
-    if (Platform.OS === 'ios') {
-      return <ActivityIndicatorIOS style={styles.scrollSpinner} />;
-    } else {
-      return (
-        <View  style={{alignItems: 'center'}}>
-          <ProgressBarAndroid styleAttr="Large"/>
-        </View>
-      );
-    }
-  },
   renderRow(order, sectionID, rowID, highlightRow) {
     const { brandId, push, reduxKey, updateBrandOrderStatus } = this.props;
 

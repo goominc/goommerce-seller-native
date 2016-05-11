@@ -15,7 +15,6 @@ export default React.createClass({
     Promise.resolve(onRefresh()).then(() => this.setState({ isRefreshing: false }));
   },
   render() {
-    console.log('aaa');
     return (
       <ScrollView
         {...this.props}
