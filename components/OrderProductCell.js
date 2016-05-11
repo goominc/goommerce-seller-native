@@ -42,8 +42,11 @@ export default React.createClass({
   },
   setQuantity(quantity) {
     const { orderProduct } = this.props;
+    if (quantity) {
+      quantity = _.clamp(_.toSafeInteger(quantity), 0, orderProduct.quantity);
+    }
     this.setState({
-      quantity,
+      quantity: quantity.toString(),
       reason: quantity == orderProduct.quantity ? 0 : (this.state.reason || 10),
     });
   },
