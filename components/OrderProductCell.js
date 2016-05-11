@@ -74,6 +74,7 @@ export default React.createClass({
     const button = (
       <View style={styles.reasonButton}>
         <Text style={styles.reasonButtonText}>{selected}</Text>
+        {this.state.reason !== 0 && !disabled && <Icon name='arrow-down-b' />}
       </View>
     );
     if (disabled) {
@@ -191,15 +192,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   reasonButton: {
+    flexDirection: 'row',
     borderColor: 'gray',
     borderRadius: 6,
     borderWidth: 1,
     height: 45,
-    width: 80,
+    width: 90,
     marginHorizontal: 5,
-    justifyContent:'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   reasonButtonText: {
     textAlign: 'center',
+    marginHorizontal: 3,
   },
 });
