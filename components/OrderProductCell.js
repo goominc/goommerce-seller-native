@@ -11,7 +11,7 @@ import React, {
 import { CloudinaryImageNative } from 'react-cloudinary';
 import _ from 'lodash';
 import Button from 'react-native-button';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
 import ModalPicker from 'react-native-modal-picker'
 import numeral from 'numeral';
 
@@ -94,6 +94,7 @@ export default React.createClass({
     const { product, productVariant } = orderProduct;
     const { name } = product;
     const { color, size } = productVariant.data;
+    const { confirmed } = this.state;
     const image = _.get(productVariant, 'appImages.default.0');
     return (
       <View style={styles.container}>
@@ -111,8 +112,9 @@ export default React.createClass({
             <Button
               containerStyle={styles.quantityButton}
               onPress={() => this.setQuantity(this.state.quantity + 1)}
+              disabled={confirmed}
             >
-              <Icon name='chevron-up' size={20} />
+              <Icon name='arrow-up-b' size={20} color={confirmed ? 'grey' : 'orange' }/>
             </Button>
             <TextInput
               autoCapitalize='none'
@@ -121,13 +123,14 @@ export default React.createClass({
               onChangeText={this.setQuantity}
               value={this.state.quantity}
               style={styles.quantityInput}
-              editable={!this.state.confirmed}
+              editable={!confirmed}
             />
             <Button
               containerStyle={styles.quantityButton}
               onPress={() => this.setQuantity(this.state.quantity - 1)}
+              disabled={confirmed}
             >
-              <Icon name='chevron-down' size={20} />
+              <Icon name='arrow-down-b' size={20} color={confirmed ? 'grey' : 'orange' }/>
             </Button>
           </View>
         </View>
@@ -142,7 +145,7 @@ export default React.createClass({
           <View style={styles.columnMainContainer}>
             <Switch
               onValueChange={this.toggleConfirm}
-              value={this.state.confirmed}
+              value={confirmed}
               disabled={orderProduct.status !== 101 &&
                 orderProduct.status !== 102 && orderProduct.status !== 104}
             />
