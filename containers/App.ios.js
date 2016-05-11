@@ -49,7 +49,7 @@ const App = React.createClass({
       <TabBarIOS
         barTintColor="white">
         <TabBarIOS.Item
-          systemIcon='recents'
+          icon={require('./images/tab_order.png')}
           title="주문조회"
           selected={this.state.selectedTab === 'orders'}
           onPress={() => {
@@ -58,7 +58,7 @@ const App = React.createClass({
           <Navigator initialRoute={routes.orders({ brandId })} />
         </TabBarIOS.Item>
         <TabBarIOS.Item
-          systemIcon="featured"
+          icon={require('./images/tab_product.png')}
           title="상품관리"
           selected={this.state.selectedTab === 'products'}
           onPress={() => {
@@ -67,7 +67,7 @@ const App = React.createClass({
           <Navigator initialRoute={routes.products({ brandId })} />
         </TabBarIOS.Item>
         <TabBarIOS.Item
-          systemIcon='contacts'
+          icon={require('./images/tab_profile.png')}
           title="내 정보"
           selected={this.state.selectedTab === 'profile'}
           onPress={() => {
