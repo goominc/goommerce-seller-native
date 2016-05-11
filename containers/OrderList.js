@@ -10,6 +10,7 @@ import React, {
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
+import Button from 'react-native-button';
 
 import EmptyView from '../components/EmptyView';
 import OrderCell from '../components/OrderCell';
@@ -117,6 +118,23 @@ const OrderList = React.createClass({
     const dataSource = this.dataSource.cloneWithRows(list);
     return (
       <View style={styles.container}>
+        <View style={styles.statusContainer}>
+          <Button
+            style={{color: 'white'}}
+          >
+            신규주문
+          </Button>
+          <Button
+            style={{color: 'white'}}
+          >
+            출고대기
+          </Button>
+          <Button
+            style={{color: 'white'}}
+          >
+            정산완료
+          </Button>
+        </View>
         <RefreshableList
           dataSource={dataSource}
           renderRow={this.renderRow}
@@ -134,6 +152,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#3f4c5d',
+    paddingVertical: 5,
   },
   rowSeparator: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
