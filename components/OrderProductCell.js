@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     flexDirection: 'row',
     justifyContent:'space-between',
+    paddingVertical: 5,
   },
   columnContainer: {
     alignItems: 'center',
