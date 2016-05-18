@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   columnContainer: {
+    flex: 1,
     alignItems: 'center',
     flexDirection: 'column',
   },
