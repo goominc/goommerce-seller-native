@@ -1,6 +1,7 @@
 'use strict';
 
 import React, {
+  AsyncStorage,
   BackAndroid,
   Dimensions,
   DrawerLayoutAndroid,
@@ -9,9 +10,15 @@ import React, {
   StyleSheet,
   View
 } from 'react-native';
+import { connect } from 'react-redux'
+import { authActions } from 'goommerce-redux';
+import OneSignal from 'react-native-onesignal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import routes from '../routes';
+import EmptyView from '../components/EmptyView';
+import Signin from '../components/Signin';
+import RouteList from '../components/RouteList';
 
 const DRAWER_WIDTH_LEFT = 56;
 
@@ -25,7 +32,18 @@ BackAndroid.addEventListener('hardwareBackPress', () => {
   return false;
 });
 
-export default React.createClass({
+function defaultBrand(roles) {
+  const brands = _.filter(roles,
+    (r) => r.type === 'owner' || r.type === 'staff').map((r) => r.brand);
+}
+
+const App = React.createClass({
+  componentDidMount() {
+    const { auth, whoami } = this.props;
+    if (auth.bearer && !auth.email) {
+      whoami();
+    }
+  },
   componentWillMount() {
     BackAndroid.addEventListener('hardwareBackPress', this.handleBackButtonPress);
   },
@@ -38,6 +56,13 @@ export default React.createClass({
       return true;
     }
     return false;
+  },
+  signin(email, password) {
+    OneSignal.idsAvailable(({ pushToken, playerId, userId }) => {
+      this.props.login(email, password, pushToken && (playerId || userId)).then(
+        (auth) => AsyncStorage.setItem('bearer', auth.bearer)
+      );
+    });
   },
   renderScene(route, navigator) {
     _navigator = navigator;
@@ -54,9 +79,46 @@ export default React.createClass({
     );
   },
   renderDrawerContent() {
+    const { auth: { roles } } = this.props;
+    const brands = _.filter(roles,
+      (r) => r.type === 'owner' || r.type === 'staff').map((r) => r.brand);
+
     return (
       <View style={styles.drawerContentWrapper}>
+        <RouteList
+          routes={[routes.orders, routes.products, routes.profile]}
+          onSelect={(route) => {
+            if (brands.length && _navigator) {
+              this.drawer && this.drawer.closeDrawer();
+              _navigator.resetTo(route({ brandId: brands[0].id }), 0);
+            }
+          }}
+        />
       </View>
+    );
+  },
+  renderApp() {
+    const { auth: { bearer, email, roles } } = this.props;
+    if (!bearer) {
+      return (<Signin signin={this.signin} />);
+    }
+    if (!email) {
+      return <EmptyView text={'Loading...'} />;
+    }
+
+    const brands = _.filter(roles,
+      (r) => r.type === 'owner' || r.type === 'staff').map((r) => r.brand);
+    if (brands.length === 0) {
+      return <EmptyView text={'Not brand owner...'} />;
+    }
+
+    const brandId = brands[0].id;
+    return (
+      <Navigator
+        initialRoute={routes.orders({ brandId })}
+        renderScene={this.renderScene}
+        style={styles.container}
+      />
     );
   },
   render() {
@@ -73,12 +135,9 @@ export default React.createClass({
         }}
         ref={(drawer) => { this.drawer = drawer; }}
         renderNavigationView={this.renderDrawerContent}
-        statusBarBackgroundColor="#589c90">
-        <Navigator
-          initialRoute={routes.home()}
-          renderScene={this.renderScene}
-          style={styles.container}
-        />
+        statusBarBackgroundColor="#589c90"
+      >
+        {this.renderApp()}
       </DrawerLayoutAndroid>
     );
   }
@@ -103,3 +162,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
 });
+
+export default connect(
+  (state) => ({ auth: state.auth }) , authActions
+)(App);
