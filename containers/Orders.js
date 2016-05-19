@@ -30,13 +30,12 @@ export default React.createClass({
             출고대기
           </Button>
           <Button
-            style={activeStatus === 'done' ? styles.activeStatus : styles.inactiveStatus}
-            onPress={() => this.setState({ activeStatus: 'done' })}
+            style={styles.inactiveStatus}
           >
             정산완료
           </Button>
         </View>
-        <OrderList status={activeStatus} {...this.props} />
+        <OrderList key={activeStatus} status={activeStatus} {...this.props} />
       </View>
     );
   },

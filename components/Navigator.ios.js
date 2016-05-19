@@ -7,6 +7,7 @@ import React, {
   TouchableOpacity,
   View
 } from 'react-native';
+import _ from 'lodash';
 
 import NavBarBack from '../components/NavBarBack'
 
@@ -20,7 +21,7 @@ const NavigationBarRouteMapper = {
   },
   RightButton(route, navigator, index, navState) {
     const { component } = route;
-    const rightButton = component.rightButton || component.WrappedComponent.rightButton;
+    const rightButton = component.rightButton || _.get(component, 'WrappedComponent.rightButton');
     return rightButton && rightButton(navigator);
   },
   Title(route, navigator, index, navState) {

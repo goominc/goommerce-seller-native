@@ -43,7 +43,7 @@ const OrderDetail = React.createClass({
         const orderProducts = map[102].map((o) => _.pick(o, 'id'));
         brandOrderReadyToPickUp(brandId, order.id, reduxKey, orderProducts).then(() => {
           pop();
-          loadBrandOrders(brandId, 0, 20); // FIXME
+          loadBrandOrders(brandId, 'new', 0, 20); // FIXME
         });
       }
 
