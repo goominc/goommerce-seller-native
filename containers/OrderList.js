@@ -23,35 +23,29 @@ const OrderList = React.createClass({
     return { limit: 20 };
   },
   getInitialState() {
-    return {
-      isLoadingTail: false, // TODO: move this into redux?
-      activeStatus: 'new',
-    };
+    // TODO: move this into redux?
+    return { isLoadingTail: false };
   },
   componentDidMount() {
-    const { brandId, limit, loadBrandOrders } = this.props;
-    loadBrandOrders(brandId, 0, limit);
+    const { brandId, status, limit, loadBrandOrders } = this.props;
+    loadBrandOrders(brandId, status, 0, limit);
   },
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
   onEndReached() {
-    const { brandId, limit, pagination, loadBrandOrders } = this.props;
+    const { brandId, status, limit, pagination, loadBrandOrders } = this.props;
     if (!pagination.hasMore || this.state.isLoadingTail) {
       return;
     }
     this.setState({ isLoadingTail: true });
-    loadBrandOrders(brandId, pagination.offset + pagination.limit, limit).then(
+    loadBrandOrders(brandId, status, pagination.offset + pagination.limit, limit).then(
       () => this.setState({ isLoadingTail: false })
     );
   },
   onRefresh() {
-    const { brandId, limit, loadBrandOrders } = this.props;
-    return loadBrandOrders(brandId, 0, limit);
-  },
-  listToDataBlob() {
-    const { list } = this.props;
-    return _.groupBy(list, (p) => p.processedDate.substr(0, 10));
+    const { brandId, status, limit, loadBrandOrders } = this.props;
+    return loadBrandOrders(brandId, status, 0, limit);
   },
   renderRow(order, sectionID, rowID, highlightRow) {
     const { brandId, push, reduxKey, updateBrandOrderStatus } = this.props;
@@ -120,57 +114,19 @@ const OrderList = React.createClass({
     // FIXME: possible performance issue...
     const dataSource = this.dataSource.cloneWithRows(list);
     return (
-      <View style={styles.container}>
-        <View style={styles.statusContainer}>
-          <Button
-            style={activeStatus === 'new' ? styles.activeStatus : styles.inactiveStatus}
-            onPress={() => this.setState({ activeStatus: 'new' })}
-          >
-            신규주문
-          </Button>
-          <Button
-            style={activeStatus === 'pending' ? styles.activeStatus : styles.inactiveStatus}
-            onPress={() => this.setState({ activeStatus: 'pending' })}
-          >
-            출고대기
-          </Button>
-          <Button
-            style={activeStatus === 'done' ? styles.activeStatus : styles.inactiveStatus}
-            onPress={() => this.setState({ activeStatus: 'done' })}
-          >
-            정산완료
-          </Button>
-        </View>
-        <RefreshableList
-          dataSource={dataSource}
-          renderRow={this.renderRow}
-          renderSectionHeader={this.renderSectionHeader}
-          renderSeparator={this.renderSeparator}
-          onEndReached={this.onEndReached}
-          onRefresh={this.onRefresh}
-        />
-      </View>
+      <RefreshableList
+        dataSource={dataSource}
+        renderRow={this.renderRow}
+        renderSectionHeader={this.renderSectionHeader}
+        renderSeparator={this.renderSeparator}
+        onEndReached={this.onEndReached}
+        onRefresh={this.onRefresh}
+      />
     );
   },
 });
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  statusContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#3f4c5d',
-    paddingVertical: 5,
-  },
-  activeStatus: {
-    color: '#23bcee',
-  },
-  inactiveStatus: {
-    color: 'white',
-  },
   rowSeparator: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     height: 1,
@@ -196,7 +152,7 @@ const styles = StyleSheet.create({
 
 export default connect(
   (state, ownProps) => {
-    const { key } = orderActions.loadBrandOrders(ownProps.brandId);
+    const { key } = orderActions.loadBrandOrders(ownProps.brandId, ownProps.status);
     return { reduxKey: key, ...state.order[key] };
   }, orderActions
 )(OrderList);
