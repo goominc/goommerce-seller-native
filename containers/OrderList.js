@@ -23,8 +23,10 @@ const OrderList = React.createClass({
     return { limit: 20 };
   },
   getInitialState() {
-    // TODO: move this into redux?
-    return { isLoadingTail: false };
+    return {
+      isLoadingTail: false, // TODO: move this into redux?
+      activeStatus: 'new',
+    };
   },
   componentDidMount() {
     const { brandId, limit, loadBrandOrders } = this.props;
@@ -104,6 +106,7 @@ const OrderList = React.createClass({
   },
   render() {
     const { list } = this.props;
+    const { activeStatus } = this.state;
     if (!list) {
       return <EmptyView text='Loading...' />;
     }
@@ -120,17 +123,20 @@ const OrderList = React.createClass({
       <View style={styles.container}>
         <View style={styles.statusContainer}>
           <Button
-            style={{color: 'white'}}
+            style={activeStatus === 'new' ? styles.activeStatus : styles.inactiveStatus}
+            onPress={() => this.setState({ activeStatus: 'new' })}
           >
             신규주문
           </Button>
           <Button
-            style={{color: 'white'}}
+            style={activeStatus === 'pending' ? styles.activeStatus : styles.inactiveStatus}
+            onPress={() => this.setState({ activeStatus: 'pending' })}
           >
             출고대기
           </Button>
           <Button
-            style={{color: 'white'}}
+            style={activeStatus === 'done' ? styles.activeStatus : styles.inactiveStatus}
+            onPress={() => this.setState({ activeStatus: 'done' })}
           >
             정산완료
           </Button>
@@ -158,6 +164,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     backgroundColor: '#3f4c5d',
     paddingVertical: 5,
+  },
+  activeStatus: {
+    color: '#23bcee',
+  },
+  inactiveStatus: {
+    color: 'white',
   },
   rowSeparator: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
