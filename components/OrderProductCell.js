@@ -38,6 +38,8 @@ export default React.createClass({
       this.props.confirm(+quantity, reason).then(
         () => this.setState(getInitialState(this.props))
       );
+    } else {
+      this.props.unconfirm();
     }
   },
   setQuantity(quantity) {
@@ -92,7 +94,7 @@ export default React.createClass({
   },
   renderConfirm() {
     const { orderProduct: { status } } = this.props;
-    if (status !== 101 && status !== 102 && status !== 104) {
+    if (status !== 101 && status !== 102) {
       return undefined;
     }
     return (

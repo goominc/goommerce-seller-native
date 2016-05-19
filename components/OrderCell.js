@@ -20,7 +20,7 @@ export default React.createClass({
   renderStatus() {
     const { order: { orderProducts } } = this.props;
     const status = _.countBy(orderProducts, 'status');
-    if (status[100]) {
+    if (status[100] || status[101] || status[102]) {
       return <Text style={[styles.descStatusText, { backgroundColor: '#23bcee'}]}>신규주문</Text>;
     } else {
       return <Text style={[styles.descStatusText, { backgroundColor: '#3f4c5d'}]}>출고대기</Text>;

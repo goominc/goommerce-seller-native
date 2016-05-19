@@ -27,20 +27,24 @@ const OrderDetail = React.createClass({
     sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
   }),
   onConfirm() {
-    const { brandId, reduxKey, order, updateBrandOrderStatus, pop } = this.props;
-    const counts = _.countBy(order.orderProducts, 'status');
-    if (counts[101]) {
+    const { brandId, reduxKey, order, brandOrderReadyToPickUp, loadBrandOrders, pop } = this.props;
+    const map = _.groupBy(order.orderProducts, 'status');
+    if (map[101] && map[101].length) {
       Alert.alert(
         '확인되지 않은 주문이 있습니다.',
       );
-    } else if (!counts[102]) {
+    } else if (!map[102]) {
       Alert.alert(
         '출고가능 상품이 없습니다.',
         '주문확인 감사합니다.',
       );
     } else {
       function onConfirm() {
-        updateBrandOrderStatus(brandId, order.id, reduxKey, 102, 103).then(() => pop());
+        const orderProducts = map[102].map((o) => _.pick(o, 'id'));
+        brandOrderReadyToPickUp(brandId, order.id, reduxKey, orderProducts).then(() => {
+          pop();
+          loadBrandOrders(brandId, 0, 20); // FIXME
+        });
       }
 
       Alert.alert(
@@ -55,12 +59,13 @@ const OrderDetail = React.createClass({
     return loadBrandOrder(brandId, orderId);
   },
   renderRow(orderProduct) {
-    const { reduxKey, brandId, orderId, updateOrderProductStock } = this.props;
+    const { reduxKey, brandId, orderId, updateOrderProductStock, deleteOrderProductStock } = this.props;
     return (
       <OrderProductCell
         key={orderProduct.id}
         orderProduct={orderProduct}
         confirm={(quantity, reason) => updateOrderProductStock(orderProduct.id, reduxKey, quantity, reason)}
+        unconfirm={() => deleteOrderProductStock(orderProduct.id, reduxKey)}
       />
     );
   },
