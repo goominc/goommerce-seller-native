@@ -107,8 +107,8 @@ export default React.createClass({
     );
   },
   renderConfirm() {
-    const { orderProduct: { status } } = this.props;
-    if (status !== 101 && status !== 102) {
+    const { order } = this.props;
+    if (order.status !== 100) {
       return undefined;
     }
     return (
