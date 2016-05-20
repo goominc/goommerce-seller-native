@@ -59,11 +59,12 @@ const OrderDetail = React.createClass({
     return loadBrandOrder(brandId, orderId);
   },
   renderRow(orderProduct) {
-    const { reduxKey, brandId, orderId, updateOrderProductStock, deleteOrderProductStock } = this.props;
+    const { reduxKey, brandId, order, updateOrderProductStock, deleteOrderProductStock } = this.props;
     return (
       <OrderProductCell
         key={orderProduct.id}
         orderProduct={orderProduct}
+        order={order}
         confirm={(quantity, reason, data) => updateOrderProductStock(orderProduct.id, reduxKey, quantity, reason, data)}
         unconfirm={() => deleteOrderProductStock(orderProduct.id, reduxKey)}
       />

@@ -18,8 +18,14 @@ import numeral from 'numeral';
 import CountPicker from './CountPicker';
 
 function getInitialState(props) {
-  const { orderProduct } = props;
-  const quantity = _.get(orderProduct, 'data.stock.quantity', orderProduct.quantity);
+  const { orderProduct, order } = props;
+  const quantity = (() => {
+    const stock = _.get(orderProduct, 'data.stock.quantity', orderProduct.quantity);
+    if (order.status === 100) {
+      return stock;
+    }
+    return _.get(orderProduct, 'finalQuantity', stock);
+  })();
   return {
     quantity: quantity.toString(),
     reason: _.get(orderProduct, 'data.stock.reason', 0),
