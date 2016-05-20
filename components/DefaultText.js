@@ -1,10 +1,7 @@
 'use strict';
 
-import React, {
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 export default React.createClass({
   render() {

@@ -1,12 +1,7 @@
 'use strict';
 
-import React, {
-  Image,
-  Picker,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React from 'react';
+import { Image, Picker, StyleSheet, Text, View } from 'react-native';
 import { CloudinaryImageNative } from 'react-cloudinary';
 import numeral from 'numeral';
 

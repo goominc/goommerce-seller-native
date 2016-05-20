@@ -1,12 +1,7 @@
 'use strict';
 
-import React, {
-  Alert,
-  ListView,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import React from 'react';
+import { Alert, ListView, StyleSheet, Text, View } from 'react-native';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';

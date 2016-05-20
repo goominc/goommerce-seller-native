@@ -1,9 +1,7 @@
 'use strict';
 
-import React, {
-  RefreshControl,
-  ScrollView,
-} from 'react-native';
+import React from 'react';
+import { RefreshControl, ScrollView } from 'react-native';
 
 export default React.createClass({
   getInitialState() {

@@ -1,13 +1,6 @@
 'use strict';
-import React, {
-  Alert,
-  AsyncStorage,
-  Component,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React from 'react';
+import { Alert, AsyncStorage, Platform, StyleSheet, Text, View } from 'react-native';
 
 import { Provider } from 'react-redux'
 import { config as configApiClient } from 'goommerce-api-client';

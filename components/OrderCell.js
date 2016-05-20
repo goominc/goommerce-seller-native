@@ -1,7 +1,7 @@
 'use strict';
 
-import _ from 'lodash';
-import React, {
+import React from 'react';
+import {
   Image,
   Picker,
   Platform,
@@ -11,6 +11,7 @@ import React, {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
+import _ from 'lodash';
 import { CloudinaryImageNative } from 'react-cloudinary';
 import numeral from 'numeral';
 

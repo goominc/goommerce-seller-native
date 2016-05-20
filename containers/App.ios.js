@@ -1,6 +1,7 @@
 'use strict';
 
-import React, { AsyncStorage, TabBarIOS } from 'react-native';
+import React from 'react';
+import { AsyncStorage, TabBarIOS } from 'react-native';
 import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
 import OneSignal from 'react-native-onesignal';

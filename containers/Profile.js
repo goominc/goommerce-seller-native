@@ -1,11 +1,7 @@
 'use strict';
 
-import React, {
-  AsyncStorage,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import React from 'react';
+import { AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux'
 import OneSignal from 'react-native-onesignal';
 import Button from 'react-native-button';

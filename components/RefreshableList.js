@@ -1,9 +1,7 @@
 'use strict';
 
-import React, {
-  ListView,
-  RefreshControl,
-} from 'react-native';
+import React from 'react';
+import { ListView, RefreshControl } from 'react-native';
 
 export default React.createClass({
   getInitialState() {

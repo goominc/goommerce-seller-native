@@ -1,11 +1,7 @@
 'use strict';
 
-import React, {
-  ListView,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import React from 'react';
+import { ListView, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux'
 import { orderActions } from 'goommerce-redux';
 

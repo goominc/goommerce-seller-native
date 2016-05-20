@@ -1,12 +1,7 @@
 'use strict';
 
-import React, {
-  Navigator,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import React from 'react';
+import { Navigator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import _ from 'lodash';
 
 import NavBarBack from '../components/NavBarBack'

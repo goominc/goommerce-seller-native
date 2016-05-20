@@ -1,9 +1,7 @@
-import React, {
-  ListView,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+'use strict';
+
+import React from 'react';
+import { ListView, StyleSheet, Text, View } from 'react-native';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { productActions } from 'goommerce-redux';

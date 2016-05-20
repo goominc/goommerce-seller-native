@@ -1,11 +1,7 @@
 'use strict';
 
-import React, {
-  Picker,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React from 'react';
+import { Picker, StyleSheet, Text, View } from 'react-native';
 
 import DefaultText from './DefaultText';
 

@@ -1,5 +1,6 @@
 'use strict';
-import React, { AppRegistry } from 'react-native';
+import React from 'react';
+import { AppRegistry } from 'react-native';
 import GoommerceSeller from './GoommerceSeller';
 
 AppRegistry.registerComponent('GoommerceSeller', () => GoommerceSeller);
