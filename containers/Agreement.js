@@ -42,6 +42,7 @@ export default React.createClass({
             </Button>
             <Button style={styles.detailText}>내용보기</Button>
           </View>
+          <Button containerStyle={styles.confirmButton} style={styles.confirmText}>약관 동의하기</Button>
         </View>
       </View>
     );
@@ -96,5 +97,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginHorizontal: 10,
     color: 'grey',
+  },
+  confirmButton: {
+    backgroundColor: '#1fcbf6',
+    borderRadius: 6,
+    marginTop: 20,
+    overflow:'hidden',
+    paddingHorizontal: 60,
+    paddingVertical: 10,
+  },
+  confirmText: {
+    color: 'white',
   },
 });
