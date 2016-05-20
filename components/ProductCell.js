@@ -39,9 +39,6 @@ export default React.createClass({
               <DefaultText text={name.ko} />
               {KRW && <DefaultText text={`${numeral(KRW).format('0,0')}원`} />}
             </View>
-            <View style={{ marginRight: 10 }}>
-              <Switch value={isActive} />
-            </View>
           </View>
         </TouchableElement>
       </View>
