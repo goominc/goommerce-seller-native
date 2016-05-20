@@ -30,7 +30,8 @@ export default React.createClass({
             출고대기
           </Button>
           <Button
-            style={styles.inactiveStatus}
+            style={activeStatus === 'settled' ? styles.activeStatus : styles.inactiveStatus}
+            onPress={() => this.setState({ activeStatus: 'settled' })}
           >
             정산완료
           </Button>
