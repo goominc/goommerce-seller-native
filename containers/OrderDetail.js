@@ -64,7 +64,7 @@ const OrderDetail = React.createClass({
       <OrderProductCell
         key={orderProduct.id}
         orderProduct={orderProduct}
-        confirm={(quantity, reason) => updateOrderProductStock(orderProduct.id, reduxKey, quantity, reason)}
+        confirm={(quantity, reason, data) => updateOrderProductStock(orderProduct.id, reduxKey, quantity, reason, data)}
         unconfirm={() => deleteOrderProductStock(orderProduct.id, reduxKey)}
       />
     );

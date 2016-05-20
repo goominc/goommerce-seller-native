@@ -23,6 +23,7 @@ function getInitialState(props) {
   return {
     quantity: quantity.toString(),
     reason: _.get(orderProduct, 'data.stock.reason', 0),
+    data: _.get(orderProduct, 'data.stock.data'),
     confirmed: orderProduct.status !== 101,
   };
 }
@@ -34,8 +35,8 @@ export default React.createClass({
   toggleConfirm(confirmed) {
     this.setState({confirmed});
     if (confirmed) {
-      const { quantity, reason } = this.state;
-      this.props.confirm(+quantity, reason).then(
+      const { quantity, reason, data } = this.state;
+      this.props.confirm(+quantity, reason, data).then(
         () => this.setState(getInitialState(this.props))
       );
     } else {
@@ -47,10 +48,9 @@ export default React.createClass({
     if (quantity) {
       quantity = _.clamp(_.toSafeInteger(quantity), 0, orderProduct.quantity);
     }
-    this.setState({
-      quantity: quantity.toString(),
-      reason: quantity == orderProduct.quantity ? 0 : (this.state.reason || 10),
-    });
+    const reason = quantity == orderProduct.quantity ? 0 : (this.state.reason || 10);
+    const data = reason === 10 ? (this.state.data || 1) : undefined;
+    this.setState({ reason, data, quantity: quantity.toString() });
   },
   renderThumbnail({ product, productVariant }) {
     const image = _.get(productVariant, 'appImages.default.0');
@@ -66,17 +66,25 @@ export default React.createClass({
   },
   renderReasonModal() {
     const { orderProduct } = this.props;
+    const { reason, data } = this.state;
     const disabled= this.state.confirmed || this.state.quantity == orderProduct.quantity;
-    const data = {
-      0: { key: 0, label: '재고 있음' },
-      10: { key: 10, label: '재입고 예정' },
-      30: { key: 30, label: '품절' },
+    const labels = {
+      '0': { key: '0', label: '재고 있음', reason: 0 },
+      '10:1': { key: '10:1', label: '1일내 재입고 예정', display: '1일내 재입고', reason: 10, data: 1 },
+      '10:2': { key: '10:2', label: '2일내 재입고 예정', display: '2일내 재입고', reason: 10, data: 2 },
+      '10:3': { key: '10:3', label: '3일내 재입고 예정', display: '3일내 재입고', reason: 10, data: 3 },
+      '10:4': { key: '10:4', label: '4일내 재입고 예정', display: '4일내 재입고', reason: 10, data: 4 },
+      '10:5': { key: '10:5', label: '5일내 재입고 예정', display: '5일내 재입고', reason: 10, data: 5 },
+      '10:6': { key: '10:6', label: '6일내 재입고 예정', display: '6일내 재입고', reason: 10, data: 6 },
+      '10:7': { key: '10:7', label: '7일내 재입고 예정', display: '7일내 재입고', reason: 10, data: 7 },
+      '30': { key: '30', label: '품절', reason: 30 },
     };
-    const selected = data[this.state.reason].label;
+    const key = `${reason}${reason === 10 ? `:${(data || 1)}` : ''}`;
+    const selected = labels[key];
     const button = (
       <View style={styles.reasonButton}>
-        <Text style={styles.reasonButtonText}>{selected}</Text>
-        {this.state.reason !== 0 && !disabled && <Icon name='arrow-down-b' />}
+        <Text style={styles.reasonButtonText}>{selected.display || selected.label}</Text>
+        {reason !== 0 && !disabled && <Icon name='arrow-down-b' />}
       </View>
     );
     if (disabled) {
@@ -84,9 +92,9 @@ export default React.createClass({
     }
     return (
       <ModalPicker
-        data={_.values(data).slice(1)}
-        initValue={selected}
-        onChange={(option)=> this.setState({ reason: option.key })}
+        data={_.values(labels).slice(1)}
+        initValue={selected.label}
+        onChange={(option)=> this.setState({ reason: option.reason, data: option.data })}
       >
         {button}
       </ModalPicker>
@@ -124,7 +132,7 @@ export default React.createClass({
           </View>
         </View>
         <View style={styles.columnContainer}>
-          <Text>주문수량: {numeral(orderProduct.quantity).format('0,0')}</Text>
+          <Text>수량: {numeral(orderProduct.quantity).format('0,0')}</Text>
           <View style={styles.columnMainContainer}>
             <Button
               containerStyle={styles.quantityButton}
@@ -152,7 +160,7 @@ export default React.createClass({
           </View>
         </View>
         <View style={styles.columnContainer}>
-            <Text>수량 변경 사유</Text>
+            <Text>변경 사유</Text>
           <View style={styles.columnMainContainer}>
             {this.renderReasonModal()}
           </View>
@@ -204,7 +212,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 1,
     height: 45,
-    width: 80,
+    width: 90,
     marginHorizontal: 5,
     justifyContent: 'center',
     alignItems: 'center',
