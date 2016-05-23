@@ -1,14 +1,16 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from 'react-native-button';
+import { connect } from 'react-redux'
+import { authActions } from 'goommerce-redux';
 
 import TermsAndConditions from '../components/TermsAndConditions';
 import PersonalInfomation from '../components/PersonalInfomation';
 
-export default React.createClass({
+const Agreement = React.createClass({
   getInitialState() {
     return {
       termsAndConditions: false,
@@ -97,7 +99,21 @@ export default React.createClass({
               내용보기
             </Button>
           </View>
-          <Button containerStyle={styles.confirmButton} style={styles.confirmText}>약관 동의하기</Button>
+          <Button
+            containerStyle={styles.confirmButton}
+            style={styles.confirmText}
+            onPress={() => {
+              if (!this.state.termsAndConditions) {
+                Alert.alert('이용약관을 동의해 주세요.');
+              } else if (!this.state.personalInfo) {
+                Alert.alert('개인정보 수집방침을 동의해 주세요.');
+              } else {
+                this.props.updateAgreements({ seller: 1, personalInfomation: 1 });
+              }
+            }}
+          >
+            약관 동의하기
+          </Button>
         </View>
       </View>
     );
@@ -179,3 +195,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
 });
+
+export default connect(
+  (state) => ({ auth: state.auth }) , authActions
+)(Agreement);

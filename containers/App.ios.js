@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
 import OneSignal from 'react-native-onesignal';
 
+import Agreement from './Agreement';
 import EmptyView from '../components/EmptyView';
 import Navigator from '../components/Navigator';
 import Signin from '../components/Signin';
@@ -31,9 +32,9 @@ const App = React.createClass({
     });
   },
   render() {
-    const { auth: { bearer, email, roles } } = this.props;
+    const { auth: { bearer, email, roles, data } } = this.props;
     if (!bearer) {
-      return (<Signin signin={this.signin} />);
+      return <Signin signin={this.signin} />;
     }
     if (!email) {
       return <EmptyView text={'Loading...'} />;
@@ -44,6 +45,12 @@ const App = React.createClass({
     if (brands.length === 0) {
       return <EmptyView text={'Not brand owner...'} />;
     }
+
+    if (_.get(data, 'agreements.seller', 0) < 1 ||
+        _.get(data, 'agreements.personalInfomation', 0) < 1) {
+      return <Agreement />;
+    }
+
 
     const brandId = brands[0].id;
     return (

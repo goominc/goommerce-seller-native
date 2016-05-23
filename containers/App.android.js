@@ -17,6 +17,7 @@ import OneSignal from 'react-native-onesignal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import routes from '../routes';
+import Agreement from './Agreement';
 import EmptyView from '../components/EmptyView';
 import Signin from '../components/Signin';
 import RouteList from '../components/RouteList';
@@ -99,7 +100,7 @@ const App = React.createClass({
     );
   },
   renderApp() {
-    const { auth: { bearer, email, roles } } = this.props;
+    const { auth: { bearer, email, roles, data } } = this.props;
     if (!bearer) {
       return (<Signin signin={this.signin} />);
     }
@@ -111,6 +112,11 @@ const App = React.createClass({
       (r) => r.type === 'owner' || r.type === 'staff').map((r) => r.brand);
     if (brands.length === 0) {
       return <EmptyView text={'Not brand owner...'} />;
+    }
+
+    if (_.get(data, 'agreements.seller', 0) < 1 ||
+        _.get(data, 'agreements.personalInfomation', 0) < 1) {
+      return <Agreement />;
     }
 
     const brandId = brands[0].id;
