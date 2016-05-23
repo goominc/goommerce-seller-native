@@ -5,13 +5,58 @@ import { StyleSheet, Text, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from 'react-native-button';
 
+import TermsAndConditions from '../components/TermsAndConditions';
+import PersonalInfomation from '../components/PersonalInfomation';
+
 export default React.createClass({
   getInitialState() {
-    return { agreement: false, personalInfo: false };
+    return {
+      termsAndConditions: false,
+      showTermsAndConditions: false,
+      personalInfo: false,
+      showPersonalInfo: false,
+    };
   },
   render() {
-    const { agreement, personalInfo } = this.state;
-    // <Ionicons name='android-checkbox' size={30} color='#1fcbf6' />
+    const { termsAndConditions, personalInfo } = this.state;
+    if (this.state.showTermsAndConditions) {
+      return (
+        <View style={styles.container}>
+          <View style={styles.title}>
+            <Text style={styles.titleText}>이용약관</Text>
+          </View>
+          <TermsAndConditions style={{ backgroundColor: 'white' }}/>
+          <View style={styles.popupButtonBox}>
+            <Button
+              containerStyle={styles.popupButton}
+              style={styles.confirmText}
+              onPress={() => this.setState({ showTermsAndConditions: false })}
+            >
+              확인
+            </Button>
+          </View>
+        </View>
+      );
+    }
+    if (this.state.showPersonalInfo) {
+      return (
+        <View style={styles.container}>
+          <View style={styles.title}>
+            <Text style={styles.titleText}>이용약관</Text>
+          </View>
+          <PersonalInfomation style={{ backgroundColor: 'white' }}/>
+          <View style={styles.popupButtonBox}>
+            <Button
+              containerStyle={styles.popupButton}
+              style={styles.confirmText}
+              onPress={() => this.setState({ showPersonalInfo: false })}
+            >
+              확인
+            </Button>
+          </View>
+        </View>
+      );
+    }
     return (
       <View style={styles.container}>
         <View style={styles.title}>
@@ -24,13 +69,18 @@ export default React.createClass({
           </View>
           <View style={styles.buttonBox}>
             <Button
-              onPress={() => this.setState({ agreement: !agreement })}
+              onPress={() => this.setState({ termsAndConditions: !termsAndConditions })}
               containerStyle={styles.button}
             >
-              <Ionicons name='android-checkbox' size={30} color={agreement ? '#1fcbfb' : 'grey' } />
+              <Ionicons name='android-checkbox' size={30} color={termsAndConditions ? '#1fcbfb' : 'grey' } />
               <Text style={styles.buttonText}>이용약관 동의</Text>
             </Button>
-            <Button style={styles.detailText}>내용보기</Button>
+            <Button
+              style={styles.detailText}
+              onPress={() => this.setState({ showTermsAndConditions: true })}
+            >
+              내용보기
+            </Button>
           </View>
           <View style={styles.buttonBox}>
             <Button
@@ -40,7 +90,12 @@ export default React.createClass({
               <Ionicons name='android-checkbox' size={30} color={personalInfo ? '#1fcbfb' : 'grey' } />
               <Text style={styles.buttonText}>개인정보 수집방침 동의</Text>
             </Button>
-            <Button style={styles.detailText}>내용보기</Button>
+            <Button
+              style={styles.detailText}
+              onPress={() => this.setState({ showPersonalInfo: true })}
+            >
+              내용보기
+            </Button>
           </View>
           <Button containerStyle={styles.confirmButton} style={styles.confirmText}>약관 동의하기</Button>
         </View>
@@ -108,5 +163,19 @@ const styles = StyleSheet.create({
   },
   confirmText: {
     color: 'white',
+  },
+  popupButtonBox: {
+    height: 60,
+    justifyContent: 'center',
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  popupButton: {
+    backgroundColor: '#1fcbf6',
+    borderRadius: 6,
+    overflow:'hidden',
+    paddingHorizontal: 60,
+    paddingVertical: 10,
   },
 });
