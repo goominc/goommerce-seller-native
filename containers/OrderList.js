@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+    backgroundColor: 'white',
     paddingVertical: 3,
   },
   sectionText: {
