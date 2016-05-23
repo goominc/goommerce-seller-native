@@ -35,18 +35,18 @@ const OrderDetail = React.createClass({
         '주문확인 감사합니다.',
       );
     } else {
-      function onConfirm() {
+      const readyToPickup = () => {
         const orderProducts = map[102].map((o) => _.pick(o, 'id'));
         brandOrderReadyToPickUp(brandId, order.id, reduxKey, orderProducts).then(() => {
           pop();
           loadBrandOrders(brandId, 'new', 0, 20); // FIXME
         });
-      }
+      };
 
       Alert.alert(
         '주문확인 및 포장이 완료되었습니까?',
         `"링크# ${_.padStart(order.id, 3, '0').substr(-3)}" 봉투에 적으셨나요?`,
-        [ { text: '확인', onPress: onConfirm }, { text: '취소' } ]
+        [ { text: '확인', onPress: readyToPickup }, { text: '취소' } ]
       );
     }
   },
