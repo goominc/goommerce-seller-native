@@ -46,16 +46,9 @@ const OrderList = React.createClass({
     const { brandId, push, reduxKey, updateBrandOrderStatus } = this.props;
 
     function onSelect() {
-      function onConfirm() {
+      if (_.find(order.orderProducts, { status: 100 })) {
         updateBrandOrderStatus(brandId, order.id, reduxKey, 100, 101).then(
           () => push(routes.order({ brandId, orderId: order.id }))
-        );
-      }
-      if (_.find(order.orderProducts, { status: 100 })) {
-        Alert.alert(
-          '알림',
-          '주문을 확인하시겠습니까?',
-          [ { text: '확인', onPress: onConfirm }, { text: '취소' } ]
         );
       } else {
         push(routes.order({ brandId, orderId: order.id }));
