@@ -44,7 +44,7 @@ const OrderList = React.createClass({
     return loadBrandOrders(brandId, status, 0, limit);
   },
   renderRow(order, sectionID, rowID, highlightRow) {
-    const { brandId, push, reduxKey, updateBrandOrderStatus } = this.props;
+    const { brandId, push, reduxKey, status, updateBrandOrderStatus } = this.props;
 
     function onSelect() {
       if (_.find(order.orderProducts, { status: 100 })) {
@@ -60,6 +60,7 @@ const OrderList = React.createClass({
       <OrderCell
         key={order.id}
         order={order}
+        status={status}
         onHighlight={() => highlightRow(sectionID, rowID)}
         onUnhighlight={() => highlightRow(null, null)}
         onSelect={onSelect}

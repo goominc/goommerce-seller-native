@@ -19,12 +19,13 @@ import DefaultText from './DefaultText';
 
 export default React.createClass({
   renderStatus() {
-    const { order: { orderProducts } } = this.props;
-    const status = _.countBy(orderProducts, 'status');
-    if (status[100] || status[101] || status[102]) {
+    const { status } = this.props;
+    if (status === 'new') {
       return <Text style={[styles.descStatusText, { backgroundColor: '#23bcee'}]}>신규주문</Text>;
-    } else {
+    } else if (status === 'pending') {
       return <Text style={[styles.descStatusText, { backgroundColor: '#3f4c5d'}]}>출고대기</Text>;
+    } else if (status === 'settled') {
+      return <Text style={[styles.descStatusText, { backgroundColor: '#3f4c5d'}]}>정산완료</Text>;
     }
   },
   render() {
