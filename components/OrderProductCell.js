@@ -1,14 +1,7 @@
 'use strict';
 
 import React from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  Switch,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TextInput, Switch, View } from 'react-native';
 import { CloudinaryImageNative } from 'react-cloudinary';
 import _ from 'lodash';
 import Button from 'react-native-button';
@@ -112,11 +105,14 @@ export default React.createClass({
     if (order.status !== 100) {
       return undefined;
     }
+    const { confirmed } = this.state;
     return (
       <View style={styles.columnContainer}>
         <Text style={styles.headerText}>주문확인</Text>
         <View style={styles.columnMainContainer}>
-          <Switch onValueChange={this.toggleConfirm} value={this.state.confirmed} />
+          <Button onPress={() => this.toggleConfirm(!confirmed)}>
+            <Icon name='android-checkbox' size={35} color={confirmed ? '#1fcbfb' : 'grey' } />
+          </Button>
         </View>
       </View>
     );
