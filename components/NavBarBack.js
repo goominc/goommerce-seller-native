@@ -1,7 +1,8 @@
 'use strict';
 
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default React.createClass({
   render() {
@@ -10,7 +11,7 @@ export default React.createClass({
       <TouchableOpacity
         onPress={() => pop()}
         style={styles.navBarLeftButton}>
-        <Image source={require('./back_chevron.png')} style={styles.backButtonImage}/>
+        <Ionicons name='chevron-left' size={23} color='grey' />
         <Text style={[styles.navBarText, styles.navBarButtonText]}>
           {title}
         </Text>
