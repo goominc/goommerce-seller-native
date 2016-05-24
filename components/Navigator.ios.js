@@ -65,17 +65,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   navBar: {
-    backgroundColor: 'white',
+    backgroundColor: '#3f4c5d',
     borderBottomWidth: 1,
-    borderBottomColor: '#eeeeee'
+    borderBottomColor: '#3f4c5d'
   },
   navBarText: {
     fontSize: 16,
     marginVertical: 10,
   },
   navBarTitleText: {
-    color: '#373E4D',
-    fontWeight: '500',
+    color: 'white',
+    fontWeight: 'bold',
     marginVertical: 9,
   },
   navBarLeftButton: {

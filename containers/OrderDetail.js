@@ -109,10 +109,10 @@ const OrderDetail = React.createClass({
         />
         <View style={styles.footer}>
           <View style={styles.footerDescContainer}>
-            <Text style={{color: 'white', flex: 1}}>
+            <Text style={{color: 'white', flex: 1, marginHorizontal: 10}}>
               총 주문수량: {numeral(totalQuantity).format('0,0')}
             </Text>
-            <Text style={{color: 'white', flex: 1}}>
+            <Text style={{color: 'white', flex: 1, marginHorizontal: 10}}>
               총 주문금액: {numeral(totalKRW).format('0,0')}원
             </Text>
           </View>

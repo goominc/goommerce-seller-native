@@ -114,7 +114,7 @@ export default React.createClass({
     }
     return (
       <View style={styles.columnContainer}>
-        <Text>주문확인</Text>
+        <Text style={styles.headerText}>주문확인</Text>
         <View style={styles.columnMainContainer}>
           <Switch onValueChange={this.toggleConfirm} value={this.state.confirmed} />
         </View>
@@ -130,16 +130,16 @@ export default React.createClass({
     const image = _.get(productVariant, 'appImages.default.0');
     return (
       <View style={styles.container}>
-        <View style={styles.columnContainer}>
-          <Text>{name.ko}</Text>
-          <View style={styles.columnMainContainer}>
-            <Text>{color} / {size}</Text>
-            <Text>{`${numeral(orderProduct.KRW).format('0,0')}원`}</Text>
+        <View style={[styles.columnContainer, { alignItems: 'flex-start', marginLeft: 4 }]}>
+          <Text style={styles.headerText}>{name.ko}</Text>
+          <View style={[styles.columnMainContainer, { alignItems: 'flex-start'}]}>
+            <Text style={styles.colorSizeText}>{color} / {size}</Text>
+            <Text style={styles.priceText}>{`${numeral(orderProduct.KRW).format('0,0')}원`}</Text>
             {this.renderThumbnail(orderProduct)}
           </View>
         </View>
         <View style={styles.columnContainer}>
-          <Text>수량: {numeral(orderProduct.quantity).format('0,0')}</Text>
+          <Text style={styles.headerText}>주문수량: {numeral(orderProduct.quantity).format('0,0')}</Text>
           <View style={styles.columnMainContainer}>
             <Button
               containerStyle={styles.quantityButton}
@@ -167,7 +167,7 @@ export default React.createClass({
           </View>
         </View>
         <View style={styles.columnContainer}>
-            <Text>변경 사유</Text>
+            <Text style={styles.headerText}>수량 변경 사유</Text>
           <View style={styles.columnMainContainer}>
             {this.renderReasonModal()}
           </View>
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
   thumbnail: {
     backgroundColor: '#dddddd',
-    borderColor: 'gray',
+    borderColor: '#dcdcdc',
     borderWidth: 1,
     height: 50,
     width: 50,
@@ -227,5 +227,17 @@ const styles = StyleSheet.create({
   reasonButtonText: {
     textAlign: 'center',
     marginRight: 3,
+  },
+  headerText: {
+    color: '#666',
+    fontSize: 12,
+  },
+  priceText: {
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  colorSizeText: {
+    fontWeight: 'bold',
+    color: '#666',
   },
 });
