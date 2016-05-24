@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
 import Button from 'react-native-button';
+import _ from 'lodash';
 
 import EmptyView from '../components/EmptyView';
 import OrderCell from '../components/OrderCell';

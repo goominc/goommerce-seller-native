@@ -7,6 +7,7 @@ import { config as configApiClient } from 'goommerce-api-client';
 import configureStore, { errorActions, orderActions } from 'goommerce-redux';
 import { cloudinaryConfig } from 'react-cloudinary';
 import OneSignal from 'react-native-onesignal';
+import _ from 'lodash';
 
 import App from './containers/App';
 

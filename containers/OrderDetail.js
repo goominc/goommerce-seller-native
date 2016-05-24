@@ -8,6 +8,7 @@ import { orderActions } from 'goommerce-redux';
 import Button from 'react-native-button';
 import Decimal from 'decimal.js-light';
 import numeral from 'numeral';
+import _ from 'lodash';
 
 import EmptyView from '../components/EmptyView';
 import OrderProductCell from '../components/OrderProductCell';

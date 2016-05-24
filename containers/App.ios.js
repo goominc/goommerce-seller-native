@@ -5,6 +5,7 @@ import { AsyncStorage, StatusBar, TabBarIOS, View } from 'react-native';
 import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
 import OneSignal from 'react-native-onesignal';
+import _ from 'lodash';
 
 import Agreement from './Agreement';
 import EmptyView from '../components/EmptyView';

@@ -15,6 +15,7 @@ import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
 import OneSignal from 'react-native-onesignal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import _ from 'lodash';
 
 import routes from '../routes';
 import Agreement from './Agreement';
