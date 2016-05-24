@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { AsyncStorage, TabBarIOS } from 'react-native';
+import { AsyncStorage, StatusBar, TabBarIOS, View } from 'react-native';
 import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
 import OneSignal from 'react-native-onesignal';
@@ -54,36 +54,39 @@ const App = React.createClass({
 
     const brandId = brands[0].id;
     return (
-      <TabBarIOS
-        barTintColor="white">
-        <TabBarIOS.Item
-          icon={require('./images/tab_order.png')}
-          title="주문조회"
-          selected={this.state.selectedTab === 'orders'}
-          onPress={() => {
-            this.setState({ selectedTab: 'orders' });
-          }}>
-          <Navigator initialRoute={routes.orders({ brandId })} />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          icon={require('./images/tab_product.png')}
-          title="상품관리"
-          selected={this.state.selectedTab === 'products'}
-          onPress={() => {
-            this.setState({ selectedTab: 'products' });
-          }}>
-          <Navigator initialRoute={routes.products({ brandId })} />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          icon={require('./images/tab_profile.png')}
-          title="내 정보"
-          selected={this.state.selectedTab === 'profile'}
-          onPress={() => {
-            this.setState({ selectedTab: 'profile' });
-          }}>
-          <Navigator initialRoute={routes.profile()} />
-        </TabBarIOS.Item>
-      </TabBarIOS>
+      <View style={{ flex: 1 }}>
+        <StatusBar barStyle="light-content" />
+        <TabBarIOS
+          barTintColor="white">
+          <TabBarIOS.Item
+            icon={require('./images/tab_order.png')}
+            title="주문조회"
+            selected={this.state.selectedTab === 'orders'}
+            onPress={() => {
+              this.setState({ selectedTab: 'orders' });
+            }}>
+            <Navigator initialRoute={routes.orders({ brandId })} />
+          </TabBarIOS.Item>
+          <TabBarIOS.Item
+            icon={require('./images/tab_product.png')}
+            title="상품관리"
+            selected={this.state.selectedTab === 'products'}
+            onPress={() => {
+              this.setState({ selectedTab: 'products' });
+            }}>
+            <Navigator initialRoute={routes.products({ brandId })} />
+          </TabBarIOS.Item>
+          <TabBarIOS.Item
+            icon={require('./images/tab_profile.png')}
+            title="내 정보"
+            selected={this.state.selectedTab === 'profile'}
+            onPress={() => {
+              this.setState({ selectedTab: 'profile' });
+            }}>
+            <Navigator initialRoute={routes.profile()} />
+          </TabBarIOS.Item>
+        </TabBarIOS>
+      </View>
     );
   }
 });
