@@ -9,8 +9,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import ModalPicker from 'react-native-modal-picker'
 import numeral from 'numeral';
 
-import CountPicker from './CountPicker';
-
 function getInitialState(props) {
   const { orderProduct, order } = props;
   const quantity = (() => {
