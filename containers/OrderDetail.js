@@ -85,6 +85,21 @@ const OrderDetail = React.createClass({
       <View key={'SEP_' + sectionID + '_' + rowID}  style={style}/>
     );
   },
+  renderConfirmButton() {
+    const { order } = this.props;
+    if (order.status === 100) {
+      return (
+        <Button
+          style={{color: 'white'}}
+          styleDisabled={{color: 'red'}}
+          containerStyle={styles.confirmButton}
+          onPress={this.onConfirm}
+        >
+          포장완료
+        </Button>
+      );
+    }
+  },
   render() {
     const { order } = this.props;
     if (!order) {
@@ -108,7 +123,7 @@ const OrderDetail = React.createClass({
           renderSeparator={this.renderSeparator}
           onRefresh={this.onRefresh}
         />
-        <View style={styles.footer}>
+        <View style={[styles.footer, { height: order.status === 100 ? 80 : 40 }]}>
           <View style={styles.footerDescContainer}>
             <Text style={{color: 'white', flex: 1, marginHorizontal: 10}}>
               총 주문수량: {numeral(totalQuantity).format('0,0')}
@@ -117,14 +132,7 @@ const OrderDetail = React.createClass({
               총 주문금액: {numeral(totalKRW).format('0,0')}원
             </Text>
           </View>
-          <Button
-            style={{color: 'white'}}
-            styleDisabled={{color: 'red'}}
-            containerStyle={styles.confirmButton}
-            onPress={this.onConfirm}
-          >
-            포장완료
-          </Button>
+          {this.renderConfirmButton()}
         </View>
       </View>
     );
@@ -157,7 +165,6 @@ const styles = StyleSheet.create({
   },
   footer: {
     backgroundColor: '#3f4c5d',
-    height: 80,
   },
   footerDescContainer: {
     flexDirection: 'row',
