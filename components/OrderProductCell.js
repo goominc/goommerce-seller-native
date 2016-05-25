@@ -22,7 +22,7 @@ function getInitialState(props) {
     quantity: quantity.toString(),
     reason: _.get(orderProduct, 'data.stock.reason', 0),
     data: _.get(orderProduct, 'data.stock.data'),
-    confirmed: orderProduct.status !== 101,
+    confirmed: orderProduct.status !== 101 || order.status !== 100,
   };
 }
 
