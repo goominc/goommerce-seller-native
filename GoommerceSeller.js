@@ -20,7 +20,7 @@ OneSignal.configure({
       const brands = _.filter(roles,
         (r) => r.type === 'owner' || r.type === 'staff').map((r) => r.brand);
       const brandId = brands[0].id;
-      orderActions.loadBrandOrders(brandId)(store.dispatch, store.getState);
+      orderActions.loadBrandOrders(brandId, 'new', 0, 20)(store.dispatch, store.getState);
     }
     if (isActive) {
       Alert.alert('새로운 주문.', message);
