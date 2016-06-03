@@ -137,7 +137,7 @@ export default React.createClass({
           <View style={styles.columnMainContainer}>
             <Button
               containerStyle={styles.quantityButton}
-              onPress={() => this.setQuantity(this.state.quantity + 1)}
+              onPress={() => this.setQuantity(+this.state.quantity + 1)}
               disabled={confirmed}
             >
               <Icon name='arrow-up-b' size={20} color={confirmed ? 'grey' : 'orange' }/>
@@ -153,7 +153,7 @@ export default React.createClass({
             />
             <Button
               containerStyle={styles.quantityButton}
-              onPress={() => this.setQuantity(this.state.quantity - 1)}
+              onPress={() => this.setQuantity(+this.state.quantity - 1)}
               disabled={confirmed}
             >
               <Icon name='arrow-down-b' size={20} color={confirmed ? 'grey' : 'orange' }/>
