@@ -31,7 +31,7 @@ export default React.createClass({
   render() {
     const TouchableElement = Platform.OS === 'android' ?
       TouchableNativeFeedback : TouchableHighlight;
-    const { order: { id, totalQuantity, totalKRW, orderProducts, processedDate, orderPrefix } } = this.props;
+    const { order: { id, totalQuantity, totalKRW, orderProducts, processedDate, orderName } } = this.props;
     const name = () => {
       if (orderProducts.length === 1) {
         return orderProducts[0].name;
@@ -48,8 +48,8 @@ export default React.createClass({
         >
           <View style={styles.container}>
             <View style={styles.orderNumContainer}>
-              <Text style={styles.orderNumText}>{`${orderPrefix || '링크'}#`}</Text>
-              <Text style={styles.orderNumText}>{_.padStart(id, 3, '0').substr(-3)}</Text>
+              <Text style={styles.orderNumText}>링크#</Text>
+              <Text style={styles.orderNumText}>{orderName || _.padStart(id, 3, '0').substr(-3)}</Text>
             </View>
             <View style={styles.descContainer}>
               <Text style={styles.descNameText}>{name()}</Text>

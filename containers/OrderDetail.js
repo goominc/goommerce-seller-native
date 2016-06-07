@@ -46,7 +46,7 @@ const OrderDetail = React.createClass({
 
       Alert.alert(
         '주문확인 및 포장이 완료되었습니까?',
-        `"${order.orderPrefix || '링크'}# ${_.padStart(order.id, 3, '0').substr(-3)}" 봉투에 적으셨나요?`,
+        `"링크# ${order.orderName || _.padStart(order.id, 3, '0').substr(-3)}" 봉투에 적으셨나요?`,
         [ { text: '확인', onPress: readyToPickup }, { text: '취소' } ]
       );
     }
