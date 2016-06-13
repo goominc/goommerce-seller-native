@@ -57,7 +57,7 @@ export default React.createClass({
               <Text style={styles.descPriceText}>{`${numeral(totalKRW).format('0,0')}원`}</Text>
             </View>
             <View>
-              <Text>{processedDate.substring(5, 10)}</Text>
+              <Text>{(processedDate || "").substring(5, 10)}</Text>
               {this.renderStatus()}
             </View>
           </View>
