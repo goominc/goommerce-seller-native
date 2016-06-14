@@ -6,8 +6,10 @@ import { CloudinaryImageNative } from 'react-cloudinary';
 import _ from 'lodash';
 import Button from 'react-native-button';
 import Icon from 'react-native-vector-icons/Ionicons';
-import ModalPicker from 'react-native-modal-picker'
+import ModalPicker from 'react-native-modal-picker';
 import numeral from 'numeral';
+
+import OpenUrlButton from './OpenUrlButton';
 
 function getInitialState(props) {
   const { orderProduct, order } = props;
@@ -54,11 +56,13 @@ export default React.createClass({
     const image = _.get(productVariant, 'appImages.default.0');
     if (image) {
       return (
-        <CloudinaryImageNative
-          publicId={image.publicId}
-          options={{ width: 100, height: 100 }}
-          style={styles.thumbnail}
-        />
+        <OpenUrlButton url={`https://m.linkshops.com/products/${product.id}`}>
+          <CloudinaryImageNative
+            publicId={image.publicId}
+            options={{ width: 100, height: 100 }}
+            style={styles.thumbnail}
+          />
+        </OpenUrlButton>
       );
     }
   },

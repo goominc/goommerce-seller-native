@@ -6,6 +6,7 @@ import { CloudinaryImageNative } from 'react-cloudinary';
 import numeral from 'numeral';
 
 import DefaultText from './DefaultText';
+import OpenUrlButton from './OpenUrlButton';
 
 export default React.createClass({
   render() {
@@ -15,11 +16,13 @@ export default React.createClass({
     const KRW = productVariant.KRW || product.KRW;
     return (
       <View style={styles.container}>
-        <CloudinaryImageNative
-          publicId={image.publicId}
-          options={{ width: 200, height: 200 }}
-          style={styles.thumbnail}
-        />
+        <OpenUrlButton url={`https://m.linkshops.com/products/${product.id}`}>
+          <CloudinaryImageNative
+            publicId={image.publicId}
+            options={{ width: 200, height: 200 }}
+            style={styles.thumbnail}
+          />
+        </OpenUrlButton>
         <View style={styles.descContainer}>
           <DefaultText text={`${color}-${size}`} />
           <DefaultText text={`${numeral(KRW).format('0,0')}원`} />

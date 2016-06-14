@@ -16,12 +16,13 @@ import { CloudinaryImageNative } from 'react-cloudinary';
 import numeral from 'numeral';
 
 import DefaultText from './DefaultText';
+import OpenUrlButton from './OpenUrlButton';
 
 export default React.createClass({
   render() {
     const TouchableElement = Platform.OS === 'android' ?
       TouchableNativeFeedback : TouchableHighlight;
-    const { product: { appImages, name, KRW, isActive } } = this.props;
+    const { product: { id, appImages, name, KRW, isActive } } = this.props;
     const image = appImages.default[0];
     return (
       <View>
@@ -31,11 +32,13 @@ export default React.createClass({
           onHideUnderlay={this.props.onUnhighlight}
         >
           <View style={styles.container}>
-            <CloudinaryImageNative
-              publicId={image.publicId}
-              options={{ width: 200, height: 200 }}
-              style={styles.thumbnail}
-            />
+            <OpenUrlButton url={`https://m.linkshops.com/products/${id}`}>
+              <CloudinaryImageNative
+                publicId={image.publicId}
+                options={{ width: 200, height: 200 }}
+                style={styles.thumbnail}
+              />
+            </OpenUrlButton>
             <View style={styles.descContainer}>
               <DefaultText text={name.ko} />
               {KRW && <DefaultText text={`${numeral(KRW).format('0,0')}원`} />}
