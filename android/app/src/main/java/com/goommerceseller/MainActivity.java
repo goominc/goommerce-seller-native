@@ -1,4 +1,4 @@
-package com.goommerceseller;
+package com.linkshops;
 
 import com.facebook.react.ReactActivity;
 import com.oblador.vectoricons.VectorIconsPackage;
