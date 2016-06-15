@@ -14,6 +14,7 @@ import {
 import _ from 'lodash';
 import { CloudinaryImageNative } from 'react-cloudinary';
 import numeral from 'numeral';
+import Decimal from 'decimal.js-light';
 
 import DefaultText from './DefaultText';
 
@@ -31,7 +32,7 @@ export default React.createClass({
   render() {
     const TouchableElement = Platform.OS === 'android' ?
       TouchableNativeFeedback : TouchableHighlight;
-    const { order: { id, totalQuantity, totalKRW, orderProducts, processedDate, orderName } } = this.props;
+    const { order: { id, orderProducts, processedDate, orderName } } = this.props;
     const name = () => {
       if (orderProducts.length === 1) {
         return orderProducts[0].name;
@@ -39,6 +40,9 @@ export default React.createClass({
         return `${orderProducts[0].name} 외 ${orderProducts.length - 1} 종`;
       }
     };
+    const totalQuantity = _.sumBy(orderProducts, (o) => _.get(o, 'data.stock.quantity', o.quantity));
+    const totalKRW = _.reduce(orderProducts,
+      (sum, o) => sum.add(Decimal(o.KRW || 0).mul(_.get(o, 'data.stock.quantity', o.quantity))), new Decimal(0)).toNumber();
     return (
       <View>
         <TouchableElement

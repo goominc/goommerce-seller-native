@@ -38,10 +38,7 @@ const OrderDetail = React.createClass({
     } else {
       const readyToPickup = () => {
         const orderProducts = map[102].map((o) => _.pick(o, 'id'));
-        brandOrderReadyToPickUp(brandId, order.id, reduxKey, orderProducts).then(() => {
-          pop();
-          loadBrandOrders(brandId, 'new', 0, 20); // FIXME
-        });
+        brandOrderReadyToPickUp(brandId, order.id, reduxKey, orderProducts).then(() => pop());
       };
 
       Alert.alert(
@@ -113,8 +110,9 @@ const OrderDetail = React.createClass({
     const dataSource = this.dataSource.cloneWithRows(orderProducts);
     // const dataBlob = _.groupBy(orderProducts, (o) => o.product.id);
     // const dataSource = this.dataSource.cloneWithRowsAndSections(dataBlob);
-    const totalQuantity = _.sumBy(orderProducts, 'quantity');
-    const totalKRW = _.reduce(orderProducts, (sum, o) => sum.add(o.totalKRW), new Decimal(0)).toNumber();
+    const totalQuantity = _.sumBy(orderProducts, (o) => _.get(o, 'data.stock.quantity', o.quantity));
+    const totalKRW = _.reduce(orderProducts,
+      (sum, o) => sum.add(Decimal(o.KRW || 0).mul(_.get(o, 'data.stock.quantity', o.quantity))), new Decimal(0)).toNumber();
     return (
       <View style={styles.container}>
         <RefreshableList
