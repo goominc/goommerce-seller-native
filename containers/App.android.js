@@ -77,7 +77,7 @@ const App = React.createClass({
           style={styles.toolbar}
           title={route.title}
         />
-        <route.component {...route.props} push={navigator.push} />
+        <route.component {...route.props} push={navigator.push} pop={navigator.pop} />
       </View>
     );
   },
