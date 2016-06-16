@@ -22,6 +22,10 @@ const OrderList = React.createClass({
     // TODO: move this into redux?
     return { isLoadingTail: false };
   },
+  componentDidMount() {
+    const { brandId, status, limit, loadBrandOrders } = this.props;
+    loadBrandOrders(brandId, status, 0, limit);
+  },
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
