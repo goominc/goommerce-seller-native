@@ -1,16 +1,23 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { AsyncStorage, StyleSheet, Text, TextInput, View } from 'react-native';
 import Button from 'react-native-button';
+import { connect } from 'react-redux'
+import { authActions } from 'goommerce-redux';
+import OneSignal from 'react-native-onesignal';
 
-export default React.createClass({
+const Signin = React.createClass({
   getInitialState() {
     return {};
   },
   signin() {
     const { email, password } = this.state;
-    this.props.signin(email, password);
+    OneSignal.idsAvailable(({ pushToken, playerId, userId }) => {
+      this.props.login(email, password, pushToken && (playerId || userId)).then(
+        (auth) => AsyncStorage.setItem('bearer', auth.bearer)
+      );
+    });
   },
   render() {
     return (
@@ -79,3 +86,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
 });
+
+export default connect(
+  (state) => ({ auth: state.auth }), authActions
+)(Signin);

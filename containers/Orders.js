@@ -3,10 +3,17 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Button from 'react-native-button';
+import { orderActions } from 'goommerce-redux';
 
 import OrderList from './OrderList';
 
 export default React.createClass({
+  statics: {
+    onDidFocus(props, dispatch) {
+      dispatch(orderActions.loadBrandOrders(props.brandId, 'new', 0, 20));
+      dispatch(orderActions.loadBrandOrders(props.brandId, 'pending', 0, 20));
+    },
+  },
   getInitialState() {
     return { activeStatus: 'new' };
   },

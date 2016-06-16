@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Navigator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { connect } from 'react-redux'
 import _ from 'lodash';
 
 import NavBarBack from '../components/NavBarBack'
@@ -27,8 +28,7 @@ const NavigationBarRouteMapper = {
     );
   },
 };
-
-export default React.createClass({
+export default connect()(React.createClass({
   renderScene(route, navigator) {
     return (
       <View style={styles.scene}>
@@ -48,10 +48,14 @@ export default React.createClass({
         }
         renderScene={this.renderScene}
         style={styles.container}
+        onDidFocus={({component, props}) => {
+          const onDidFocus = component.onDidFocus || _.get(component, 'WrappedComponent.onDidFocus');
+          if (onDidFocus) onDidFocus(props, this.props.dispatch);
+        }}
       />
     );
   }
-});
+}));
 
 const styles = StyleSheet.create({
   container: {

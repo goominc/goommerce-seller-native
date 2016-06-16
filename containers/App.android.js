@@ -2,7 +2,6 @@
 
 import React from 'react';
 import {
-  AsyncStorage,
   BackAndroid,
   Dimensions,
   DrawerLayoutAndroid,
@@ -13,7 +12,6 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
-import OneSignal from 'react-native-onesignal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import _ from 'lodash';
 
@@ -42,9 +40,9 @@ function defaultBrand(roles) {
 
 const App = React.createClass({
   componentDidMount() {
-    const { auth, whoami } = this.props;
+    const { auth, dispatch } = this.props;
     if (auth.bearer && !auth.email) {
-      whoami();
+      dispatch(authActions.whoami());
     }
   },
   componentWillMount() {
@@ -59,13 +57,6 @@ const App = React.createClass({
       return true;
     }
     return false;
-  },
-  signin(email, password) {
-    OneSignal.idsAvailable(({ pushToken, playerId, userId }) => {
-      this.props.login(email, password, pushToken && (playerId || userId)).then(
-        (auth) => AsyncStorage.setItem('bearer', auth.bearer)
-      );
-    });
   },
   renderScene(route, navigator) {
     _navigator = navigator;
@@ -126,6 +117,10 @@ const App = React.createClass({
         initialRoute={routes.orders({ brandId })}
         renderScene={this.renderScene}
         style={styles.container}
+        onDidFocus={({component, props}) => {
+          const onDidFocus = component.onDidFocus || _.get(component, 'WrappedComponent.onDidFocus');
+          if (onDidFocus) onDidFocus(props, this.props.dispatch);
+        }}
       />
     );
   },
@@ -171,6 +166,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(
-  (state) => ({ auth: state.auth }) , authActions
-)(App);
+export default connect((state) => ({ auth: state.auth }))(App);

@@ -1,10 +1,9 @@
 'use strict';
 
 import React from 'react';
-import { AsyncStorage, StatusBar, TabBarIOS, View } from 'react-native';
+import { StatusBar, TabBarIOS, View } from 'react-native';
 import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
-import OneSignal from 'react-native-onesignal';
 import _ from 'lodash';
 
 import Agreement from './Agreement';
@@ -24,13 +23,6 @@ const App = React.createClass({
     if (auth.bearer && !auth.email) {
       whoami();
     }
-  },
-  signin(email, password) {
-    OneSignal.idsAvailable(({ pushToken, playerId, userId }) => {
-      this.props.login(email, password, pushToken && (playerId || userId)).then(
-        (auth) => AsyncStorage.setItem('bearer', auth.bearer)
-      );
-    });
   },
   render() {
     const { auth: { bearer, email, roles, data } } = this.props;
@@ -93,5 +85,5 @@ const App = React.createClass({
 });
 
 export default connect(
-  (state) => ({ auth: state.auth }) , authActions
+  (state) => ({ auth: state.auth }), authActions
 )(App);
