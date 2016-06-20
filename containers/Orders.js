@@ -55,13 +55,13 @@ const styles = StyleSheet.create({
   statusContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: '#3f4c5d',
+    backgroundColor: '#1F3A4A',
     paddingVertical: 5,
   },
   activeStatus: {
     color: '#23bcee',
   },
   inactiveStatus: {
-    color: 'white',
+    color: '#999999',
   },
 });

@@ -76,6 +76,9 @@ const OrderList = React.createClass({
         <Text style={[styles.sectionText, { flex: 1} ]}>
           주문내용
         </Text>
+        <Text style={[styles.sectionText, { width: 80} ]}>
+          날짜
+        </Text>
       </View>
     );
   },

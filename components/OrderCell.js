@@ -12,37 +12,56 @@ import {
   View,
 } from 'react-native';
 import _ from 'lodash';
-import { CloudinaryImageNative } from 'react-cloudinary';
 import numeral from 'numeral';
 import Decimal from 'decimal.js-light';
+import moment from 'moment';
 
-import DefaultText from './DefaultText';
+// FIXME: move to some other place.
+moment.locale('ko', {
+  relativeTime : {
+    future : "%s 후",
+    past : "%s 전",
+    s : "몇초",
+    m : "일분",
+    mm : "%d분",
+    h : "한시간",
+    hh : "%d시간",
+    d : "하루",
+    dd : "%d일",
+    M : "한달",
+    MM : "%d달",
+    y : "일년",
+    yy : "%d년"
+  },
+});
 
 export default React.createClass({
-  renderStatus() {
-    const { status } = this.props;
-    if (status === 'new') {
-      return <Text style={[styles.descStatusText, { backgroundColor: '#23bcee'}]}>신규주문</Text>;
-    } else if (status === 'pending') {
-      return <Text style={[styles.descStatusText, { backgroundColor: '#3f4c5d'}]}>출고대기</Text>;
-    } else if (status === 'settled') {
-      return <Text style={[styles.descStatusText, { backgroundColor: '#3f4c5d'}]}>정산완료</Text>;
-    }
-  },
   render() {
     const TouchableElement = Platform.OS === 'android' ?
       TouchableNativeFeedback : TouchableHighlight;
-    const { order: { id, orderProducts, processedDate, orderName } } = this.props;
-    const name = () => {
-      if (orderProducts.length === 1) {
-        return orderProducts[0].name;
-      } else {
-        return `${orderProducts[0].name} 외 ${orderProducts.length - 1} 종`;
-      }
-    };
+    const { order: { id, orderProducts, orderedAt, orderName } } = this.props;
     const totalQuantity = _.sumBy(orderProducts, (o) => _.get(o, 'data.stock.quantity', o.quantity));
     const totalKRW = _.reduce(orderProducts,
       (sum, o) => sum.add(Decimal(o.KRW || 0).mul(_.get(o, 'data.stock.quantity', o.quantity))), new Decimal(0)).toNumber();
+
+    const name = () => {
+      if (orderProducts.length === 1) {
+        return `${orderProducts[0].name} ${numeral(totalQuantity).format('0,0')}개 주문내역`;
+      } else {
+        return `${orderProducts[0].name} 외 ${orderProducts.length - 1} 종 ${numeral(totalQuantity).format('0,0')}개 주문내역`;
+      }
+    };
+
+    const date = () => {
+      if (orderedAt) {
+        const at = moment(orderedAt);
+        if (moment().diff(at, 'hours') > 23) {
+          return <Text style={styles.rowText}>{at.format('YYYY.MM.DD')}</Text>
+        }
+        return <Text style={styles.rowText}>{at.fromNow()}</Text>
+      }
+    };
+
     return (
       <View>
         <TouchableElement
@@ -57,12 +76,10 @@ export default React.createClass({
             </View>
             <View style={styles.descContainer}>
               <Text style={styles.descNameText}>{name()}</Text>
-              <Text style={styles.descQuantityText}>{`${numeral(totalQuantity).format('0,0')}개`}</Text>
-              <Text style={styles.descPriceText}>{`${numeral(totalKRW).format('0,0')}원`}</Text>
+              <Text>{`${numeral(totalKRW).format('0,0')}원`}</Text>
             </View>
-            <View>
-              <Text>{(processedDate || "").substring(5, 10)}</Text>
-              {this.renderStatus()}
+            <View style={styles.dateContainer}>
+              {date()}
             </View>
           </View>
         </TouchableElement>
@@ -95,19 +112,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   descNameText: {
-    fontSize: 18,
-    fontWeight: 'bold',
     marginVertical: 5,
   },
   descQuantityText: {
     color: 'grey',
   },
-  descPriceText: {
-    fontWeight: 'bold',
-  },
-  descStatusText: {
-    borderRadius: 16,
-    padding: 7,
-    color: 'white',
+  dateContainer: {
+    width: 80,
   },
 });
