@@ -53,23 +53,17 @@ const OrderDetail = React.createClass({
     return loadBrandOrder(brandId, orderId);
   },
   renderRow(orderProduct) {
-    const { reduxKey, brandId, order, updateOrderProductStock, deleteOrderProductStock } = this.props;
+    const { reduxKey, brandId, order, updateOrderProductStock, deleteOrderProductStock, changeable } = this.props;
     return (
-      <OrderProductCell
-        key={orderProduct.id}
-        orderProduct={orderProduct}
-        order={order}
-        confirm={(quantity, reason, data) => updateOrderProductStock(orderProduct.id, reduxKey, quantity, reason, data)}
-        unconfirm={() => deleteOrderProductStock(orderProduct.id, reduxKey)}
-      />
-    );
-  },
-  renderSectionHeader(sectionData, sectionID) {
-    return (
-      <View style={styles.section}>
-        <Text style={{ fontSize: 17 }}>
-          {sectionData[0].product.name.ko}
-        </Text>
+      <View style={{ marginHorizontal: 8 }}>
+        <OrderProductCell
+          key={orderProduct.id}
+          orderProduct={orderProduct}
+          order={order}
+          changeable={changeable}
+          confirm={(quantity, reason, data) => updateOrderProductStock(orderProduct.id, reduxKey, quantity, reason, data)}
+          unconfirm={() => deleteOrderProductStock(orderProduct.id, reduxKey)}
+        />
       </View>
     );
   },
@@ -84,8 +78,8 @@ const OrderDetail = React.createClass({
   },
   renderConfirmButton() {
     const { order } = this.props;
-    if (order.status === 100) {
-      return (
+    return (
+      <View style={{ paddingVertical: 15 }}>
         <Button
           style={{color: 'white'}}
           styleDisabled={{color: 'red'}}
@@ -94,44 +88,47 @@ const OrderDetail = React.createClass({
         >
           포장완료
         </Button>
-      );
-    }
+      </View>
+    );
+  },
+  renderFooter() {
+    const { order, changeable } = this.props;
+    const { orderProducts } = order;
+    const totalQuantity = _.sumBy(orderProducts, (o) => _.get(o, 'data.stock.quantity', o.quantity));
+    const totalKRW = _.reduce(orderProducts,
+      (sum, o) => sum.add(Decimal(o.KRW || 0).mul(_.get(o, 'data.stock.quantity', o.quantity))), new Decimal(0)).toNumber();
+    return (
+      <View style={styles.footer}>
+        <View style={styles.footerDescContainer}>
+          <View style={{ flex: 1, flexDirection: 'column', marginHorizontal: 10 }}>
+            <Text style={{ color: 'black' }}>총 주문수량</Text>
+            <Text style={{ color: 'black', fontWeight: 'bold' }}>{numeral(totalQuantity).format('0,0')}개</Text>
+          </View>
+          <View style={{ flex: 1, flexDirection: 'column', marginHorizontal: 10 }}>
+            <Text style={{ color: '#FB6813', textAlign: 'right', fontWeight: 'bold' }}>입금예정금액(VAT포함)</Text>
+            <Text style={{ color: '#FB6813', textAlign: 'right', fontWeight: 'bold' }}>{numeral(totalKRW).format('0,0')}원</Text>
+          </View>
+        </View>
+        {changeable && this.renderConfirmButton()}
+      </View>
+    );
   },
   render() {
     const { order } = this.props;
     if (!order) {
       return <EmptyView text='Loading...' />;
     }
-    const { orderProducts } = order;
-    if (!orderProducts.length) {
-      return <EmptyView text='No orders...' />;
-    }
     // FIXME: possible performance issue...
-    const dataSource = this.dataSource.cloneWithRows(orderProducts);
-    // const dataBlob = _.groupBy(orderProducts, (o) => o.product.id);
-    // const dataSource = this.dataSource.cloneWithRowsAndSections(dataBlob);
-    const totalQuantity = _.sumBy(orderProducts, (o) => _.get(o, 'data.stock.quantity', o.quantity));
-    const totalKRW = _.reduce(orderProducts,
-      (sum, o) => sum.add(Decimal(o.KRW || 0).mul(_.get(o, 'data.stock.quantity', o.quantity))), new Decimal(0)).toNumber();
+    const dataSource = this.dataSource.cloneWithRows(order.orderProducts || []);
     return (
       <View style={styles.container}>
         <RefreshableList
           dataSource={dataSource}
           renderRow={this.renderRow}
           renderSeparator={this.renderSeparator}
+          renderFooter={this.renderFooter}
           onRefresh={this.onRefresh}
         />
-        <View style={[styles.footer, { height: order.status === 100 ? 80 : 40 }]}>
-          <View style={styles.footerDescContainer}>
-            <Text style={{color: 'white', flex: 1, marginHorizontal: 10}}>
-              상품 수량: {numeral(totalQuantity).format('0,0')}
-            </Text>
-            <Text style={{color: 'white', flex: 1, marginHorizontal: 10}}>
-              판매가액: {numeral(totalKRW).format('0,0')}원
-            </Text>
-          </View>
-          {this.renderConfirmButton()}
-        </View>
       </View>
     );
   },
@@ -140,12 +137,12 @@ const OrderDetail = React.createClass({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#F2F2F2',
+    paddingTop: 8,
   },
   rowSeparator: {
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    height: 1,
-    marginLeft: 4,
+    backgroundColor: '#F2F2F2',
+    height: 8,
   },
   rowSeparatorHide: {
     opacity: 0.0,
@@ -162,12 +159,15 @@ const styles = StyleSheet.create({
     color: '#5890FF',
   },
   footer: {
-    backgroundColor: '#3f4c5d',
+    backgroundColor: 'white',
   },
   footerDescContainer: {
     flexDirection: 'row',
     flex: 1,
     alignItems: 'center',
+    paddingVertical: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F2F2F2',
   },
   confirmButton: {
     flex: 1,
@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     overflow:'hidden',
     marginHorizontal: 60,
+    paddingVertical: 15,
     justifyContent:'center',
   },
 });
@@ -182,6 +183,9 @@ const styles = StyleSheet.create({
 export default connect(
   (state, ownProps) => {
     const { key } = orderActions.loadBrandOrder(ownProps.brandId, ownProps.orderId);
-    return { reduxKey: key, order: state.order[key] };
+    const order = state.order[key];
+    const changeable = _.get(order, 'status') === 100 &&
+      _.some(_.get(order, 'orderProducts'), (p) => _.includes([100, 101, 102, 103], p.status));
+    return { reduxKey: key, order, changeable };
   }, orderActions
 )(OrderDetail);

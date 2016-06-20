@@ -71,22 +71,32 @@ export default React.createClass({
     const { reason, data } = this.state;
     const disabled= this.state.confirmed || this.state.quantity == orderProduct.quantity;
     const labels = {
-      '0': { key: '0', label: '재고 있음', reason: 0 },
-      '10:1': { key: '10:1', label: '1일내 재입고 예정', display: '1일내 재입고', reason: 10, data: 1 },
-      '10:2': { key: '10:2', label: '2일내 재입고 예정', display: '2일내 재입고', reason: 10, data: 2 },
-      '10:3': { key: '10:3', label: '3일내 재입고 예정', display: '3일내 재입고', reason: 10, data: 3 },
-      '10:4': { key: '10:4', label: '4일내 재입고 예정', display: '4일내 재입고', reason: 10, data: 4 },
-      '10:5': { key: '10:5', label: '5일내 재입고 예정', display: '5일내 재입고', reason: 10, data: 5 },
-      '10:6': { key: '10:6', label: '6일내 재입고 예정', display: '6일내 재입고', reason: 10, data: 6 },
-      '10:7': { key: '10:7', label: '7일내 재입고 예정', display: '7일내 재입고', reason: 10, data: 7 },
+      '0': { key: '0', label: '출고수량 변경없음', reason: 0 },
+      '10:1': { key: '10:1', label: '1일내 재입고 예정', reason: 10, data: 1 },
+      '10:2': { key: '10:2', label: '2일내 재입고 예정', reason: 10, data: 2 },
+      '10:3': { key: '10:3', label: '3일내 재입고 예정', reason: 10, data: 3 },
+      '10:4': { key: '10:4', label: '4일내 재입고 예정', reason: 10, data: 4 },
+      '10:5': { key: '10:5', label: '5일내 재입고 예정', reason: 10, data: 5 },
+      '10:6': { key: '10:6', label: '6일내 재입고 예정', reason: 10, data: 6 },
+      '10:7': { key: '10:7', label: '7일내 재입고 예정', reason: 10, data: 7 },
       '30': { key: '30', label: '품절', reason: 30 },
     };
     const key = `${reason}${reason === 10 ? `:${(data || 1)}` : ''}`;
     const selected = labels[key];
+    if (reason === 0) {
+      return (
+        <View style={[styles.reasonButton, { borderWidth: 0 }]}>
+          <Text style={styles.reasonButtonText}>{selected.label}</Text>
+        </View>
+      );
+    }
+
     const button = (
       <View style={styles.reasonButton}>
-        <Text style={styles.reasonButtonText}>{selected.display || selected.label}</Text>
-        {reason !== 0 && !disabled && <Icon name='arrow-down' />}
+        <Text style={styles.reasonButtonText}>{selected.label}</Text>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <Icon name='md-arrow-dropdown' size={20} style={{ textAlign: 'right', marginRight: 5 }}/>
+        </View>
       </View>
     );
     if (disabled) {
@@ -95,6 +105,7 @@ export default React.createClass({
     return (
       <ModalPicker
         data={_.values(labels).slice(1)}
+        style={{ flex: 1 }}
         initValue={selected.label}
         onChange={(option)=> this.setState({ reason: option.reason, data: option.data })}
       >
@@ -103,74 +114,96 @@ export default React.createClass({
     );
   },
   renderConfirm() {
-    const { order } = this.props;
-    if (order.status !== 100) {
-      return undefined;
-    }
+    const { order, changeable } = this.props;
     const { confirmed } = this.state;
     return (
-      <View style={styles.columnContainer}>
-        <Text style={styles.headerText}>주문확인</Text>
-        <View style={styles.columnMainContainer}>
-          <Button onPress={() => this.toggleConfirm(!confirmed)}>
-            <Icon name='checkbox' size={35} color={confirmed ? '#1fcbfb' : 'grey' } />
-          </Button>
-        </View>
+      <Button
+        onPress={() => changeable && this.toggleConfirm(!confirmed)}
+        containerStyle={styles.confirmButton}
+        style={{ color: 'white', fontSize: 14 }}
+        disabled={!changeable}
+      >
+        {changeable ? (confirmed ? '확인해제' : '주문확인') : '주문완료'}
+      </Button>
+    );
+  },
+  renderQuantity() {
+    const { confirmed } = this.state;
+    return (
+      <View style={styles.quantityContainer}>
+        <Button
+          onPress={() => this.setQuantity(+this.state.quantity + 1)}
+          disabled={confirmed}
+          containerStyle={{ justifyContent: 'center' }}
+        >
+          <Icon name='add' size={20} color={confirmed ? 'grey' : 'orange' } style={styles.quantityButton}/>
+        </Button>
+        <View style={{ width: 1, backgroundColor: '#D7D7D7' }}/>
+        <TextInput
+          autoCapitalize='none'
+          autoCorrect={false}
+          keyboardType='number-pad'
+          onChangeText={this.setQuantity}
+          value={this.state.quantity}
+          style={styles.quantityInput}
+          editable={!confirmed}
+        />
+        <View style={{ width: 1, backgroundColor: '#D7D7D7' }}/>
+        <Button
+          onPress={() => this.setQuantity(+this.state.quantity - 1)}
+          disabled={confirmed}
+          containerStyle={{ justifyContent: 'center' }}
+        >
+        <Icon name='remove' size={20} color={confirmed ? 'grey' : 'orange' } style={styles.quantityButton}/>
+        </Button>
       </View>
     );
   },
   render() {
-    const { orderProduct } = this.props;
+    const { orderProduct, changeable } = this.props;
     const { product, productVariant } = orderProduct;
     const { name } = product;
     const { color, size } = productVariant.data;
     const { confirmed } = this.state;
     const image = _.get(productVariant, 'appImages.default.0');
+    const opacity = confirmed ? 0.4 : 1;
     return (
-      <View style={styles.container}>
-        <View style={[styles.columnContainer, { alignItems: 'flex-start', marginLeft: 4 }]}>
-          <Text style={styles.headerText}>{name.ko}</Text>
-          <View style={[styles.columnMainContainer, { alignItems: 'flex-start'}]}>
-            <Text style={styles.colorSizeText}>{color} / {size}</Text>
-            <Text style={styles.priceText}>{`${numeral(orderProduct.KRW).format('0,0')}원`}</Text>
-            {this.renderThumbnail(orderProduct)}
+      <View style={[styles.container, { backgroundColor: confirmed ? '#F7F7F7' : 'white' }]}>
+        <View style={{ marginRight: 8, opacity }}>
+          {this.renderThumbnail(orderProduct)}
+        </View>
+        <View style={{ flex: 1, flexDirection: 'column', marginVertical: 3 }}>
+          <View style={{ opacity }}>
+            <Text style={{ fontWeight: 'bold' }}>{name.ko}</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={{ fontWeight: 'bold', flex: 1 }}>{color} / {size}</Text>
+              <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'right', color: '#999999' }}>{`${numeral(orderProduct.KRW).format('0,0')}원`}</Text>
+            </View>
+          </View>
+          <View style={{ height: 1, backgroundColor: '#F2F2F2', marginVertical: 10 }}></View>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'column', flex: 1, opacity }}>
+              <View style={styles.descRow}>
+                <Text style={[styles.headerText]}>주문수량: </Text>
+                <Text style={[styles.headerText, { textAlign: 'center', flex: 1, fontWeight: 'bold' }]}>
+                  {numeral(orderProduct.quantity).format('0,0')}개
+                </Text>
+              </View>
+              <View style={styles.descRow}>
+                <Text style={[styles.headerText]}>출고수량: </Text>
+                <View style={{ flex: 1 }}>
+                  {this.renderQuantity()}
+                </View>
+              </View>
+              <View style={styles.descRow}>
+                {this.renderReasonModal()}
+              </View>
+            </View>
+            <View style={{ marginLeft: 6, marginBottom: 3, justifyContent: 'flex-end', opacity: (changeable ? 1 : opacity) }}>
+                {this.renderConfirm()}
+            </View>
           </View>
         </View>
-        <View style={styles.columnContainer}>
-          <Text style={styles.headerText}>주문수량: {numeral(orderProduct.quantity).format('0,0')}</Text>
-          <View style={styles.columnMainContainer}>
-            <Button
-              containerStyle={styles.quantityButton}
-              onPress={() => this.setQuantity(+this.state.quantity + 1)}
-              disabled={confirmed}
-            >
-              <Icon name='arrow-up' size={20} color={confirmed ? 'grey' : 'orange' }/>
-            </Button>
-            <TextInput
-              autoCapitalize='none'
-              autoCorrect={false}
-              keyboardType='number-pad'
-              onChangeText={this.setQuantity}
-              value={this.state.quantity}
-              style={styles.quantityInput}
-              editable={!confirmed}
-            />
-            <Button
-              containerStyle={styles.quantityButton}
-              onPress={() => this.setQuantity(+this.state.quantity - 1)}
-              disabled={confirmed}
-            >
-              <Icon name='arrow-down' size={20} color={confirmed ? 'grey' : 'orange' }/>
-            </Button>
-          </View>
-        </View>
-        <View style={styles.columnContainer}>
-            <Text style={styles.headerText}>수량 변경 사유</Text>
-          <View style={styles.columnMainContainer}>
-            {this.renderReasonModal()}
-          </View>
-        </View>
-        {this.renderConfirm()}
       </View>
     );
   }
@@ -178,64 +211,59 @@ export default React.createClass({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'stretch',
     flexDirection: 'row',
-    justifyContent:'space-between',
-    paddingHorizontal: 3,
-    paddingVertical: 5,
-  },
-  columnContainer: {
     flex: 1,
-    alignItems: 'center',
-    flexDirection: 'column',
-  },
-  columnMainContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent:'center',
+    backgroundColor: 'white',
+    padding: 8,
   },
   thumbnail: {
-    backgroundColor: '#dddddd',
-    borderColor: '#dcdcdc',
+    backgroundColor: '#F2F2F2',
+    borderColor: '#EBEBEB',
     borderWidth: 1,
-    height: 50,
-    width: 50,
+    height: 104,
+    width: 80,
   },
-  quantityButton: {
-    paddingHorizontal: 15,
+  descRow: {
+    flexDirection: 'row',
+    marginVertical: 3,
+    alignItems: 'center',
+  },
+  quantityContainer: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    borderColor: '#D7D7D7',
+    borderRadius: 5,
+    borderWidth: 1,
   },
   quantityInput: {
-    borderColor: 'gray',
-    borderRadius: 6,
-    borderWidth: 1,
-    height: 45,
+    width: 40,
+    fontSize: 14,
+    padding: 0,
     textAlign: 'center',
   },
-  reasonButton: {
-    flexDirection: 'row',
-    borderColor: 'gray',
-    borderRadius: 6,
-    borderWidth: 1,
-    height: 45,
-    width: 90,
+  quantityButton: {
     marginHorizontal: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0)',
+  },
+  reasonButton: {
+    flex: 1,
+    flexDirection: 'row',
+    borderColor: '#D7D7D7',
+    borderRadius: 5,
+    borderWidth: 1,
   },
   reasonButtonText: {
     textAlign: 'center',
-    marginRight: 3,
+    margin: 5,
   },
   headerText: {
     color: '#666',
     fontSize: 12,
   },
-  priceText: {
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  colorSizeText: {
-    fontWeight: 'bold',
-    color: '#666',
+  confirmButton: {
+    backgroundColor: '#1F3A4A',
+    borderRadius: 5,
+    overflow:'hidden',
+    padding: 5,
   },
 });

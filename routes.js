@@ -6,7 +6,7 @@ import ProductList from './containers/ProductList';
 import Profile from './containers/Profile';
 
 export default {
-  order: (props) => ({ title: '주문내역', component: OrderDetail, props }),
+  order: (title, props) => ({ title, component: OrderDetail, props }),
   orders: (props) => ({ title: '주문조회', component: Orders, props }),
   product: (props) => ({ title: '상품조회', component: ProductDetail, props }),
   products: (props) => ({ title: '상품관리', component: ProductList, props }),

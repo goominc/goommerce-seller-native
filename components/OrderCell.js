@@ -87,7 +87,7 @@ export default React.createClass({
               <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#3C3C3C' }]}>{orderName || _.padStart(id, 3, '0').substr(-3)}</Text>
             </View>
             <View style={styles.descContainer}>
-              <Text style={styles.descText}>{name()}</Text>
+              <Text style={styles.descText} numberOfLines={1}>{name()}</Text>
               {price()}
               {status === 'awaiting' && <Text style={[styles.descText, { fontSize: 12 }]}>(매출수수료, VAT포함)</Text>}
             </View>

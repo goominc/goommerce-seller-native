@@ -23,11 +23,11 @@ export default React.createClass({
       },
       ready() {
         return _.filter(orders, (o) => (o.status === 100 &&
-          _.every(o.orderProducts, (p) => _.includes([103, 104], p.status))));
+          _.every(o.orderProducts, (p) => p.status === 103)));
       },
       awaiting() {
         return _.filter(orders, (o) => (o.status !== 100 ||
-          _.every(o.orderProducts, (p) => _.includes([104, 200], p.status))));
+          _.every(o.orderProducts, (p) => p.status === 200)));
       },
     }[status]();
   },
@@ -35,12 +35,13 @@ export default React.createClass({
     const { brandId, push, reduxKey, status, updateBrandOrderStatus } = this.props;
 
     function onSelect() {
+      const title = `링크# ${order.orderName || _.padStart(order.id, 3, '0').substr(-3)} 주문내역`;
       if (_.find(order.orderProducts, { status: 100 })) {
         updateBrandOrderStatus(brandId, order.id, reduxKey, 100, 101).then(
-          () => push(routes.order({ brandId, orderId: order.id }))
+          () => push(routes.order(title, { brandId, orderId: order.id }))
         );
       } else {
-        push(routes.order({ brandId, orderId: order.id }));
+        push(routes.order(title, { brandId, orderId: order.id }));
       }
     }
 
