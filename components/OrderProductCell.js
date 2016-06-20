@@ -5,10 +5,10 @@ import { Image, StyleSheet, Text, TextInput, Switch, View } from 'react-native';
 import { CloudinaryImageNative } from 'react-cloudinary';
 import _ from 'lodash';
 import Button from 'react-native-button';
-import Icon from 'react-native-vector-icons/Ionicons';
 import ModalPicker from 'react-native-modal-picker';
 import numeral from 'numeral';
 
+import Icon from './Icon';
 import OpenUrlButton from './OpenUrlButton';
 
 function getInitialState(props) {
@@ -86,7 +86,7 @@ export default React.createClass({
     const button = (
       <View style={styles.reasonButton}>
         <Text style={styles.reasonButtonText}>{selected.display || selected.label}</Text>
-        {reason !== 0 && !disabled && <Icon name='arrow-down-b' />}
+        {reason !== 0 && !disabled && <Icon name='arrow-down' />}
       </View>
     );
     if (disabled) {
@@ -113,7 +113,7 @@ export default React.createClass({
         <Text style={styles.headerText}>주문확인</Text>
         <View style={styles.columnMainContainer}>
           <Button onPress={() => this.toggleConfirm(!confirmed)}>
-            <Icon name='android-checkbox' size={35} color={confirmed ? '#1fcbfb' : 'grey' } />
+            <Icon name='checkbox' size={35} color={confirmed ? '#1fcbfb' : 'grey' } />
           </Button>
         </View>
       </View>
@@ -144,7 +144,7 @@ export default React.createClass({
               onPress={() => this.setQuantity(+this.state.quantity + 1)}
               disabled={confirmed}
             >
-              <Icon name='arrow-up-b' size={20} color={confirmed ? 'grey' : 'orange' }/>
+              <Icon name='arrow-up' size={20} color={confirmed ? 'grey' : 'orange' }/>
             </Button>
             <TextInput
               autoCapitalize='none'
@@ -160,7 +160,7 @@ export default React.createClass({
               onPress={() => this.setQuantity(+this.state.quantity - 1)}
               disabled={confirmed}
             >
-              <Icon name='arrow-down-b' size={20} color={confirmed ? 'grey' : 'orange' }/>
+              <Icon name='arrow-down' size={20} color={confirmed ? 'grey' : 'orange' }/>
             </Button>
           </View>
         </View>

@@ -1,10 +1,11 @@
 'use strict';
 
 import React from 'react';
-import { StatusBar, TabBarIOS, View } from 'react-native';
+import { Image, StatusBar, View } from 'react-native';
 import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
 import _ from 'lodash';
+import TabNavigator from 'react-native-tab-navigator';
 
 import Agreement from './Agreement';
 import EmptyView from '../components/EmptyView';
@@ -44,41 +45,39 @@ const App = React.createClass({
       return <Agreement />;
     }
 
-
     const brandId = brands[0].id;
     return (
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" />
-        <TabBarIOS
-          barTintColor="white">
-          <TabBarIOS.Item
-            icon={require('./images/tab_order.png')}
+        <TabNavigator>
+          <TabNavigator.Item
+            renderIcon={() => <Image source={require('./images/tab_order.png')}/>}
             title="주문조회"
             selected={this.state.selectedTab === 'orders'}
             onPress={() => {
               this.setState({ selectedTab: 'orders' });
             }}>
             <Navigator initialRoute={routes.orders({ brandId })} />
-          </TabBarIOS.Item>
-          <TabBarIOS.Item
-            icon={require('./images/tab_product.png')}
+          </TabNavigator.Item>
+          <TabNavigator.Item
+            renderIcon={() => <Image source={require('./images/tab_product.png')}/>}
             title="상품관리"
             selected={this.state.selectedTab === 'products'}
             onPress={() => {
               this.setState({ selectedTab: 'products' });
             }}>
             <Navigator initialRoute={routes.products({ brandId })} />
-          </TabBarIOS.Item>
-          <TabBarIOS.Item
-            icon={require('./images/tab_profile.png')}
+          </TabNavigator.Item>
+          <TabNavigator.Item
+            renderIcon={() => <Image source={require('./images/tab_profile.png')}/>}
             title="내 정보"
             selected={this.state.selectedTab === 'profile'}
             onPress={() => {
               this.setState({ selectedTab: 'profile' });
             }}>
             <Navigator initialRoute={routes.profile()} />
-          </TabBarIOS.Item>
-        </TabBarIOS>
+          </TabNavigator.Item>
+        </TabNavigator>
       </View>
     );
   }

@@ -2,11 +2,11 @@
 
 import React from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from 'react-native-button';
 import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
 
+import Icon from '../components/Icon';
 import TermsAndConditions from '../components/TermsAndConditions';
 import PersonalInfomation from '../components/PersonalInfomation';
 
@@ -74,7 +74,7 @@ const Agreement = React.createClass({
               onPress={() => this.setState({ termsAndConditions: !termsAndConditions })}
               containerStyle={styles.button}
             >
-              <Ionicons name='android-checkbox' size={30} color={termsAndConditions ? '#1fcbfb' : 'grey' } />
+              <Icon name='checkbox' size={30} color={termsAndConditions ? '#1fcbfb' : 'grey' } />
               <Text style={styles.buttonText}>이용약관 동의</Text>
             </Button>
             <Button
@@ -89,7 +89,7 @@ const Agreement = React.createClass({
               onPress={() => this.setState({ personalInfo: !personalInfo })}
               containerStyle={styles.button}
             >
-              <Ionicons name='android-checkbox' size={30} color={personalInfo ? '#1fcbfb' : 'grey' } />
+              <Icon name='checkbox' size={30} color={personalInfo ? '#1fcbfb' : 'grey' } />
               <Text style={styles.buttonText}>개인정보 수집방침 동의</Text>
             </Button>
             <Button
