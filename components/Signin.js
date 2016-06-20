@@ -52,6 +52,7 @@ const Signin = React.createClass({
         >
           Login
         </Button>
+        <Text style={styles.registeration}>입점신청 하기</Text>
       </View>
     );
   },
@@ -85,6 +86,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 60,
     paddingVertical: 10,
   },
+  registeration: {
+    marginTop: 25,
+    textDecorationLine: 'underline',
+  }
 });
 
 export default connect(
