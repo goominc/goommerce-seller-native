@@ -39,7 +39,7 @@ export default React.createClass({
   render() {
     const TouchableElement = Platform.OS === 'android' ?
       TouchableNativeFeedback : TouchableHighlight;
-    const { order: { id, orderProducts, orderedAt, orderName } } = this.props;
+    const { order: { id, orderProducts, orderedAt, orderName }, status } = this.props;
     const totalQuantity = _.sumBy(orderProducts, (o) => _.get(o, 'data.stock.quantity', o.quantity));
     const totalKRW = _.reduce(orderProducts,
       (sum, o) => sum.add(Decimal(o.KRW || 0).mul(_.get(o, 'data.stock.quantity', o.quantity))), new Decimal(0)).toNumber();
@@ -56,11 +56,23 @@ export default React.createClass({
       if (orderedAt) {
         const at = moment(orderedAt);
         if (moment().diff(at, 'hours') > 23) {
-          return <Text style={styles.rowText}>{at.format('YYYY.MM.DD')}</Text>
+          return <Text style={styles.descText}>{at.format('YYYY.MM.DD')}</Text>
         }
-        return <Text style={styles.rowText}>{at.fromNow()}</Text>
+        return <Text style={styles.descText}>{at.fromNow()}</Text>
       }
     };
+
+    const price = () => {
+      if (status === 'awaiting') {
+        return (
+          <Text style={styles.descText}>
+            <Text style={{ fontSize: 12 }}>입금예정금액: </Text>
+            <Text style={{ color: '#FB6D21', fontWeight: 'bold' }}>{`${numeral(totalKRW).format('0,0')}원`}</Text>
+          </Text>
+        );
+      }
+      return <Text style={styles.descText}>{`${numeral(totalKRW).format('0,0')}원`}</Text>;
+    }
 
     return (
       <View>
@@ -70,13 +82,14 @@ export default React.createClass({
           onHideUnderlay={this.props.onUnhighlight}
         >
           <View style={styles.container}>
-            <View style={styles.orderNumContainer}>
-              <Text style={styles.orderNumText}>링크#</Text>
-              <Text style={styles.orderNumText}>{orderName || _.padStart(id, 3, '0').substr(-3)}</Text>
+            <View style={[styles.orderNumContainer, { backgroundColor: status === 'new' ? '#1F3A4A' : '#F2F2F2' }]}>
+              <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#3C3C3C' }]}>링크#</Text>
+              <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#3C3C3C' }]}>{orderName || _.padStart(id, 3, '0').substr(-3)}</Text>
             </View>
             <View style={styles.descContainer}>
-              <Text style={styles.descNameText}>{name()}</Text>
-              <Text>{`${numeral(totalKRW).format('0,0')}원`}</Text>
+              <Text style={styles.descText}>{name()}</Text>
+              {price()}
+              {status === 'awaiting' && <Text style={[styles.descText, { fontSize: 12 }]}>(매출수수료, VAT포함)</Text>}
             </View>
             <View style={styles.dateContainer}>
               {date()}
@@ -97,7 +110,6 @@ const styles = StyleSheet.create({
   },
   orderNumContainer: {
     alignItems: 'center',
-    backgroundColor: '#3f4c5d',
     borderRadius: 30,
     height: 60,
     justifyContent: 'center',
@@ -105,17 +117,14 @@ const styles = StyleSheet.create({
     width: 60,
   },
   orderNumText: {
-    color: 'white',
     fontWeight: 'bold',
   },
   descContainer: {
     flex: 1,
   },
-  descNameText: {
-    marginVertical: 5,
-  },
-  descQuantityText: {
-    color: 'grey',
+  descText: {
+    color: '#4B4B4B',
+    marginVertical: 2,
   },
   dateContainer: {
     width: 80,

@@ -3,15 +3,16 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Button from 'react-native-button';
+import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
+import _ from 'lodash';
 
 import OrderList from './OrderList';
 
-export default React.createClass({
+const Orders = React.createClass({
   statics: {
     onDidFocus(props, dispatch) {
-      dispatch(orderActions.loadBrandOrders(props.brandId, 'new', 0, 20));
-      dispatch(orderActions.loadBrandOrders(props.brandId, 'pending', 0, 20));
+      dispatch(orderActions.loadBrandOrders(props.brandId, 'not_settled'));
     },
   },
   getInitialState() {
@@ -19,6 +20,7 @@ export default React.createClass({
   },
   render() {
     const { activeStatus } = this.state;
+    const { loadBrandOrders, brandId } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.statusContainer}>
@@ -29,19 +31,24 @@ export default React.createClass({
             신규주문
           </Button>
           <Button
-            style={activeStatus === 'pending' ? styles.activeStatus : styles.inactiveStatus}
-            onPress={() => this.setState({ activeStatus: 'pending' })}
+            style={activeStatus === 'ready' ? styles.activeStatus : styles.inactiveStatus}
+            onPress={() => this.setState({ activeStatus: 'ready' })}
           >
-            출고대기
+            포장완료
           </Button>
           <Button
-            style={activeStatus === 'settled' ? styles.activeStatus : styles.inactiveStatus}
-            onPress={() => this.setState({ activeStatus: 'settled' })}
+            style={activeStatus === 'awaiting' ? styles.activeStatus : styles.inactiveStatus}
+            onPress={() => this.setState({ activeStatus: 'awaiting' })}
           >
-            정산완료
+            입금대기
           </Button>
         </View>
-        <OrderList key={activeStatus} status={activeStatus} {...this.props} />
+        <OrderList
+          {...this.props}
+          key={activeStatus}
+          status={activeStatus}
+          onRefresh={() => loadBrandOrders(brandId, 'not_settled')}
+        />
       </View>
     );
   },
@@ -65,3 +72,8 @@ const styles = StyleSheet.create({
     color: '#999999',
   },
 });
+
+export default connect((state, ownProps) => {
+  const { key } = orderActions.loadBrandOrders(ownProps.brandId, 'not_settled');
+  return { orders: _.get(state.order[key], 'list') };
+}, orderActions)(Orders);

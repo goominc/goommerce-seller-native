@@ -1,11 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { Alert, ListView, StyleSheet, Text, View } from 'react-native';
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux';
-import { orderActions } from 'goommerce-redux';
-import Button from 'react-native-button';
+import { ListView, StyleSheet, Text, View } from 'react-native';
 import _ from 'lodash';
 
 import EmptyView from '../components/EmptyView';
@@ -14,34 +10,26 @@ import RefreshableList from '../components/RefreshableList';
 import RefreshableView from '../components/RefreshableView';
 import routes from '../routes';
 
-const OrderList = React.createClass({
-  getDefaultProps() {
-    return { limit: 20 };
-  },
-  getInitialState() {
-    // TODO: move this into redux?
-    return { isLoadingTail: false };
-  },
-  componentDidMount() {
-    const { brandId, status, limit, loadBrandOrders } = this.props;
-    loadBrandOrders(brandId, status, 0, limit);
-  },
+export default React.createClass({
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
-  onEndReached() {
-    const { brandId, status, limit, pagination, loadBrandOrders } = this.props;
-    if (!pagination.hasMore || this.state.isLoadingTail) {
-      return;
-    }
-    this.setState({ isLoadingTail: true });
-    loadBrandOrders(brandId, status, pagination.offset + pagination.limit, limit).then(
-      () => this.setState({ isLoadingTail: false })
-    );
-  },
-  onRefresh() {
-    const { brandId, status, limit, loadBrandOrders } = this.props;
-    return loadBrandOrders(brandId, status, 0, limit);
+  filter() {
+    const { orders, status } = this.props;
+    return {
+      new() {
+        return _.filter(orders, (o) => (o.status === 100 &&
+          _.every(o.orderProducts, (p) => _.includes([100, 101, 102], p.status))));
+      },
+      ready() {
+        return _.filter(orders, (o) => (o.status === 100 &&
+          _.every(o.orderProducts, (p) => _.includes([103, 104], p.status))));
+      },
+      awaiting() {
+        return _.filter(orders, (o) => (o.status !== 100 ||
+          _.every(o.orderProducts, (p) => _.includes([104, 200], p.status))));
+      },
+    }[status]();
   },
   renderRow(order, sectionID, rowID, highlightRow) {
     const { brandId, push, reduxKey, status, updateBrandOrderStatus } = this.props;
@@ -92,14 +80,10 @@ const OrderList = React.createClass({
     );
   },
   render() {
-    const { list } = this.props;
-    const { activeStatus } = this.state;
-    if (!list) {
-      return <EmptyView text='Loading...' />;
-    }
-    if (!list.length) {
+    const list = this.filter();
+    if (_.isEmpty(list)) {
       return (
-        <RefreshableView onRefresh={this.onRefresh} contentContainerStyle={{ flex: 1 }}>
+        <RefreshableView onRefresh={this.props.onRefresh} contentContainerStyle={{ flex: 1 }}>
           <EmptyView text='No orders...' />
         </RefreshableView>
       );
@@ -112,8 +96,7 @@ const OrderList = React.createClass({
         renderRow={this.renderRow}
         renderSectionHeader={this.renderSectionHeader}
         renderSeparator={this.renderSeparator}
-        onEndReached={this.onEndReached}
-        onRefresh={this.onRefresh}
+        onRefresh={this.props.onRefresh}
       />
     );
   },
@@ -137,16 +120,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 0, 0, 0.1)',
     backgroundColor: 'white',
-    paddingVertical: 3,
+    paddingVertical: 7,
   },
   sectionText: {
+    color: '#4B4B4B',
     textAlign: 'center',
   },
 });
-
-export default connect(
-  (state, ownProps) => {
-    const { key } = orderActions.loadBrandOrders(ownProps.brandId, ownProps.status);
-    return { reduxKey: key, ...state.order[key] };
-  }, orderActions
-)(OrderList);
