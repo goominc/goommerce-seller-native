@@ -10,6 +10,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import DatePicker from 'react-native-datepicker';
 
+import Icon from '../components/Icon';
 import OrderCell from '../components/OrderCell';
 import RefreshableList from '../components/RefreshableList';
 import routes from '../routes';
@@ -52,66 +53,98 @@ const Settled = React.createClass({
       <View key={'SEP_' + sectionID + '_' + rowID}  style={style}/>
     );
   },
+  renderDatePicker(props) {
+    return (
+      <DatePicker
+        {...props}
+        customStyles={{
+          dateIcon: { width: 0, height: 0, marginLeft: 0, marginRight: 0 },
+          dateInput: styles.button,
+          dateTouchBody: { height: null },
+          dateText: styles.headerText,
+        }}
+        style={{ width: null, flex: 1 }}
+        mode='date'
+        format='YYYY.MM.DD'
+        confirmBtnText='확인'
+        cancelBtnText='취소'
+      />
+    );
+  },
   renderRange() {
     const { start, end, showSelector } = this.state;
     if (showSelector) {
       return (
-        <View style={{ flexDirection: 'row', padding: 10 }}>
-          <Text>조회기간 설정</Text>
-          <View style={{ flexDirection: 'column' }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <DatePicker
-                customStyles={{
-                  dateIcon: {
-                    width: 0,
-                    height: 0,
-                  },
-                }}
-                style={{ width: null }}
-                date={start}
-                mode='date'
-                format='YYYY.MM.DD'
-                confirmBtnText='확인'
-                cancelBtnText='취소'
-                onDateChange={(start) => {this.setState({ start })}}
-              />
-              <DatePicker
-                customStyles={{
-                  dateIcon: {
-                    width: 0,
-                    height: 0,
-                  },
-                }}
-                style={{ width: null }}
-                date={end}
-                mode='date'
-                format='YYYY.MM.DD'
-                confirmBtnText='확인'
-                cancelBtnText='취소'
-                onDateChange={(end) => {this.setState({ end })}}
-              />
-              <Button>조회</Button>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Button>하루전</Button>
-              <Button>이번달</Button>
-              <Button>지난달</Button>
+        <View style={styles.headerContainer}>
+          <View style={styles.headerRow}>
+            <Text style={[styles.selectorFirstColumn, { fontSize: 11, fontWeight: 'bold', fontColor: '#4C4C4C' }]}>
+              조회기간 설정
+            </Text>
+            {this.renderDatePicker({ date: start, onDateChange: (start) => {this.setState({ start })} })}
+            <Text style={[styles.headerText, { marginHorizontal: 4 }]}>-</Text>
+            {this.renderDatePicker({ date: end, onDateChange: (end) => {this.setState({ end })} })}
+            <Button
+              style={{color: 'white', fontSize: 12 }}
+              containerStyle={{
+                backgroundColor: '#1fcbf6',
+                borderRadius: 3,
+                padding: 4,
+                marginLeft: 4,
+              }}
+            >
+              조회
+            </Button>
+            <View style={styles.selectorLastColumn}>
+              <Button onPress={() => this.setState({showSelector: false })}>
+                <Icon name='close' size={23} style={{ padding: 4 }}/>
+              </Button>
             </View>
           </View>
-          <Button>X</Button>
+          <View style={styles.headerRow}>
+            <View style={styles.selectorFirstColumn} />
+            <Button
+              style={styles.headerText}
+              containerStyle={[styles.button, { flex: 1 }]}
+            >
+              하루전
+            </Button>
+            <Button
+              style={styles.headerText}
+              containerStyle={[styles.button, { flex: 1 }]}
+            >
+              이번달
+            </Button>
+            <Button
+              style={styles.headerText}
+              containerStyle={[styles.button, { flex: 1 }]}
+            >
+              지난달
+            </Button>
+            <View style={styles.selectorLastColumn} />
+          </View>
         </View>
       );
     }
     return (
-      <View style={{ flexDirection: 'column', padding: 10 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text>{start} - {end}</Text>
-          <Button onPress={() => this.setState({ showSelector: true })}>조회기간변경</Button>
+      <View style={styles.headerContainer}>
+        <View style={styles.headerRow}>
+          <Text style={styles.headerText}>{start} - {end}</Text>
+          <Button
+            style={[styles.headerText, { color: 'white', fontWeight: 'bold' }]}
+            containerStyle={{
+              backgroundColor: '#1fcbf6',
+              borderRadius: 12,
+              padding: 6,
+            }}
+            onPress={() => this.setState({ showSelector: true })}
+          >
+            조회기간변경
+          </Button>
         </View>
-        <View style={{ height: 1, backgroundColor: 'red' }}/>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text>정산금액(VAT포함)</Text>
-          <Text style={[{ fontWeight: 'bold' }]}>{numeral(_.sumBy(this.props.orders, (o) => _.toInteger(o.settledKRW))).format('0,0')}원</Text>
+        <View style={{ height: 1, backgroundColor: '#E7E7E7' }}/>
+        <View style={styles.headerRow}>
+          <Text style={styles.boldOrange}>정산금액(VAT포함)</Text>
+          <Text style={styles.boldOrange}>{numeral(_.sumBy(this.props.orders, (o) => _.toInteger(o.settledKRW))).format('0,0')}원</Text>
         </View>
       </View>
     );
@@ -151,6 +184,40 @@ const styles = StyleSheet.create({
     color: '#4B4B4B',
     marginHorizontal: 7,
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 7,
+  },
+  headerContainer: {
+    flexDirection: 'column',
+    paddingHorizontal: 10,
+    backgroundColor: '#F7F7F7',
+  },
+  headerText: {
+    fontSize: 11,
+    color: '#999999',
+  },
+  boldOrange: {
+    fontSize: 12,
+    color: '#ff6c00',
+    fontWeight: 'bold',
+  },
+  button: {
+    borderWidth: 1,
+    borderRadius: 3,
+    borderColor: '#D9D9D9',
+    padding: 4,
+    height: null,
+  },
+  selectorFirstColumn: {
+    width: 70,
+  },
+  selectorLastColumn: {
+    width: 20,
+    alignItems: 'flex-end',
+  }
 });
 
 export default connect((state, ownProps) => {
