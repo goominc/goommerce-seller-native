@@ -60,6 +60,15 @@ const App = React.createClass({
             <Navigator initialRoute={routes.orders({ brandId })} />
           </TabNavigator.Item>
           <TabNavigator.Item
+            renderIcon={() => <Image source={require('./images/tab_settled.png')}/>}
+            title="정산통계"
+            selected={this.state.selectedTab === 'settled'}
+            onPress={() => {
+              this.setState({ selectedTab: 'settled' });
+            }}>
+            <Navigator initialRoute={routes.settled({ brandId })} />
+          </TabNavigator.Item>
+          <TabNavigator.Item
             renderIcon={() => <Image source={require('./images/tab_product.png')}/>}
             title="상품관리"
             selected={this.state.selectedTab === 'products'}

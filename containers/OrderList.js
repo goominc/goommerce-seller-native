@@ -32,12 +32,12 @@ export default React.createClass({
     }[status]();
   },
   renderRow(order, sectionID, rowID, highlightRow) {
-    const { brandId, push, reduxKey, status, updateBrandOrderStatus } = this.props;
+    const { brandId, push, status, updateBrandOrderStatus } = this.props;
 
     function onSelect() {
       const title = `링크# ${order.orderName || _.padStart(order.id, 3, '0').substr(-3)} 주문내역`;
       if (_.find(order.orderProducts, { status: 100 })) {
-        updateBrandOrderStatus(brandId, order.id, reduxKey, 100, 101).then(
+        updateBrandOrderStatus(brandId, order.id, 100, 101).then(
           () => push(routes.order(title, { brandId, orderId: order.id }))
         );
       } else {
