@@ -56,9 +56,9 @@ export default React.createClass({
       if (orderedAt) {
         const at = moment(orderedAt);
         if (moment().diff(at, 'hours') > 23) {
-          return <Text style={styles.descText}>{at.format('YYYY.MM.DD')}</Text>
+          return <Text style={styles.dateText}>{at.format('YYYY.MM.DD')}</Text>
         }
-        return <Text style={styles.descText}>{at.fromNow()}</Text>
+        return <Text style={styles.dateText}>{at.fromNow()}</Text>
       }
     };
 
@@ -124,6 +124,10 @@ const styles = StyleSheet.create({
   },
   descText: {
     color: '#4B4B4B',
+    marginVertical: 2,
+  },
+  dateText: {
+    textAlign: 'center',
     marginVertical: 2,
   },
   dateContainer: {
