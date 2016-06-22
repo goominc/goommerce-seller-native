@@ -107,11 +107,11 @@ const styles = StyleSheet.create({
   navBarTitleText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 16,
     marginVertical: Platform.OS === 'ios' ? 9 : 15,
   },
   navBarButton: {
-    marginVertical: Platform.OS === 'ios' ? 4 : 10,
+    marginVertical: Platform.OS === 'ios' ? 4 : 8,
     paddingLeft: 5,
     paddingRight: 5,
   },

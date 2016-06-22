@@ -120,7 +120,7 @@ export default React.createClass({
       <Button
         onPress={() => changeable && this.toggleConfirm(!confirmed)}
         containerStyle={styles.confirmButton}
-        style={{ color: 'white', fontSize: 14 }}
+        style={{ color: 'white', fontSize: 11, fontWeight: 'bold' }}
         disabled={!changeable}
       >
         {changeable ? (confirmed ? '확인해제' : '주문확인') : '주문완료'}
@@ -136,7 +136,7 @@ export default React.createClass({
           disabled={confirmed}
           containerStyle={{ justifyContent: 'center' }}
         >
-          <Icon name='add' size={20} color={confirmed ? 'grey' : 'orange' } style={styles.quantityButton}/>
+          <Icon name='add' style={styles.quantityButton}/>
         </Button>
         <View style={{ width: 1, backgroundColor: '#D7D7D7' }}/>
         <TextInput
@@ -154,7 +154,7 @@ export default React.createClass({
           disabled={confirmed}
           containerStyle={{ justifyContent: 'center' }}
         >
-        <Icon name='remove' size={20} color={confirmed ? 'grey' : 'orange' } style={styles.quantityButton}/>
+        <Icon name='remove' style={styles.quantityButton}/>
         </Button>
       </View>
     );
@@ -174,23 +174,23 @@ export default React.createClass({
         </View>
         <View style={{ flex: 1, flexDirection: 'column', marginVertical: 3 }}>
           <View style={{ opacity }}>
-            <Text style={{ fontWeight: 'bold' }}>{name.ko}</Text>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#4C4C4C' }}>{name.ko}</Text>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={{ fontWeight: 'bold', flex: 1 }}>{color} / {size}</Text>
-              <Text style={{ fontWeight: 'bold', flex: 1, textAlign: 'right', color: '#999999' }}>{`${numeral(orderProduct.KRW).format('0,0')}원`}</Text>
+              <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#4C4C4C', flex: 1 }}>{color} / {size}</Text>
+              <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#999999', textAlign: 'right', flex: 1 }}>{`${numeral(orderProduct.KRW).format('0,0')}원`}</Text>
             </View>
           </View>
           <View style={{ height: 1, backgroundColor: '#F2F2F2', marginVertical: 10 }}></View>
           <View style={{ flexDirection: 'row' }}>
             <View style={{ flexDirection: 'column', flex: 1, opacity }}>
               <View style={styles.descRow}>
-                <Text style={[styles.headerText]}>주문수량: </Text>
-                <Text style={[styles.headerText, { textAlign: 'center', flex: 1, fontWeight: 'bold' }]}>
+                <Text style={styles.labelText}>주문수량: </Text>
+                <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#999999', textAlign: 'center', flex: 1 }}>
                   {numeral(orderProduct.quantity).format('0,0')}개
                 </Text>
               </View>
               <View style={styles.descRow}>
-                <Text style={[styles.headerText]}>출고수량: </Text>
+                <Text style={styles.labelText}>출고수량: </Text>
                 <View style={{ flex: 1 }}>
                   {this.renderQuantity()}
                 </View>
@@ -237,13 +237,16 @@ const styles = StyleSheet.create({
   },
   quantityInput: {
     width: 40,
-    fontSize: 14,
+    fontSize: 12,
     padding: 0,
+    color: '#ff6c00',
     textAlign: 'center',
   },
   quantityButton: {
     marginHorizontal: 5,
     backgroundColor: 'rgba(0,0,0,0)',
+    fontSize: 20,
+    color: '#D7D7D7',
   },
   reasonButton: {
     flex: 1,
@@ -253,12 +256,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   reasonButtonText: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: '#4C4C4C',
     textAlign: 'center',
     margin: 5,
   },
-  headerText: {
-    color: '#666',
-    fontSize: 12,
+  labelText: {
+    fontSize: 11,
+    color: '#4C4C4C',
   },
   confirmButton: {
     backgroundColor: '#1F3A4A',

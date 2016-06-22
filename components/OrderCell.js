@@ -65,9 +65,9 @@ export default React.createClass({
     const price = () => {
       if (status === 'awaiting') {
         return (
-          <Text style={styles.descText}>
-            <Text style={{ fontSize: 12 }}>입금예정금액: </Text>
-            <Text style={{ color: '#FB6D21', fontWeight: 'bold' }}>{`${numeral(totalKRW).format('0,0')}원`}</Text>
+          <Text>
+            <Text style={styles.annotText}>입금예정금액: </Text>
+            <Text style={styles.awaitingPriceText}>{`${numeral(totalKRW).format('0,0')}원`}</Text>
           </Text>
         );
       }
@@ -83,13 +83,13 @@ export default React.createClass({
         >
           <View style={styles.container}>
             <View style={[styles.orderNumContainer, { backgroundColor: status === 'new' ? '#1F3A4A' : '#F2F2F2' }]}>
-              <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#3C3C3C' }]}>링크#</Text>
-              <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#3C3C3C' }]}>{orderName || _.padStart(id, 3, '0').substr(-3)}</Text>
+              <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#4C4C4C' }]}>링크#</Text>
+              <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#4C4C4C' }]}>{orderName || _.padStart(id, 3, '0').substr(-3)}</Text>
             </View>
             <View style={styles.descContainer}>
               <Text style={styles.descText} numberOfLines={1}>{name()}</Text>
               {price()}
-              {status === 'awaiting' && <Text style={[styles.descText, { fontSize: 12 }]}>(매출수수료, VAT포함)</Text>}
+              {status === 'awaiting' && <Text style={[styles.annotText, { color: '#999999' }]}>(매출수수료, VAT포함)</Text>}
             </View>
             <View style={styles.dateContainer}>
               {date()}
@@ -117,18 +117,32 @@ const styles = StyleSheet.create({
     width: 60,
   },
   orderNumText: {
+    fontSize: 12,
     fontWeight: 'bold',
   },
   descContainer: {
     flex: 1,
   },
   descText: {
-    color: '#4B4B4B',
+    fontSize: 12,
+    color: '#4C4C4C',
+    marginVertical: 2,
+  },
+  annotText: {
+    fontSize: 11,
+    color: '#4C4C4C',
     marginVertical: 2,
   },
   dateText: {
+    fontSize: 11,
+    color: '#4C4C4C',
     textAlign: 'center',
     marginVertical: 2,
+  },
+  awaitingPriceText: {
+    color: '#ff6c00',
+    fontWeight: 'bold',
+    fontSize: 12
   },
   dateContainer: {
     width: 80,

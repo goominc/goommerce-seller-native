@@ -124,7 +124,8 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
   },
   sectionText: {
-    color: '#4B4B4B',
+    fontSize: 11,
+    color: '#4C4C4C',
     textAlign: 'center',
   },
 });

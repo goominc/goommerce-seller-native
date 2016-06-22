@@ -24,7 +24,7 @@ const Signin = React.createClass({
       <View style={styles.container}>
         <View style={styles.desc}>
           <Text style={{ fontSize: 30, fontWeight: '400' }}>Link<Text style={{ fontWeight: '900' }}>Shop</Text>s</Text>
-          <Text style={{ color: '#bbbbbb' }}>링크샵스 판매자 전용App 입니다.</Text>
+          <Text style={{ fontSize: 12, color: '#b2b2b2' }}>링크샵스 판매자 전용App 입니다.</Text>
         </View>
         <TextInput
           autoCapitalize='none'
@@ -72,6 +72,8 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: '#eeeeee',
     borderRadius: 6,
+    color: '#b2b2b2',
+    fontSize: 12,
     height: 50,
     marginHorizontal: 20,
     marginVertical: 5,
@@ -87,6 +89,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   registeration: {
+    color: '#b2b2b2',
+    fontSize: 12,
     marginTop: 25,
     textDecorationLine: 'underline',
   }

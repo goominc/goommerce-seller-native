@@ -66,9 +66,13 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   activeStatus: {
-    color: '#23bcee',
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#0dcff2',
   },
   inactiveStatus: {
+    fontSize: 14,
+    fontWeight: 'bold',
     color: '#999999',
   },
 });

@@ -81,7 +81,7 @@ const OrderDetail = React.createClass({
     return (
       <View style={{ paddingVertical: 15 }}>
         <Button
-          style={{color: 'white'}}
+          style={{color: 'white', fontSize: 14 }}
           styleDisabled={{color: 'red'}}
           containerStyle={styles.confirmButton}
           onPress={this.onConfirm}
@@ -101,12 +101,12 @@ const OrderDetail = React.createClass({
       <View style={styles.footer}>
         <View style={styles.footerDescContainer}>
           <View style={{ flex: 1, flexDirection: 'column', marginHorizontal: 10 }}>
-            <Text style={{ color: 'black' }}>총 주문수량</Text>
-            <Text style={{ color: 'black', fontWeight: 'bold' }}>{numeral(totalQuantity).format('0,0')}개</Text>
+            <Text style={{ fontSize: 11, color: '#4C4C4C' }}>총 주문수량</Text>
+            <Text style={{ fontSize: 11, color: '#4C4C4C', fontWeight: 'bold' }}>{numeral(totalQuantity).format('0,0')}개</Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'column', marginHorizontal: 10 }}>
-            <Text style={{ color: '#FB6813', textAlign: 'right', fontWeight: 'bold' }}>입금예정금액(VAT포함)</Text>
-            <Text style={{ color: '#FB6813', textAlign: 'right', fontWeight: 'bold' }}>{numeral(totalKRW).format('0,0')}원</Text>
+            <Text style={{ fontSize: 12, color: '#FF6C00', textAlign: 'right', fontWeight: 'bold' }}>입금예정금액(VAT포함)</Text>
+            <Text style={{ fontSize: 12, color: '#FF6C00', textAlign: 'right', fontWeight: 'bold' }}>{numeral(totalKRW).format('0,0')}원</Text>
           </View>
         </View>
         {changeable && this.renderConfirmButton()}
