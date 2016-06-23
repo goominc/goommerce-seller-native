@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { Image, StatusBar, View } from 'react-native';
+import { Image, StatusBar, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
 import _ from 'lodash';
@@ -51,7 +51,7 @@ const App = React.createClass({
         <StatusBar barStyle="light-content" />
         <TabNavigator>
           <TabNavigator.Item
-            renderIcon={() => <Image source={require('./images/tab_order.png')}/>}
+            renderIcon={() => <Image source={require('./images/tab_order.png')} style={styles.icon}/>}
             title="주문조회"
             selected={this.state.selectedTab === 'orders'}
             onPress={() => {
@@ -60,7 +60,7 @@ const App = React.createClass({
             <Navigator initialRoute={routes.orders({ brandId })} />
           </TabNavigator.Item>
           <TabNavigator.Item
-            renderIcon={() => <Image source={require('./images/tab_settled.png')}/>}
+            renderIcon={() => <Image source={require('./images/tab_settled.png')} style={styles.icon}/>}
             title="정산통계"
             selected={this.state.selectedTab === 'settled'}
             onPress={() => {
@@ -69,7 +69,7 @@ const App = React.createClass({
             <Navigator initialRoute={routes.settled({ brandId })} />
           </TabNavigator.Item>
           <TabNavigator.Item
-            renderIcon={() => <Image source={require('./images/tab_product.png')}/>}
+            renderIcon={() => <Image source={require('./images/tab_product.png')} style={styles.icon}/>}
             title="상품관리"
             selected={this.state.selectedTab === 'products'}
             onPress={() => {
@@ -78,7 +78,7 @@ const App = React.createClass({
             <Navigator initialRoute={routes.products({ brandId })} />
           </TabNavigator.Item>
           <TabNavigator.Item
-            renderIcon={() => <Image source={require('./images/tab_profile.png')}/>}
+            renderIcon={() => <Image source={require('./images/tab_profile.png')} style={styles.icon}/>}
             title="내 정보"
             selected={this.state.selectedTab === 'profile'}
             onPress={() => {
@@ -90,6 +90,12 @@ const App = React.createClass({
       </View>
     );
   }
+});
+
+const styles = StyleSheet.create({
+  icon: {
+    transform: [{ translateY: 5 }],
+  },
 });
 
 export default connect(

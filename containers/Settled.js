@@ -63,7 +63,7 @@ const Settled = React.createClass({
         <View style={{ flexDirection: 'row', paddingVertical: 15, justifyContent: 'space-between', backgroundColor: 'white' }}>
           <Text style={styles.rowText}>{date}</Text>
           <Text style={[styles.rowText, { flex: 1 }]}>총 {numeral(_.size(orders)).format('0,0')}개의 주문</Text>
-          <Text style={[styles.rowText, { fontWeight: 'bold' }]}>{numeral(_.sumBy(orders, (o) => _.toInteger(o.settledKRW))).format('0,0')}원</Text>
+          <Text style={styles.rowPriceText}>{numeral(_.sumBy(orders, (o) => _.toInteger(o.settledKRW))).format('0,0')}원</Text>
         </View>
       </TouchableElement>
     );
@@ -114,6 +114,7 @@ const Settled = React.createClass({
                 borderRadius: 3,
                 padding: 4,
                 marginLeft: 4,
+                marginRight: 2,
               }}
               onPress={this.onRefresh}
             >
@@ -227,7 +228,14 @@ const styles = StyleSheet.create({
     opacity: 0.0,
   },
   rowText: {
-    color: '#4B4B4B',
+    fontSize: 11,
+    color: '#4C4C4C',
+    marginHorizontal: 7,
+  },
+  rowPriceText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#4C4C4C',
     marginHorizontal: 7,
   },
   headerRow: {
@@ -256,6 +264,7 @@ const styles = StyleSheet.create({
     borderColor: '#D9D9D9',
     padding: 4,
     height: null,
+    marginHorizontal: 2,
   },
   selectorFirstColumn: {
     width: 70,
