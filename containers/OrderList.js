@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { ListView, StyleSheet, Text, View } from 'react-native';
+import { connect } from 'react-redux';
+import { orderActions } from 'goommerce-redux';
 import _ from 'lodash';
 
 import EmptyView from '../components/EmptyView';
@@ -10,33 +12,16 @@ import RefreshableList from '../components/RefreshableList';
 import RefreshableView from '../components/RefreshableView';
 import routes from '../routes';
 
-export default React.createClass({
+const OrderList = React.createClass({
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
-  filter() {
-    const { orders, status } = this.props;
-    return {
-      new() {
-        return _.filter(orders, (o) => (o.status === 100 &&
-          _.every(o.orderProducts, (p) => _.includes([100, 101, 102], p.status))));
-      },
-      ready() {
-        return _.filter(orders, (o) => (o.status === 100 &&
-          _.every(o.orderProducts, (p) => p.status === 103)));
-      },
-      awaiting() {
-        return _.filter(orders, (o) => (o.status !== 100 ||
-          _.every(o.orderProducts, (p) => p.status === 200)));
-      },
-    }[status]();
-  },
   renderRow(order, sectionID, rowID, highlightRow) {
     const { brandId, push, status, updateBrandOrderStatus } = this.props;
 
     function onSelect() {
       const title = `링크# ${order.orderName || _.padStart(order.id, 3, '0').substr(-3)} 주문내역`;
-      if (_.find(order.orderProducts, { status: 100 })) {
+      if (status === 'new' && _.find(order.orderProducts, { status: 100 })) {
         updateBrandOrderStatus(brandId, order.id, 100, 101).then(
           () => push(routes.order(title, { brandId, orderId: order.id }))
         );
@@ -81,8 +66,8 @@ export default React.createClass({
     );
   },
   render() {
-    const list = this.filter();
-    if (_.isEmpty(list)) {
+    const { orders } = this.props;
+    if (_.isEmpty(orders)) {
       return (
         <RefreshableView onRefresh={this.props.onRefresh} contentContainerStyle={{ flex: 1 }}>
           <EmptyView text='No orders...' />
@@ -90,7 +75,7 @@ export default React.createClass({
       );
     }
     // FIXME: possible performance issue...
-    const dataSource = this.dataSource.cloneWithRows(list);
+    const dataSource = this.dataSource.cloneWithRows(orders);
     return (
       <RefreshableList
         dataSource={dataSource}
@@ -129,3 +114,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default connect(null, orderActions)(OrderList);

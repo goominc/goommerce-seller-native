@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { ListView, Platform, StyleSheet, Text, View } from 'react-native';
+import { ListView, Platform, StyleSheet, Text, TouchableHighlight, TouchableNativeFeedback, View } from 'react-native';
 import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
 import Button from 'react-native-button';
@@ -14,6 +14,8 @@ import Icon from '../components/Icon';
 import OrderCell from '../components/OrderCell';
 import RefreshableList from '../components/RefreshableList';
 import routes from '../routes';
+
+const TouchableElement = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableHighlight;
 
 const Settled = React.createClass({
   dataSource: new ListView.DataSource({
@@ -38,16 +40,19 @@ const Settled = React.createClass({
     });
   },
   renderRow({ orders, date }, sectionID, rowID, highlightRow) {
-    function onSelect() {
-      push(routes.order(title, { brandId, orderId: order.id }));
-    }
-
+    const { brandId, push } = this.props;
     return (
-      <View style={{ flexDirection: 'row', paddingVertical: 15, justifyContent: 'space-between' }}>
-        <Text style={styles.rowText}>{date}</Text>
-        <Text style={[styles.rowText, { flex: 1 }]}>총 {numeral(_.size(orders)).format('0,0')}개의 주문</Text>
-        <Text style={[styles.rowText, { fontWeight: 'bold' }]}>{numeral(_.sumBy(orders, (o) => _.toInteger(o.settledKRW))).format('0,0')}원</Text>
-      </View>
+      <TouchableElement
+        onPress={() => push(routes.orderList(`${date} 주문내역`, { orders, brandId, status: 'settled' }))}
+        onShowUnderlay={() => highlightRow(sectionID, rowID)}
+        onHideUnderlay={() => highlightRow(null, null)}
+      >
+        <View style={{ flexDirection: 'row', paddingVertical: 15, justifyContent: 'space-between', backgroundColor: 'white' }}>
+          <Text style={styles.rowText}>{date}</Text>
+          <Text style={[styles.rowText, { flex: 1 }]}>총 {numeral(_.size(orders)).format('0,0')}개의 주문</Text>
+          <Text style={[styles.rowText, { fontWeight: 'bold' }]}>{numeral(_.sumBy(orders, (o) => _.toInteger(o.settledKRW))).format('0,0')}원</Text>
+        </View>
+      </TouchableElement>
     );
   },
   renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
@@ -185,13 +190,13 @@ const Settled = React.createClass({
     // FIXME: possible performance issue...
     const dataSource = this.dataSource.cloneWithRows(rows);
     return (
-      <View>
+      <View style={{ flexDirection: 'column', flex: 1 }}>
         {this.renderRange()}
         <RefreshableList
           dataSource={dataSource}
           renderRow={this.renderRow}
           renderSeparator={this.renderSeparator}
-          onRefresh={this.props.onRefresh}
+          onRefresh={this.onRefresh}
           enableEmptySections
         />
       </View>

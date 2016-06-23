@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
 import _ from 'lodash';
 
+import EmptyView from '../components/EmptyView';
 import OrderList from './OrderList';
 
 const Orders = React.createClass({
@@ -18,9 +19,30 @@ const Orders = React.createClass({
   getInitialState() {
     return { activeStatus: 'new' };
   },
+  filter() {
+    const { orders } = this.props;
+    const { activeStatus } = this.state;
+    return {
+      new() {
+        return _.filter(orders, (o) => (o.status === 100 &&
+          _.every(o.orderProducts, (p) => _.includes([100, 101, 102], p.status))));
+      },
+      ready() {
+        return _.filter(orders, (o) => (o.status === 100 &&
+          _.every(o.orderProducts, (p) => p.status === 103)));
+      },
+      awaiting() {
+        return _.filter(orders, (o) => (o.status !== 100 ||
+          _.every(o.orderProducts, (p) => p.status === 200)));
+      },
+    }[activeStatus]();
+  },
   render() {
     const { activeStatus } = this.state;
-    const { loadBrandOrders, brandId } = this.props;
+    const { loadBrandOrders, brandId, orders, push } = this.props;
+    if (_.isNil(orders)) {
+      return <EmptyView text='Loading...' />
+    }
     return (
       <View style={styles.container}>
         <View style={styles.statusContainer}>
@@ -44,8 +66,10 @@ const Orders = React.createClass({
           </Button>
         </View>
         <OrderList
-          {...this.props}
           key={activeStatus}
+          brandId={brandId}
+          push={push}
+          orders={this.filter()}
           status={activeStatus}
           onRefresh={() => loadBrandOrders(brandId, 'not_settled')}
         />
