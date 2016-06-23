@@ -147,6 +147,7 @@ export default React.createClass({
           value={this.state.quantity}
           style={styles.quantityInput}
           editable={!confirmed}
+          underlineColorAndroid='rgba(0,0,0,0)'
         />
         <View style={{ width: 1, backgroundColor: '#D7D7D7' }}/>
         <Button
