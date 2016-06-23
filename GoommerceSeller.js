@@ -38,18 +38,13 @@ const store = configureStore();
 store.subscribe(() => {
   const { error: { message, status } } = store.getState();
   if (message) {
-    Alert.alert(
-      'Error',
-      message,
-      [{
-        text: 'OK', onPress: () => {
-          errorActions.resetError()(store.dispatch);
-          if (status === 401) {
-            AsyncStorage.removeItem('bearer').then(() => store.dispatch( { type: 'LOGOUT' }));
-          }
-        }
-      }],
-    );
+    if (status !== 401) {
+      Alert.alert(
+        'Error',
+        message,
+        [{ text: 'OK', onPress: () => errorActions.resetError()(store.dispatch) }],
+      );
+    }
   }
 });
 

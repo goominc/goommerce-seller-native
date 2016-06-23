@@ -1,10 +1,10 @@
 'use strict';
 
 import React from 'react';
-import { AsyncStorage, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, AsyncStorage, StyleSheet, Text, TextInput, View } from 'react-native';
 import Button from 'react-native-button';
 import { connect } from 'react-redux'
-import { authActions } from 'goommerce-redux';
+import { authActions, errorActions } from 'goommerce-redux';
 import OneSignal from 'react-native-onesignal';
 
 const Signin = React.createClass({
@@ -15,7 +15,12 @@ const Signin = React.createClass({
     const { email, password } = this.state;
     OneSignal.idsAvailable(({ pushToken, userId }) => {
       this.props.login(email, password, pushToken && userId).then(
-        (auth) => AsyncStorage.setItem('bearer', auth.bearer)
+        (auth) => auth && AsyncStorage.setItem('bearer', auth.bearer),
+        (err) => Alert.alert(
+          '에러',
+          '아이디 / 비밀번호가 일치하지 않습니다.',
+          [{ text: '확인', onPress: () => this.props.resetError() }],
+        ),
       );
     });
   },
@@ -97,5 +102,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(
-  (state) => ({ auth: state.auth }), authActions
+  (state) => ({ auth: state.auth }), _.assign({}, authActions, errorActions)
 )(Signin);
