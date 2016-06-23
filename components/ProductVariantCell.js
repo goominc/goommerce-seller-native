@@ -24,8 +24,8 @@ export default React.createClass({
           />
         </OpenUrlButton>
         <View style={styles.descContainer}>
-          <DefaultText text={`${color}-${size}`} />
-          <DefaultText text={`${numeral(KRW).format('0,0')}원`} />
+          <Text style={{ fontSize: 14, color: '#4c4c4c' }}>{`${color}-${size}`}</Text>
+          <Text style={{ fontSize: 12, color: '#4c4c4c' }}>{`${numeral(KRW).format('0,0')}원`}</Text>
         </View>
       </View>
     );
@@ -42,9 +42,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   thumbnail: {
-    width: 90,
-    height: 90,
+    width: 60,
+    height: 78,
     marginRight: 10,
-    backgroundColor: '#dddddd',
+    backgroundColor: '#F2F2F2',
+    borderWidth: 1,
+    borderColor: '#EAEAEA',
   },
 });

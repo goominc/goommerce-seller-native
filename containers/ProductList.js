@@ -5,6 +5,7 @@ import { ListView, StyleSheet, Text, View } from 'react-native';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { productActions } from 'goommerce-redux';
+import moment from 'moment';
 import _ from 'lodash';
 
 import EmptyView from '../components/EmptyView';
@@ -44,7 +45,7 @@ const ProductList = React.createClass({
   },
   listToDataBlob() {
     const { list } = this.props;
-    return _.groupBy(list, (p) => new Date(p.createdAt).toDateString());
+    return _.groupBy(list, (p) => moment(p.createdAt).format('YYYY.MM.DD'));
   },
   renderFooter() {
     const { pagination } = this.props;
@@ -76,9 +77,11 @@ const ProductList = React.createClass({
   renderSectionHeader(sectionData, sectionID) {
     return (
       <View style={styles.section}>
-        <Text style={styles.sectionText}>
-          {sectionID}
-        </Text>
+        <View style={styles.sectionButton}>
+          <Text style={styles.sectionText}>
+            {sectionID}
+          </Text>
+        </View>
       </View>
     );
   },
@@ -124,7 +127,6 @@ const styles = StyleSheet.create({
   rowSeparator: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     height: 1,
-    marginLeft: 4,
   },
   rowSeparatorHide: {
     opacity: 0.0,
@@ -135,13 +137,17 @@ const styles = StyleSheet.create({
   section: {
     alignItems: 'center',
   },
-  sectionText: {
-    width: 200,
-    textAlign: 'center',
-    paddingVertical: 6,
-    borderRadius: 10,
-    marginVertical: 6,
+  sectionButton: {
     backgroundColor: '#f2f2f2',
+    borderRadius: 10,
+    paddingVertical: 4,
+    paddingHorizontal: 20,
+    marginVertical: 8,
+  },
+  sectionText: {
+    color: '#4c4c4c',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 });
 
