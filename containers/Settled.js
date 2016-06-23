@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { ListView, StyleSheet, Text, View } from 'react-native';
+import { ListView, Platform, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
 import Button from 'react-native-button';
@@ -20,8 +20,7 @@ const Settled = React.createClass({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
   componentDidMount() {
-    const { loadBrandOrders, brandId } = this.props;
-    loadBrandOrders(brandId, 'settled');
+    this.onRefresh();
   },
   getInitialState() {
     const now = moment();
@@ -30,6 +29,13 @@ const Settled = React.createClass({
       end: now.endOf('month').format('YYYY.MM.DD'),
       showSelector: false,
     };
+  },
+  onRefresh() {
+    const { loadBrandOrders, brandId } = this.props;
+    loadBrandOrders(brandId, 'settled', {
+      start: moment(this.state.start, 'YYYY.MM.DD').format('YYYY-MM-DD'),
+      end: moment(this.state.end, 'YYYY.MM.DD').format('YYYY-MM-DD'),
+    });
   },
   renderRow({ orders, date }, sectionID, rowID, highlightRow) {
     function onSelect() {
@@ -91,6 +97,7 @@ const Settled = React.createClass({
                 padding: 4,
                 marginLeft: 4,
               }}
+              onPress={this.onRefresh}
             >
               조회
             </Button>
@@ -105,18 +112,39 @@ const Settled = React.createClass({
             <Button
               style={styles.headerText}
               containerStyle={[styles.button, { flex: 1 }]}
+              onPress={() => {
+                const at = moment().subtract(1, 'd');
+                this.setState({
+                  start: at.format('YYYY.MM.DD'),
+                  end: at.format('YYYY.MM.DD'),
+                });
+              }}
             >
               하루전
             </Button>
             <Button
               style={styles.headerText}
               containerStyle={[styles.button, { flex: 1 }]}
+              onPress={() => {
+                const at = moment();
+                this.setState({
+                  start: at.startOf('month').format('YYYY.MM.DD'),
+                  end: at.endOf('month').format('YYYY.MM.DD'),
+                });
+              }}
             >
               이번달
             </Button>
             <Button
               style={styles.headerText}
               containerStyle={[styles.button, { flex: 1 }]}
+              onPress={() => {
+                const at = moment().subtract(1, 'months');
+                this.setState({
+                  start: at.startOf('month').format('YYYY.MM.DD'),
+                  end: at.endOf('month').format('YYYY.MM.DD'),
+                });
+              }}
             >
               지난달
             </Button>
@@ -215,8 +243,9 @@ const styles = StyleSheet.create({
     width: 70,
   },
   selectorLastColumn: {
-    width: 20,
+    width: Platform.OS === 'ios' ? 20 : 25,
     alignItems: 'flex-end',
+    justifyContent: 'center',
   }
 });
 
