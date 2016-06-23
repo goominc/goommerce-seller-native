@@ -81,29 +81,27 @@ export default React.createClass({
     }
 
     return (
-      <View>
-        <TouchableElement
-          onPress={this.props.onSelect}
-          onShowUnderlay={this.props.onHighlight}
-          onHideUnderlay={this.props.onUnhighlight}
-        >
-          <View style={styles.container}>
-            <View style={[styles.orderNumContainer, { backgroundColor: status === 'new' ? '#1F3A4A' : '#F2F2F2' }]}>
-              <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#4C4C4C' }]}>링크#</Text>
-              <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#4C4C4C' }]}>{orderName || _.padStart(id, 3, '0').substr(-3)}</Text>
-              {badge()}
-            </View>
-            <View style={styles.descContainer}>
-              <Text style={styles.descText} numberOfLines={1}>{name()}</Text>
-              {price()}
-              {status === 'awaiting' && <Text style={[styles.annotText, { color: '#999999' }]}>(매출수수료, VAT포함)</Text>}
-            </View>
-            <View style={styles.dateContainer}>
-              {date()}
-            </View>
+      <TouchableElement
+        onPress={this.props.onSelect}
+        onShowUnderlay={this.props.onHighlight}
+        onHideUnderlay={this.props.onUnhighlight}
+      >
+        <View style={styles.container}>
+          <View style={[styles.orderNumContainer, { backgroundColor: status === 'new' ? '#1F3A4A' : '#F2F2F2' }]}>
+            <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#4C4C4C' }]}>링크#</Text>
+            <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#4C4C4C' }]}>{orderName || _.padStart(id, 3, '0').substr(-3)}</Text>
+            {badge()}
           </View>
-        </TouchableElement>
-      </View>
+          <View style={styles.descContainer}>
+            <Text style={styles.descText} numberOfLines={1}>{name()}</Text>
+            {price()}
+            {status === 'awaiting' && <Text style={[styles.annotText, { color: '#999999' }]}>(매출수수료, VAT포함)</Text>}
+          </View>
+          <View style={styles.dateContainer}>
+            {date()}
+          </View>
+        </View>
+      </TouchableElement>
     );
   }
 });
@@ -113,14 +111,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     flexDirection: 'row',
-    padding: 5,
+    height: 90,
+    paddingHorizontal: 12,
   },
   orderNumContainer: {
     alignItems: 'center',
     borderRadius: 30,
     height: 60,
     justifyContent: 'center',
-    marginRight: 10,
     width: 60,
   },
   orderNumText: {
@@ -146,6 +144,7 @@ const styles = StyleSheet.create({
   },
   descContainer: {
     flex: 1,
+    marginHorizontal: 12,
   },
   descText: {
     fontSize: 12,
@@ -169,6 +168,6 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   dateContainer: {
-    width: 80,
+    width: 60,
   },
 });

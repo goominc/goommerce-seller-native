@@ -60,10 +60,11 @@ const Settled = React.createClass({
         onShowUnderlay={() => highlightRow(sectionID, rowID)}
         onHideUnderlay={() => highlightRow(null, null)}
       >
-        <View style={{ flexDirection: 'row', paddingVertical: 15, justifyContent: 'space-between', backgroundColor: 'white' }}>
+        <View style={styles.rowContainer}>
           <Text style={styles.rowText}>{date}</Text>
-          <Text style={[styles.rowText, { flex: 1 }]}>총 {numeral(_.size(orders)).format('0,0')}개의 주문</Text>
+          <Text style={[styles.rowText, { flex: 1, marginHorizontal: 12 }]}>총 {numeral(_.size(orders)).format('0,0')}개의 주문</Text>
           <Text style={styles.rowPriceText}>{numeral(_.sumBy(orders, (o) => _.toInteger(o.settledKRW))).format('0,0')}원</Text>
+          <Icon name='ios-arrow-forward' size={17} color='#999999' style={{ marginLeft: 12 }}/>
         </View>
       </TouchableElement>
     );
@@ -226,16 +227,22 @@ const styles = StyleSheet.create({
   rowSeparatorHide: {
     opacity: 0.0,
   },
+  rowContainer: {
+    height: 90,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
+    marginHorizontal: 12,
+  },
   rowText: {
     fontSize: 11,
     color: '#4C4C4C',
-    marginHorizontal: 7,
   },
   rowPriceText: {
     fontSize: 12,
     fontWeight: 'bold',
     color: '#4C4C4C',
-    marginHorizontal: 7,
   },
   headerRow: {
     flexDirection: 'row',
@@ -247,7 +254,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: 10,
     backgroundColor: '#F7F7F7',
-    height: 93,
+    height: 90,
     justifyContent: 'center',
   },
   headerText: {

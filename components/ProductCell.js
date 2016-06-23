@@ -55,7 +55,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     flexDirection: 'row',
-    padding: 5,
+    height: 90,
+    marginHorizontal: 12,
   },
   descContainer: {
     flex: 1,

@@ -47,10 +47,10 @@ const OrderList = React.createClass({
         <Text style={[styles.sectionText, { width: 60 }]}>
           주문자명
         </Text>
-        <Text style={[styles.sectionText, { flex: 1} ]}>
+        <Text style={[styles.sectionText, { flex: 1 }]}>
           주문내용
         </Text>
-        <Text style={[styles.sectionText, { width: 80} ]}>
+        <Text style={[styles.sectionText, { width: 60 }]}>
           날짜
         </Text>
       </View>
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'rgba(0, 0, 0, 0.1)',
     backgroundColor: 'white',
     paddingVertical: 7,
+    paddingHorizontal: 12,
   },
   sectionText: {
     fontSize: 11,
