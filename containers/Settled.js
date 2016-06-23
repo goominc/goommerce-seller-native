@@ -126,7 +126,7 @@ const Settled = React.createClass({
               </Button>
             </View>
           </View>
-          <View style={styles.headerRow}>
+          <View style={[styles.headerRow, { marginTop: 0 }]}>
             <View style={styles.selectorFirstColumn} />
             <Button
               style={styles.headerText}
@@ -247,6 +247,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: 10,
     backgroundColor: '#F7F7F7',
+    height: 93,
+    justifyContent: 'center',
   },
   headerText: {
     fontSize: 11,

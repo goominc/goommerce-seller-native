@@ -84,7 +84,7 @@ const App = React.createClass({
             onPress={() => {
               this.setState({ selectedTab: 'profile' });
             }}>
-            <Navigator initialRoute={routes.profile()} />
+            <Navigator initialRoute={routes.profile({ brandId })} />
           </TabNavigator.Item>
         </TabNavigator>
       </View>

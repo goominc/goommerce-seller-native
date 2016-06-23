@@ -11,27 +11,28 @@ import _ from 'lodash';
 
 const Profile = React.createClass({
   componentDidMount() {
-    const { brands, loadBrand } = this.props;
-    brands.forEach((b) => loadBrand(b.id));
+    const { loadBrand, brandId } = this.props;
+    loadBrand(brandId);
   },
   signout() {
-    OneSignal.idsAvailable(({ pushToken, playerId, userId }) => {
-      this.props.logout(pushToken && (playerId || userId)).then(
+    OneSignal.idsAvailable(({ pushToken, userId }) => {
+      this.props.logout(pushToken && userId).then(
         () => AsyncStorage.removeItem('bearer')
       );
     });
   },
   render() {
-    const { brands = [] } = this.props;
+    const { brand } = this.props;
     return (
       <View style={styles.container}>
-        {brands.map((b, idx) => (
-          <View key={b.id}>
-            <Text>{_.get(b, 'name.ko')}</Text>
-            <Text>{b.pathname && `https://www.linkshops.com/${b.pathname}`}</Text>
-            <Text>{_.get(b, 'data.building.name')}</Text>
-          </View>
-        ))}
+        <Text style={styles.name} numberOfLines={1}>{_.get(brand, 'name.ko')}</Text>
+        <Text style={styles.main}>{'http://www.linkshops.com/'}</Text>
+        <Text style={styles.main}>{_.toLower(_.get(brand, 'pathname'))}</Text>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#4C4C4C' }}>{_.get(brand, 'data.location.building.name.ko')}</Text>
+        <Text style={styles.main}>{_.get(brand, 'data.location.floor')} {_.get(brand, 'data.location.flatNumber')}</Text>
+        <Text style={styles.footer}>친절하고 빠른 서비스 / 이용문의</Text>
+        <Text style={styles.footer}>02-2272-1122</Text>
+        <Text style={styles.footer}>카카오톡: @링크샵스 판매자 센터</Text>
         <Button
           style={{color: 'white'}}
           styleDisabled={{color: 'red'}}
@@ -59,17 +60,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 60,
     paddingVertical: 10,
   },
+  name: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#4C4C4C',
+  },
+  main: {
+    fontSize: 11,
+    color: '#4C4C4C',
+  },
+  footer: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: '#999999',
+  },
 });
 
 export default connect(
-  (state) => {
-    const { roles = [] } = state.auth;
-    const brands = _.filter(roles,
-      (r) => r.type === 'owner' || r.type === 'staff').map((r) => r.brand);
-    brands.forEach((b) => {
-      const { key } = brandActions.loadBrand(b.id);
-      _.assign(b, state.brand[key]);
-    });
-    return { auth: state.auth, brands };
+  (state, ownProps) => {
+    const { key } = brandActions.loadBrand(ownProps.brandId);
+    return { brand: state.brand[key] };
   }, _.assign({}, authActions, brandActions)
 )(Profile);
