@@ -12,7 +12,7 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
-import { CloudinaryImageNative } from 'react-cloudinary';
+import { CloudinaryImageNative } from 'react-cloudinary/lib/native';
 import numeral from 'numeral';
 
 import DefaultText from './DefaultText';

@@ -82,11 +82,11 @@ const Settled = React.createClass({
       <DatePicker
         {...props}
         customStyles={{
-          dateIcon: { width: 0, height: 0, marginLeft: 0, marginRight: 0 },
           dateInput: styles.button,
           dateTouchBody: { height: null },
           dateText: styles.headerText,
         }}
+        showIcon={false}
         style={{ width: null, flex: 1 }}
         mode='date'
         format='YYYY.MM.DD'

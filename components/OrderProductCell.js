@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Image, StyleSheet, Text, TextInput, Switch, View } from 'react-native';
-import { CloudinaryImageNative } from 'react-cloudinary';
+import { CloudinaryImageNative } from 'react-cloudinary/lib/native';
 import _ from 'lodash';
 import Button from 'react-native-button';
 import ModalPicker from 'react-native-modal-picker';

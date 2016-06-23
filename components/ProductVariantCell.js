@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Image, Picker, StyleSheet, Text, View } from 'react-native';
-import { CloudinaryImageNative } from 'react-cloudinary';
+import { CloudinaryImageNative } from 'react-cloudinary/lib/native';
 import numeral from 'numeral';
 
 import DefaultText from './DefaultText';
