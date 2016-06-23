@@ -18,6 +18,19 @@ import routes from '../routes';
 const TouchableElement = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableHighlight;
 
 const Settled = React.createClass({
+  statics: {
+    rightButton: (nav, { props }) => {
+      return (
+        <Button
+          style={{ fontSize: 11, color: 'white', margin: 5, paddingVertical: 2 }}
+          containerStyle={{ marginTop: Platform.OS === 'android' ? 5 : 3 }}
+          onPress={() => nav.push(routes.awaiting(props))}
+        >
+          입금대기내역
+        </Button>
+      );
+    },
+  },
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),

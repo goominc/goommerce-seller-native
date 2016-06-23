@@ -184,7 +184,7 @@ export default connect(
   (state, ownProps) => {
     const { key } = orderActions.loadBrandOrder(ownProps.brandId, ownProps.orderId);
     const order = state.order[key];
-    const changeable = _.get(order, 'status') === 100 &&
+    const changeable = _.get(order, 'status') === 100 && _.get(order, 'settlementStatus') === 0 &&
       _.some(_.get(order, 'orderProducts'), (p) => _.includes([100, 101, 102, 103], p.status));
     return { reduxKey: key, order, changeable };
   }, orderActions

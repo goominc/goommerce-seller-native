@@ -66,7 +66,7 @@ const OrderList = React.createClass({
     );
   },
   render() {
-    const { orders } = this.props;
+    const { orders, onRefresh } = this.props;
     if (_.isEmpty(orders)) {
       return (
         <RefreshableView onRefresh={this.props.onRefresh} contentContainerStyle={{ flex: 1 }}>
@@ -82,7 +82,7 @@ const OrderList = React.createClass({
         renderRow={this.renderRow}
         renderSectionHeader={this.renderSectionHeader}
         renderSeparator={this.renderSeparator}
-        onRefresh={this.props.onRefresh}
+        onRefresh={() => onRefresh && onRefresh()}
       />
     );
   },
