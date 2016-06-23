@@ -94,7 +94,7 @@ const App = React.createClass({
 
 const styles = StyleSheet.create({
   icon: {
-    transform: [{ translateY: 5 }],
+    transform: [{ translateY: 7 }],
   },
 });
 

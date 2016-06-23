@@ -74,6 +74,12 @@ export default React.createClass({
       return <Text style={styles.descText}>{`${numeral(totalKRW).format('0,0')}원`}</Text>;
     }
 
+    const badge = () => {
+      if (status === 'new' && _.find(orderProducts, { status: 100 })) {
+        return <View style={styles.badgeContainer}><Text style={styles.badgetText}>N</Text></View>;
+      }
+    }
+
     return (
       <View>
         <TouchableElement
@@ -85,6 +91,7 @@ export default React.createClass({
             <View style={[styles.orderNumContainer, { backgroundColor: status === 'new' ? '#1F3A4A' : '#F2F2F2' }]}>
               <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#4C4C4C' }]}>링크#</Text>
               <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#4C4C4C' }]}>{orderName || _.padStart(id, 3, '0').substr(-3)}</Text>
+              {badge()}
             </View>
             <View style={styles.descContainer}>
               <Text style={styles.descText} numberOfLines={1}>{name()}</Text>
@@ -119,6 +126,23 @@ const styles = StyleSheet.create({
   orderNumText: {
     fontSize: 12,
     fontWeight: 'bold',
+    backgroundColor: 'transparent',
+  },
+  badgeContainer: {
+    backgroundColor: '#FB6D21',
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    left: 42,
+    top: 0,
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  badgetText: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: 'white'
   },
   descContainer: {
     flex: 1,
