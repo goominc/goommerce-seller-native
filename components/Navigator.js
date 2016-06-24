@@ -71,6 +71,7 @@ export default connect()(React.createClass({
     };
   },
   render() {
+    const { showTabBar } = this.props;
     return (
       <Navigator
         initialRoute={this.props.initialRoute}
@@ -83,6 +84,7 @@ export default connect()(React.createClass({
         renderScene={this.renderScene}
         style={styles.container}
         onDidFocus={({component, props}) => {
+          showTabBar && showTabBar(props.showTabBar !== false);
           const onDidFocus = component.onDidFocus || _.get(component, 'WrappedComponent.onDidFocus');
           if (onDidFocus) onDidFocus(props, this.props.dispatch);
         }}

@@ -24,7 +24,7 @@ const Settled = React.createClass({
         <Button
           style={{ fontSize: 11, color: 'white', margin: 5, paddingVertical: 2 }}
           containerStyle={{ marginTop: Platform.OS === 'android' ? 5 : 3 }}
-          onPress={() => nav.push(routes.awaiting(props))}
+          onPress={() => nav.push(routes.awaiting(_.assign({}, props, { showTabBar: false })))}
         >
           입금대기내역
         </Button>

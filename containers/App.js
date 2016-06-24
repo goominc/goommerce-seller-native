@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { Image, StatusBar, StyleSheet, View } from 'react-native';
+import { Dimensions, Image, StatusBar, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux'
 import { authActions } from 'goommerce-redux';
 import _ from 'lodash';
@@ -17,6 +17,7 @@ const App = React.createClass({
   getInitialState: function() {
     return {
       selectedTab: 'orders',
+      showTabBar: true,
       ordersNavigatorKey: Date.now(),
       settledNavigatorKey: Date.now(),
       productsNavigatorKey: Date.now(),
@@ -49,10 +50,20 @@ const App = React.createClass({
     }
 
     const brandId = brands[0].id;
+
+    const tabBarStyle = [styles.tabBarStyle];
+    const sceneStyle = [];
+    if (!this.state.showTabBar) {
+      tabBarStyle.push({ position: 'absolute', top: Dimensions.get('window').height });
+      sceneStyle.push({ paddingBottom: 0 });
+    }
+
+    const showTabBar = (show) => this.setState({ showTabBar: show });
+
     return (
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" />
-        <TabNavigator tabBarStyle={styles.tabBarStyle}>
+        <TabNavigator tabBarStyle={tabBarStyle} sceneStyle={sceneStyle}>
           <TabNavigator.Item
             renderIcon={() => <Image source={require('./images/tab_order.png')} style={styles.icon}/>}
             title="주문조회"
@@ -69,7 +80,7 @@ const App = React.createClass({
             onPress={() => {
               this.setState({ selectedTab: 'settled', settledNavigatorKey: Date.now() });
             }}>
-            <Navigator key={this.state.settledNavigatorKey} initialRoute={routes.settled({ brandId })} />
+            <Navigator key={this.state.settledNavigatorKey} initialRoute={routes.settled({ brandId })} showTabBar={showTabBar} />
           </TabNavigator.Item>
           <TabNavigator.Item
             renderIcon={() => <Image source={require('./images/tab_product.png')} style={styles.icon}/>}
