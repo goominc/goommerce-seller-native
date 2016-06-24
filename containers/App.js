@@ -52,7 +52,7 @@ const App = React.createClass({
     return (
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" />
-        <TabNavigator>
+        <TabNavigator tabBarStyle={styles.tabBarStyle}>
           <TabNavigator.Item
             renderIcon={() => <Image source={require('./images/tab_order.png')} style={styles.icon}/>}
             title="주문조회"
@@ -98,7 +98,11 @@ const App = React.createClass({
 const styles = StyleSheet.create({
   icon: {
     transform: [{ translateY: 7 }],
+    tintColor: '#b2b2b2',
   },
+  tabBarStyle: {
+    backgroundColor: 'white',
+  }
 });
 
 export default connect(
