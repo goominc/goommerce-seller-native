@@ -21,4 +21,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  text: {
+    color: '#B2B2B2',
+    fontSize: 12,
+  },
 });

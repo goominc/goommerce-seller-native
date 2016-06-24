@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     backgroundColor: '#1F3A4A',
-    paddingVertical: 5,
+    paddingVertical: 15,
   },
   activeStatus: {
     fontSize: 14,

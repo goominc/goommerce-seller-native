@@ -66,11 +66,16 @@ const OrderList = React.createClass({
     );
   },
   render() {
-    const { orders, onRefresh } = this.props;
+    const { orders, status, onRefresh } = this.props;
     if (_.isEmpty(orders)) {
+      const text = _.get({
+        new: '신규주문이 없습니다.',
+        ready: '포장완료된 주문이 없습니다.',
+        awaiting: '입금대기 주문이 없습니다.',
+      }, status, '주문이 없습니다');
       return (
-        <RefreshableView onRefresh={this.props.onRefresh} contentContainerStyle={{ flex: 1 }}>
-          <EmptyView text='No orders...' />
+        <RefreshableView onRefresh={() => onRefresh && onRefresh()} contentContainerStyle={{ flex: 1 }}>
+          <EmptyView text={text} />
         </RefreshableView>
       );
     }

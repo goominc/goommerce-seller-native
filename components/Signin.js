@@ -38,6 +38,7 @@ const Signin = React.createClass({
           keyboardType='email-address'
           onChangeText={(email) => this.setState({ email })}
           placeholder='e-mail'
+          placeholderTextColor='#B2B2B2'
           style={styles.input}
           value={this.state.email}
         />
@@ -46,6 +47,7 @@ const Signin = React.createClass({
           autoCorrect={false}
           onChangeText={(password) => this.setState({ password })}
           placeholder='password'
+          placeholderTextColor='#B2B2B2'
           secureTextEntry={true}
           style={styles.input}
           value={this.state.password}
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: '#eeeeee',
     borderRadius: 6,
-    color: '#b2b2b2',
+    color: '#4C4C4C',
     fontSize: 12,
     height: 50,
     marginHorizontal: 20,

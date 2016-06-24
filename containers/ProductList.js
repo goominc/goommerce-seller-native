@@ -70,7 +70,7 @@ const ProductList = React.createClass({
         product={product}
         onHighlight={() => highlightRow(sectionID, rowID)}
         onUnhighlight={() => highlightRow(null, null)}
-        onSelect={() => push(routes.product({ productId: product.id }))}
+        onSelect={() => push(routes.product(_.get(product, 'name.ko'), { productId: product.id }))}
       />
     );
   },

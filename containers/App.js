@@ -17,6 +17,9 @@ const App = React.createClass({
   getInitialState: function() {
     return {
       selectedTab: 'orders',
+      ordersNavigatorKey: Date.now(),
+      settledNavigatorKey: Date.now(),
+      productsNavigatorKey: Date.now(),
     };
   },
   componentDidMount() {
@@ -55,27 +58,27 @@ const App = React.createClass({
             title="주문조회"
             selected={this.state.selectedTab === 'orders'}
             onPress={() => {
-              this.setState({ selectedTab: 'orders' });
+              this.setState({ selectedTab: 'orders', ordersNavigatorKey: Date.now() });
             }}>
-            <Navigator initialRoute={routes.orders({ brandId })} />
+            <Navigator key={this.state.ordersNavigatorKey} initialRoute={routes.orders({ brandId })} />
           </TabNavigator.Item>
           <TabNavigator.Item
             renderIcon={() => <Image source={require('./images/tab_settled.png')} style={styles.icon}/>}
             title="정산통계"
             selected={this.state.selectedTab === 'settled'}
             onPress={() => {
-              this.setState({ selectedTab: 'settled' });
+              this.setState({ selectedTab: 'settled', settledNavigatorKey: Date.now() });
             }}>
-            <Navigator initialRoute={routes.settled({ brandId })} />
+            <Navigator key={this.state.settledNavigatorKey} initialRoute={routes.settled({ brandId })} />
           </TabNavigator.Item>
           <TabNavigator.Item
             renderIcon={() => <Image source={require('./images/tab_product.png')} style={styles.icon}/>}
             title="상품관리"
             selected={this.state.selectedTab === 'products'}
             onPress={() => {
-              this.setState({ selectedTab: 'products' });
+              this.setState({ selectedTab: 'products', productsNavigatorKey: Date.now() });
             }}>
-            <Navigator initialRoute={routes.products({ brandId })} />
+            <Navigator key={this.state.productsNavigatorKey} initialRoute={routes.products({ brandId })} />
           </TabNavigator.Item>
           <TabNavigator.Item
             renderIcon={() => <Image source={require('./images/tab_profile.png')} style={styles.icon}/>}

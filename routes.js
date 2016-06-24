@@ -15,7 +15,7 @@ export default {
   orders: (props) => ({ title: '주문조회', component: Orders, props }),
   orderList: (title, props) => ({ title, component: OrderList, props }),
   settled: (props) => ({ title: '정산통계', component: Settled, props }),
-  product: (props) => ({ title: '상품조회', component: ProductDetail, props }),
+  product: (title, props) => ({ title, component: ProductDetail, props }),
   products: (props) => ({ title: '상품관리', component: ProductList, props }),
   profile: (props) => ({ title: '내 정보', component: Profile, props }),
 };

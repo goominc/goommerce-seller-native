@@ -24,7 +24,8 @@ export default React.createClass({
           />
         </OpenUrlButton>
         <View style={styles.descContainer}>
-          <Text style={{ fontSize: 14, color: '#4c4c4c' }}>{`${color}-${size}`}</Text>
+          <Text style={{ fontSize: 14, color: '#4c4c4c' }}>{color}</Text>
+          <Text style={{ fontSize: 14, color: '#4c4c4c' }}>{size}</Text>
           <Text style={{ fontSize: 12, color: '#4c4c4c' }}>{`${numeral(KRW).format('0,0')}원`}</Text>
         </View>
       </View>

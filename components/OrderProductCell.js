@@ -132,11 +132,11 @@ export default React.createClass({
     return (
       <View style={styles.quantityContainer}>
         <Button
-          onPress={() => this.setQuantity(+this.state.quantity + 1)}
+          onPress={() => this.setQuantity(+this.state.quantity - 1)}
           disabled={confirmed}
           containerStyle={{ justifyContent: 'center' }}
         >
-          <Icon name='add' style={styles.quantityButton}/>
+          <Icon name='remove' style={styles.quantityButton}/>
         </Button>
         <View style={{ width: 1, backgroundColor: '#D7D7D7' }}/>
         <TextInput
@@ -151,11 +151,11 @@ export default React.createClass({
         />
         <View style={{ width: 1, backgroundColor: '#D7D7D7' }}/>
         <Button
-          onPress={() => this.setQuantity(+this.state.quantity - 1)}
+          onPress={() => this.setQuantity(+this.state.quantity + 1)}
           disabled={confirmed}
           containerStyle={{ justifyContent: 'center' }}
         >
-        <Icon name='remove' style={styles.quantityButton}/>
+          <Icon name='add' style={styles.quantityButton}/>
         </Button>
       </View>
     );
@@ -185,13 +185,13 @@ export default React.createClass({
           <View style={{ flexDirection: 'row' }}>
             <View style={{ flexDirection: 'column', flex: 1, opacity }}>
               <View style={styles.descRow}>
-                <Text style={styles.labelText}>주문수량: </Text>
+                <Text style={styles.labelText}>주문수량 : </Text>
                 <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#999999', textAlign: 'center', flex: 1 }}>
                   {numeral(orderProduct.quantity).format('0,0')}개
                 </Text>
               </View>
               <View style={styles.descRow}>
-                <Text style={styles.labelText}>출고수량: </Text>
+                <Text style={styles.labelText}>출고수량 : </Text>
                 <View style={{ flex: 1 }}>
                   {this.renderQuantity()}
                 </View>
