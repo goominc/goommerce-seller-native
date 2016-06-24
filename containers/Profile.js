@@ -15,8 +15,8 @@ const Profile = React.createClass({
     loadBrand(brandId);
   },
   signout() {
-    OneSignal.idsAvailable(({ pushToken, userId }) => {
-      this.props.logout(pushToken && userId).then(
+    OneSignal.idsAvailable(({ pushToken, playerId, userId }) => {
+      this.props.logout(pushToken && (playerId || userId)).then(
         () => AsyncStorage.removeItem('bearer')
       );
     });
