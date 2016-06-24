@@ -6,6 +6,7 @@ import Button from 'react-native-button';
 import { connect } from 'react-redux'
 import { authActions, errorActions } from 'goommerce-redux';
 import OneSignal from 'react-native-onesignal';
+import _ from 'lodash';
 
 const Signin = React.createClass({
   getInitialState() {
