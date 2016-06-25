@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Navigator, StyleSheet, View } from 'react-native';
 import Button from 'react-native-button';
 import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
@@ -50,6 +50,7 @@ const AwaitingSettlement = React.createClass({
             brandId,
             orderId: order.id,
             showTabBar: false,
+            sceneConfig: Navigator.SceneConfigs.VerticalDownSwipeJump,
             rightButton(route, navigator, index, navState) {
               return (
                 <Button onPress={() => navigator.popToRoute(navState.routeStack[index - 2])}>
