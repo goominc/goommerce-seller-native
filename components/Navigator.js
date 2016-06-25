@@ -93,6 +93,7 @@ export default connect()(React.createClass({
           <Navigator.NavigationBar
             routeMapper={this.routeMapper()}
             style={styles.navBar}
+            navigationStyles={Navigator.NavigationBar.StylesIOS}
           />
         }
         configureScene={this.configureScene}
@@ -125,10 +126,10 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 16,
-    marginVertical: Platform.OS === 'ios' ? 9 : 15,
+    marginVertical: Platform.OS === 'ios' ? 9 : null,
   },
   navBarButton: {
-    marginVertical: Platform.OS === 'ios' ? 4 : 8,
+    marginTop: Platform.OS === 'ios' ? 4 : -5,
     paddingLeft: 5,
     paddingRight: 5,
   },
