@@ -99,8 +99,10 @@ export default connect()(React.createClass({
         configureScene={this.configureScene}
         renderScene={this.renderScene}
         style={styles.container}
-        onDidFocus={({component, props}) => {
+        onWillFocus={({props}) => {
           showTabBar && showTabBar(props.showTabBar !== false);
+        }}
+        onDidFocus={({component, props}) => {
           const onDidFocus = component.onDidFocus || _.get(component, 'WrappedComponent.onDidFocus');
           if (onDidFocus) onDidFocus(props, this.props.dispatch);
         }}
