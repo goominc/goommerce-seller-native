@@ -7,10 +7,26 @@ import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
 import _ from 'lodash';
 
+import Icon from '../components/Icon';
 import EmptyView from '../components/EmptyView';
 import OrderList from './OrderList';
+import routes from '../routes';
 
 const AwaitingSettlement = React.createClass({
+  statics: {
+    leftButton() {
+      return null;
+    },
+    rightButton: (route, navigator) => {
+      return (
+        <Button onPress={() => navigator.pop()}>
+          <View style={{ padding: 5 }}>
+            <Icon name='close' size={23} color='white' />
+          </View>
+        </Button>
+      );
+    },
+  },
   render() {
     const { loadBrandOrders, brandId, orders, push } = this.props;
 
@@ -28,6 +44,23 @@ const AwaitingSettlement = React.createClass({
         orders={filtered}
         status={'awaiting'}
         onRefresh={() => loadBrandOrders(brandId, 'not_settled')}
+        onSelect={(order) => {
+          const title = `링크# ${order.orderName || _.padStart(order.id, 3, '0').substr(-3)} 주문내역`;
+          push(routes.order(title, {
+            brandId,
+            orderId: order.id,
+            showTabBar: false,
+            rightButton(route, navigator, index, navState) {
+              return (
+                <Button onPress={() => navigator.popToRoute(navState.routeStack[index - 2])}>
+                  <View style={{ padding: 5 }}>
+                    <Icon name='close' size={23} color='white' />
+                  </View>
+                </Button>
+              );
+            },
+          }));
+        }}
       />
     );
   },

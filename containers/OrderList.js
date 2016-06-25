@@ -16,20 +16,20 @@ const OrderList = React.createClass({
   dataSource: new ListView.DataSource({
     rowHasChanged: (row1, row2) => row1 !== row2,
   }),
-  renderRow(order, sectionID, rowID, highlightRow) {
+  onSelect(order) {
     const { brandId, push, status, updateBrandOrderStatus } = this.props;
 
-    function onSelect() {
-      const title = `링크# ${order.orderName || _.padStart(order.id, 3, '0').substr(-3)} 주문내역`;
-      if (status === 'new' && _.find(order.orderProducts, { status: 100 })) {
-        updateBrandOrderStatus(brandId, order.id, 100, 101).then(
-          () => push(routes.order(title, { brandId, orderId: order.id }))
-        );
-      } else {
-        push(routes.order(title, { brandId, orderId: order.id }));
-      }
+    const title = `링크# ${order.orderName || _.padStart(order.id, 3, '0').substr(-3)} 주문내역`;
+    if (status === 'new' && _.find(order.orderProducts, { status: 100 })) {
+      updateBrandOrderStatus(brandId, order.id, 100, 101).then(
+        () => push(routes.order(title, { brandId, orderId: order.id }))
+      );
+    } else {
+      push(routes.order(title, { brandId, orderId: order.id }));
     }
-
+  },
+  renderRow(order, sectionID, rowID, highlightRow) {
+    const { onSelect, status } = this.props;
     return (
       <OrderCell
         key={order.id}
@@ -37,7 +37,7 @@ const OrderList = React.createClass({
         status={status}
         onHighlight={() => highlightRow(sectionID, rowID)}
         onUnhighlight={() => highlightRow(null, null)}
-        onSelect={onSelect}
+        onSelect={() => (onSelect ? onSelect(order) : this.onSelect(order))}
       />
     );
   },

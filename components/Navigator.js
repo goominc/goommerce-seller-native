@@ -19,6 +19,9 @@ if (Platform.OS === 'android') {
 }
 
 export default connect()(React.createClass({
+  configureScene(route) {
+    return route.props.sceneConfig || Navigator.SceneConfigs.PushFromRight;
+  },
   renderScene(route, navigator) {
     if (Platform.OS === 'android') {
       _navigator = navigator;
@@ -33,6 +36,17 @@ export default connect()(React.createClass({
     const { dispatch } = this.props;
     return {
       LeftButton(route, navigator, index, navState) {
+        const { component } = route;
+        const leftButton = component.leftButton || _.get(component, 'WrappedComponent.leftButton');
+        if (leftButton) {
+          return (
+            <View style={styles.navBarButton}>
+              {leftButton(navigator, route)}
+            </View>
+          );
+        }
+
+        // default back button.
         if (index === 0) {
           return null;
         }
@@ -45,12 +59,12 @@ export default connect()(React.createClass({
         );
       },
       RightButton(route, navigator, index, navState) {
-        const { component } = route;
-        const rightButton = component.rightButton || _.get(component, 'WrappedComponent.rightButton');
+        const { component, props } = route;
+        const rightButton = props.rightButton || component.rightButton || _.get(component, 'WrappedComponent.rightButton');
         if (rightButton) {
           return (
             <View style={styles.navBarButton}>
-              {rightButton(navigator, route)}
+              {rightButton(route, navigator, index, navState)}
             </View>
           );
         }
@@ -81,6 +95,7 @@ export default connect()(React.createClass({
             style={styles.navBar}
           />
         }
+        configureScene={this.configureScene}
         renderScene={this.renderScene}
         style={styles.container}
         onDidFocus={({component, props}) => {

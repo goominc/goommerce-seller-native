@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { ListView, Platform, StyleSheet, Text, TouchableHighlight, TouchableNativeFeedback, View } from 'react-native';
+import { Navigator, ListView, Platform, StyleSheet, Text, TouchableHighlight, TouchableNativeFeedback, View } from 'react-native';
 import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
 import Button from 'react-native-button';
@@ -19,12 +19,15 @@ const TouchableElement = Platform.OS === 'android' ? TouchableNativeFeedback : T
 
 const Settled = React.createClass({
   statics: {
-    rightButton: (nav, { props }) => {
+    rightButton: ({ props }, navigator) => {
       return (
         <Button
           style={{ fontSize: 11, color: 'white', margin: 5, paddingVertical: 2 }}
           containerStyle={{ marginTop: Platform.OS === 'android' ? 5 : 3 }}
-          onPress={() => nav.push(routes.awaiting(_.assign({}, props, { showTabBar: false })))}
+          onPress={() => navigator.push(routes.awaiting(_.assign({}, props, {
+            showTabBar: false,
+            sceneConfig: Navigator.SceneConfigs.VerticalDownSwipeJump,
+          })))}
         >
           입금대기내역
         </Button>
