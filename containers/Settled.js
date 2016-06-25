@@ -59,7 +59,7 @@ const Settled = React.createClass({
     const { brandId, push } = this.props;
     return (
       <TouchableElement
-        onPress={() => push(routes.orderList(`${date} 주문내역`, { orders, brandId, status: 'settled' }))}
+        onPress={() => push(routes.settledOrders(`${date} 주문내역`, { orders, brandId }))}
         onShowUnderlay={() => highlightRow(sectionID, rowID)}
         onHideUnderlay={() => highlightRow(null, null)}
       >
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: 'white',
-    marginHorizontal: 12,
+    paddingHorizontal: 12,
   },
   rowText: {
     fontSize: 11,

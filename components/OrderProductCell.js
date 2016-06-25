@@ -12,7 +12,7 @@ import Icon from './Icon';
 import OpenUrlButton from './OpenUrlButton';
 
 function getInitialState(props) {
-  const { orderProduct, order } = props;
+  const { orderProduct, order, changeable } = props;
   const quantity = (() => {
     const stock = _.get(orderProduct, 'data.stock.quantity', orderProduct.quantity);
     if (order.status === 100) {
@@ -24,7 +24,7 @@ function getInitialState(props) {
     quantity: quantity.toString(),
     reason: _.get(orderProduct, 'data.stock.reason', 0),
     data: _.get(orderProduct, 'data.stock.data'),
-    confirmed: orderProduct.status !== 101 || order.status !== 100,
+    confirmed: !changeable || orderProduct.status !== 101 || order.status !== 100,
   };
 }
 

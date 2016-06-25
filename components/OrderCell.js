@@ -16,6 +16,8 @@ import numeral from 'numeral';
 import Decimal from 'decimal.js-light';
 import moment from 'moment';
 
+import OrderNumber from './OrderNumber'
+
 // FIXME: move to some other place.
 moment.locale('ko', {
   relativeTime : {
@@ -39,7 +41,8 @@ export default React.createClass({
   render() {
     const TouchableElement = Platform.OS === 'android' ?
       TouchableNativeFeedback : TouchableHighlight;
-    const { order: { id, orderProducts, orderedAt, orderName }, status } = this.props;
+    const { order, status } = this.props;
+    const { orderProducts, orderedAt } = order;
     const totalQuantity = _.sumBy(orderProducts, (o) => _.get(o, 'data.stock.quantity', o.quantity));
     const totalKRW = _.reduce(orderProducts,
       (sum, o) => sum.add(Decimal(o.KRW || 0).mul(_.get(o, 'data.stock.quantity', o.quantity))), new Decimal(0)).toNumber();
@@ -74,12 +77,6 @@ export default React.createClass({
       return <Text style={styles.descText}>{`${numeral(totalKRW).format('0,0')}원`}</Text>;
     }
 
-    const badge = () => {
-      if (status === 'new' && _.find(orderProducts, { status: 100 })) {
-        return <View style={styles.badgeContainer}><Text style={styles.badgetText}>N</Text></View>;
-      }
-    }
-
     return (
       <TouchableElement
         onPress={this.props.onSelect}
@@ -87,11 +84,7 @@ export default React.createClass({
         onHideUnderlay={this.props.onUnhighlight}
       >
         <View style={styles.container}>
-          <View style={[styles.orderNumContainer, { backgroundColor: status === 'new' ? '#1F3A4A' : '#F2F2F2' }]}>
-            <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#4C4C4C' }]}>링크#</Text>
-            <Text style={[styles.orderNumText, { color: status === 'new' ? 'white' : '#4C4C4C' }]}>{orderName || _.padStart(id, 3, '0').substr(-3)}</Text>
-            {badge()}
-          </View>
+          <OrderNumber order={order} status={status}/>
           <View style={styles.descContainer}>
             <Text style={styles.descText} numberOfLines={1}>{name()}</Text>
             {price()}
@@ -113,34 +106,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 90,
     paddingHorizontal: 12,
-  },
-  orderNumContainer: {
-    alignItems: 'center',
-    borderRadius: 30,
-    height: 60,
-    justifyContent: 'center',
-    width: 60,
-  },
-  orderNumText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    backgroundColor: 'transparent',
-  },
-  badgeContainer: {
-    backgroundColor: '#FB6D21',
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    left: 42,
-    top: 0,
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  badgetText: {
-    fontSize: 11,
-    fontWeight: 'bold',
-    color: 'white'
   },
   descContainer: {
     flex: 1,
