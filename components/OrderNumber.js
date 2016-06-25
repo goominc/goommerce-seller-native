@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import _ from 'lodash';
 
 export default React.createClass({
   render() {
