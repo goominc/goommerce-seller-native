@@ -53,7 +53,7 @@ const Settled = React.createClass({
     loadBrandOrders(brandId, 'settled', {
       start: moment(this.state.start, 'YYYY.MM.DD').format('YYYY-MM-DD'),
       end: moment(this.state.end, 'YYYY.MM.DD').format('YYYY-MM-DD'),
-    });
+    }).then(() => this.setState({ showSelector: false }));
   },
   renderRow({ orders, date }, sectionID, rowID, highlightRow) {
     const { brandId, push } = this.props;
@@ -99,83 +99,91 @@ const Settled = React.createClass({
       />
     );
   },
-  renderRange() {
+  renderSelector() {
     const { start, end, showSelector } = this.state;
     if (showSelector) {
       return (
-        <View style={styles.headerContainer}>
-          <View style={styles.headerRow}>
-            <Text style={[styles.selectorFirstColumn, { fontSize: 11, fontWeight: 'bold', fontColor: '#4C4C4C' }]}>
-              조회기간 설정
-            </Text>
-            {this.renderDatePicker({ date: start, onDateChange: (start) => {this.setState({ start })} })}
-            <Text style={[styles.headerText, { marginHorizontal: 4 }]}>-</Text>
-            {this.renderDatePicker({ date: end, onDateChange: (end) => {this.setState({ end })} })}
-            <Button
-              style={{color: 'white', fontSize: 12 }}
-              containerStyle={{
-                backgroundColor: '#1fcbf6',
-                borderRadius: 3,
-                padding: 4,
-                marginLeft: 4,
-                marginRight: 2,
-              }}
-              onPress={this.onRefresh}
-            >
-              조회
-            </Button>
-            <View style={styles.selectorLastColumn}>
-              <Button onPress={() => this.setState({showSelector: false })}>
-                <Icon name='close' size={23} style={{ padding: 4 }}/>
+        <View style={styles.selectorContainer}>
+          <View style={styles.headerContainer}>
+            <View style={styles.headerRow}>
+              <Text style={[styles.selectorFirstColumn, { fontSize: 11, fontWeight: 'bold', fontColor: '#4C4C4C' }]}>
+                조회기간 설정
+              </Text>
+              {this.renderDatePicker({ date: start, onDateChange: (start) => {this.setState({ start })} })}
+              <Text style={[styles.headerText, { marginHorizontal: 4 }]}>-</Text>
+              {this.renderDatePicker({ date: end, onDateChange: (end) => {this.setState({ end })} })}
+              <Button
+                style={{color: 'white', fontSize: 12 }}
+                containerStyle={{
+                  backgroundColor: '#1fcbf6',
+                  borderRadius: 3,
+                  padding: 4,
+                  marginLeft: 4,
+                  marginRight: 2,
+                }}
+                onPress={this.onRefresh}
+              >
+                조회
               </Button>
+              <View style={styles.selectorLastColumn}>
+                <Button onPress={() => this.setState({showSelector: false })}>
+                  <Icon name='close' size={23} style={{ padding: 4 }}/>
+                </Button>
+              </View>
             </View>
-          </View>
-          <View style={[styles.headerRow, { marginTop: 0 }]}>
-            <View style={styles.selectorFirstColumn} />
-            <Button
-              style={styles.headerText}
-              containerStyle={[styles.button, { flex: 1 }]}
-              onPress={() => {
-                const at = moment().subtract(1, 'd');
-                this.setState({
-                  start: at.format('YYYY.MM.DD'),
-                  end: at.format('YYYY.MM.DD'),
-                });
-              }}
-            >
-              하루전
-            </Button>
-            <Button
-              style={styles.headerText}
-              containerStyle={[styles.button, { flex: 1 }]}
-              onPress={() => {
-                const at = moment();
-                this.setState({
-                  start: at.startOf('month').format('YYYY.MM.DD'),
-                  end: at.endOf('month').format('YYYY.MM.DD'),
-                });
-              }}
-            >
-              이번달
-            </Button>
-            <Button
-              style={styles.headerText}
-              containerStyle={[styles.button, { flex: 1 }]}
-              onPress={() => {
-                const at = moment().subtract(1, 'months');
-                this.setState({
-                  start: at.startOf('month').format('YYYY.MM.DD'),
-                  end: at.endOf('month').format('YYYY.MM.DD'),
-                });
-              }}
-            >
-              지난달
-            </Button>
-            <View style={styles.selectorLastColumn} />
+            <View style={[styles.headerRow, { marginTop: 0 }]}>
+              <View style={styles.selectorFirstColumn} />
+              <Button
+                style={styles.headerText}
+                containerStyle={[styles.button, { flex: 1 }]}
+                onPress={() => {
+                  const at = moment().subtract(1, 'd');
+                  this.setState({
+                    start: at.format('YYYY.MM.DD'),
+                    end: at.format('YYYY.MM.DD'),
+                  });
+                  this.onRefresh();
+                }}
+              >
+                하루전
+              </Button>
+              <Button
+                style={styles.headerText}
+                containerStyle={[styles.button, { flex: 1 }]}
+                onPress={() => {
+                  const at = moment();
+                  this.setState({
+                    start: at.startOf('month').format('YYYY.MM.DD'),
+                    end: at.endOf('month').format('YYYY.MM.DD'),
+                  });
+                  this.onRefresh();
+                }}
+              >
+                이번달
+              </Button>
+              <Button
+                style={styles.headerText}
+                containerStyle={[styles.button, { flex: 1 }]}
+                onPress={() => {
+                  const at = moment().subtract(1, 'months');
+                  this.setState({
+                    start: at.startOf('month').format('YYYY.MM.DD'),
+                    end: at.endOf('month').format('YYYY.MM.DD'),
+                  });
+                  this.onRefresh();
+                }}
+              >
+                지난달
+              </Button>
+              <View style={styles.selectorLastColumn} />
+            </View>
           </View>
         </View>
       );
     }
+  },
+  renderRange() {
+    const { start, end } = this.state;
     return (
       <View style={styles.headerContainer}>
         <View style={styles.headerRow}>
@@ -217,6 +225,7 @@ const Settled = React.createClass({
           onRefresh={this.onRefresh}
           enableEmptySections
         />
+        {this.renderSelector()}
       </View>
     );
   },
@@ -276,6 +285,14 @@ const styles = StyleSheet.create({
     padding: 4,
     height: null,
     marginHorizontal: 2,
+  },
+  selectorContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   selectorFirstColumn: {
     width: 70,
