@@ -9,6 +9,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import numeral from 'numeral';
 import DatePicker from 'react-native-datepicker';
+import * as Animatable from 'react-native-animatable';
 
 import Icon from '../components/Icon';
 import OrderCell from '../components/OrderCell';
@@ -48,12 +49,12 @@ const Settled = React.createClass({
       showSelector: false,
     };
   },
-  onRefresh() {
+  onRefresh(hideSelector) {
     const { loadBrandOrders, brandId } = this.props;
     loadBrandOrders(brandId, 'settled', {
       start: moment(this.state.start, 'YYYY.MM.DD').format('YYYY-MM-DD'),
       end: moment(this.state.end, 'YYYY.MM.DD').format('YYYY-MM-DD'),
-    }).then(() => this.setState({ showSelector: false }));
+    }).then(() => hideSelector && this.refs.selector.bounceOutUp());
   },
   renderRow({ orders, date }, sectionID, rowID, highlightRow) {
     const { brandId, push } = this.props;
@@ -100,90 +101,88 @@ const Settled = React.createClass({
     );
   },
   renderSelector() {
-    const { start, end, showSelector } = this.state;
-    if (showSelector) {
-      return (
-        <View style={styles.selectorContainer}>
-          <View style={styles.headerContainer}>
-            <View style={styles.headerRow}>
-              <Text style={[styles.selectorFirstColumn, { fontSize: 11, fontWeight: 'bold', fontColor: '#4C4C4C' }]}>
-                조회기간 설정
-              </Text>
-              {this.renderDatePicker({ date: start, onDateChange: (start) => {this.setState({ start })} })}
-              <Text style={[styles.headerText, { marginHorizontal: 4 }]}>-</Text>
-              {this.renderDatePicker({ date: end, onDateChange: (end) => {this.setState({ end })} })}
-              <Button
-                style={{color: 'white', fontSize: 12 }}
-                containerStyle={{
-                  backgroundColor: '#1fcbf6',
-                  borderRadius: 3,
-                  padding: 4,
-                  marginLeft: 4,
-                  marginRight: 2,
-                }}
-                onPress={this.onRefresh}
-              >
-                조회
+    const { start, end } = this.state;
+    return (
+      <Animatable.View style={styles.selectorContainer} animation='bounceInDown' ref='selector'>
+        <View style={styles.headerContainer}>
+          <View style={styles.headerRow}>
+            <Text style={[styles.selectorFirstColumn, { fontSize: 11, fontWeight: 'bold', fontColor: '#4C4C4C' }]}>
+              조회기간 설정
+            </Text>
+            {this.renderDatePicker({ date: start, onDateChange: (start) => {this.setState({ start })} })}
+            <Text style={[styles.headerText, { marginHorizontal: 4 }]}>-</Text>
+            {this.renderDatePicker({ date: end, onDateChange: (end) => {this.setState({ end })} })}
+            <Button
+              style={{color: 'white', fontSize: 12 }}
+              containerStyle={{
+                backgroundColor: '#1fcbf6',
+                borderRadius: 3,
+                padding: 4,
+                marginLeft: 4,
+                marginRight: 2,
+              }}
+              onPress={() => this.onRefresh(true)}
+            >
+              조회
+            </Button>
+            <View style={styles.selectorLastColumn}>
+              <Button onPress={() => this.refs.selector.bounceOutUp()}>
+                <Icon name='close' size={23} style={{ padding: 4 }}/>
               </Button>
-              <View style={styles.selectorLastColumn}>
-                <Button onPress={() => this.setState({showSelector: false })}>
-                  <Icon name='close' size={23} style={{ padding: 4 }}/>
-                </Button>
-              </View>
-            </View>
-            <View style={[styles.headerRow, { marginTop: 0 }]}>
-              <View style={styles.selectorFirstColumn} />
-              <Button
-                style={styles.headerText}
-                containerStyle={[styles.button, { flex: 1 }]}
-                onPress={() => {
-                  const at = moment().subtract(1, 'd');
-                  this.setState({
-                    start: at.format('YYYY.MM.DD'),
-                    end: at.format('YYYY.MM.DD'),
-                  });
-                  this.onRefresh();
-                }}
-              >
-                하루전
-              </Button>
-              <Button
-                style={styles.headerText}
-                containerStyle={[styles.button, { flex: 1 }]}
-                onPress={() => {
-                  const at = moment();
-                  this.setState({
-                    start: at.startOf('month').format('YYYY.MM.DD'),
-                    end: at.endOf('month').format('YYYY.MM.DD'),
-                  });
-                  this.onRefresh();
-                }}
-              >
-                이번달
-              </Button>
-              <Button
-                style={styles.headerText}
-                containerStyle={[styles.button, { flex: 1 }]}
-                onPress={() => {
-                  const at = moment().subtract(1, 'months');
-                  this.setState({
-                    start: at.startOf('month').format('YYYY.MM.DD'),
-                    end: at.endOf('month').format('YYYY.MM.DD'),
-                  });
-                  this.onRefresh();
-                }}
-              >
-                지난달
-              </Button>
-              <View style={styles.selectorLastColumn} />
             </View>
           </View>
+          <View style={[styles.headerRow, { marginTop: 0 }]}>
+            <View style={styles.selectorFirstColumn} />
+            <Button
+              style={styles.headerText}
+              containerStyle={[styles.button, { flex: 1 }]}
+              onPress={() => {
+                const at = moment().subtract(1, 'd');
+                this.setState({
+                  start: at.format('YYYY.MM.DD'),
+                  end: at.format('YYYY.MM.DD'),
+                });
+                this.onRefresh(true);
+              }}
+            >
+              하루전
+            </Button>
+            <Button
+              style={styles.headerText}
+              containerStyle={[styles.button, { flex: 1 }]}
+              onPress={() => {
+                const at = moment();
+                this.setState({
+                  start: at.startOf('month').format('YYYY.MM.DD'),
+                  end: at.endOf('month').format('YYYY.MM.DD'),
+                });
+                this.onRefresh(true);
+              }}
+            >
+              이번달
+            </Button>
+            <Button
+              style={styles.headerText}
+              containerStyle={[styles.button, { flex: 1 }]}
+              onPress={() => {
+                const at = moment().subtract(1, 'months');
+                this.setState({
+                  start: at.startOf('month').format('YYYY.MM.DD'),
+                  end: at.endOf('month').format('YYYY.MM.DD'),
+                });
+                this.onRefresh(true);
+              }}
+            >
+              지난달
+            </Button>
+            <View style={styles.selectorLastColumn} />
+          </View>
         </View>
-      );
-    }
+      </Animatable.View>
+    );
   },
   renderRange() {
-    const { start, end } = this.state;
+    const { start, end, showSelector } = this.state;
     return (
       <View style={styles.headerContainer}>
         <View style={styles.headerRow}>
@@ -195,7 +194,13 @@ const Settled = React.createClass({
               borderRadius: 12,
               padding: 6,
             }}
-            onPress={() => this.setState({ showSelector: true })}
+            onPress={() => {
+              if (showSelector) {
+                this.refs.selector.bounceInDown();
+              } else {
+                this.setState({ showSelector: true });
+              }
+            }}
           >
             조회기간변경
           </Button>
@@ -225,7 +230,7 @@ const Settled = React.createClass({
           onRefresh={this.onRefresh}
           enableEmptySections
         />
-        {this.renderSelector()}
+        {this.state.showSelector && this.renderSelector()}
       </View>
     );
   },
