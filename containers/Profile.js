@@ -2,24 +2,38 @@
 
 import React from 'react';
 import { AsyncStorage, StyleSheet, Text, View } from 'react-native';
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import OneSignal from 'react-native-onesignal';
 import Button from 'react-native-button';
 import { authActions, brandActions } from 'goommerce-redux';
-
 import _ from 'lodash';
 
+import Icon from '../components/Icon';
+
 const Profile = React.createClass({
+  statics: {
+    rightButton: ({ dispatch }) => {
+      const logout = bindActionCreators(authActions.logout, dispatch);
+      const signout = () => {
+        OneSignal.idsAvailable(({ pushToken, userId }) => {
+          logout(pushToken && userId).then(
+            () => AsyncStorage.removeItem('bearer')
+          );
+        });
+      };
+      return (
+        <Button onPress={signout}>
+          <View style={{ padding: 5 }}>
+            <Icon name='log-out' size={23} color='white' />
+          </View>
+        </Button>
+      );
+    },
+  },
   componentDidMount() {
     const { loadBrand, brandId } = this.props;
     loadBrand(brandId);
-  },
-  signout() {
-    OneSignal.idsAvailable(({ pushToken, playerId, userId }) => {
-      this.props.logout(pushToken && (playerId || userId)).then(
-        () => AsyncStorage.removeItem('bearer')
-      );
-    });
   },
   render() {
     const { brand } = this.props;
@@ -33,14 +47,6 @@ const Profile = React.createClass({
         <Text style={styles.footer}>친절하고 빠른 서비스 / 이용문의</Text>
         <Text style={styles.footer}>02-2272-1122</Text>
         <Text style={styles.footer}>카카오톡: @링크샵스 판매자 센터</Text>
-        <Button
-          style={{color: 'white'}}
-          styleDisabled={{color: 'red'}}
-          containerStyle={styles.signoutContainer}
-          onPress={this.signout}
-        >
-          Logout
-        </Button>
       </View>
     );
   }
@@ -80,5 +86,5 @@ export default connect(
   (state, ownProps) => {
     const { key } = brandActions.loadBrand(ownProps.brandId);
     return { brand: state.brand[key] };
-  }, _.assign({}, authActions, brandActions)
+  }, brandActions
 )(Profile);

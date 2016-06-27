@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Alert, ListView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { orderActions } from 'goommerce-redux';
 import Button from 'react-native-button';

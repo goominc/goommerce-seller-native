@@ -17,7 +17,7 @@ const AwaitingSettlement = React.createClass({
     leftButton() {
       return null;
     },
-    rightButton: (route, navigator) => {
+    rightButton: ({ navigator }) => {
       return (
         <Button onPress={() => navigator.pop()}>
           <View style={{ padding: 5 }}>
@@ -51,7 +51,7 @@ const AwaitingSettlement = React.createClass({
             orderId: order.id,
             showTabBar: false,
             sceneConfig: Navigator.SceneConfigs.VerticalDownSwipeJump,
-            rightButton(route, navigator, index, navState) {
+            rightButton({ navigator, index, navState }) {
               return (
                 <Button onPress={() => navigator.popToRoute(navState.routeStack[index - 2])}>
                   <View style={{ padding: 5 }}>

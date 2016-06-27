@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { ListView, StyleSheet, Text, View } from 'react-native';
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { productActions } from 'goommerce-redux';
 import moment from 'moment';

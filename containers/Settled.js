@@ -20,12 +20,12 @@ const TouchableElement = Platform.OS === 'android' ? TouchableNativeFeedback : T
 
 const Settled = React.createClass({
   statics: {
-    rightButton: ({ props }, navigator) => {
+    rightButton: ({ route, navigator }) => {
       return (
         <Button
           style={{ fontSize: 11, color: 'white', margin: 5, paddingVertical: 2 }}
           containerStyle={{ marginTop: Platform.OS === 'android' ? 5 : 3 }}
-          onPress={() => navigator.push(routes.awaiting(_.assign({}, props, {
+          onPress={() => navigator.push(routes.awaiting(_.assign({}, route.props, {
             showTabBar: false,
             sceneConfig: Navigator.SceneConfigs.VerticalDownSwipeJump,
           })))}

@@ -41,7 +41,7 @@ export default connect()(React.createClass({
         if (leftButton) {
           return (
             <View style={styles.navBarButton}>
-              {leftButton(navigator, route)}
+              {leftButton({ route, navigator, index, navState, dispatch })}
             </View>
           );
         }
@@ -64,7 +64,7 @@ export default connect()(React.createClass({
         if (rightButton) {
           return (
             <View style={styles.navBarButton}>
-              {rightButton(route, navigator, index, navState)}
+              {rightButton({ route, navigator, index, navState, dispatch })}
             </View>
           );
         }
