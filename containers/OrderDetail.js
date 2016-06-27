@@ -100,7 +100,7 @@ const OrderDetail = React.createClass({
       <View style={styles.footer}>
         <View style={styles.footerDescContainer}>
           <View style={{ flex: 1, flexDirection: 'column', marginHorizontal: 10 }}>
-            <Text style={{ fontSize: 11, color: '#4C4C4C' }}>총 주문수량</Text>
+            <Text style={{ fontSize: 11, color: '#4C4C4C' }}>총 출고수량</Text>
             <Text style={{ fontSize: 11, color: '#4C4C4C', fontWeight: 'bold' }}>{numeral(totalQuantity).format('0,0')}개</Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'column', marginHorizontal: 10 }}>
@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     backgroundColor: 'white',
+    marginHorizontal: 8,
   },
   footerDescContainer: {
     flexDirection: 'row',
