@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 90,
     marginHorizontal: 12,
+    marginVertical: 15,
   },
   descContainer: {
     flex: 1,
