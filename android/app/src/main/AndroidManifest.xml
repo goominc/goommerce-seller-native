@@ -35,6 +35,7 @@
               <category android:name="${applicationId}" />
           </intent-filter>
       </receiver>
+      <meta-data android:name="com.onesignal.BadgeCount" android:value="DISABLE" />
     </application>
 
 </manifest>
