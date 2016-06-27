@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { Alert, AsyncStorage, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, AsyncStorage, Image, StyleSheet, Text, TextInput, View } from 'react-native';
 import Button from 'react-native-button';
 import { connect } from 'react-redux'
 import { authActions, errorActions } from 'goommerce-redux';
@@ -29,7 +29,7 @@ const Signin = React.createClass({
     return (
       <View style={styles.container}>
         <View style={styles.desc}>
-          <Text style={{ fontSize: 30, fontWeight: '400' }}>Link<Text style={{ fontWeight: '900' }}>Shop</Text>s</Text>
+          <Image source={require('./images/logo.png')} style={{ height: 40, width: 160, resizeMode: 'contain' }}/>
           <Text style={{ fontSize: 12, color: '#b2b2b2' }}>링크샵스 판매자 전용App 입니다.</Text>
         </View>
         <TextInput
