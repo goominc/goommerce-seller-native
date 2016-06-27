@@ -39,14 +39,19 @@ const Profile = React.createClass({
     const { brand } = this.props;
     return (
       <View style={styles.container}>
-        <Text style={styles.name} numberOfLines={1}>{_.get(brand, 'name.ko')}</Text>
-        <Text style={styles.main}>{'http://www.linkshops.com/'}</Text>
-        <Text style={styles.main}>{_.toLower(_.get(brand, 'pathname'))}</Text>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#4C4C4C' }}>{_.get(brand, 'data.location.building.name.ko')}</Text>
-        <Text style={styles.main}>{_.get(brand, 'data.location.floor')} {_.get(brand, 'data.location.flatNumber')}</Text>
-        <Text style={styles.footer}>친절하고 빠른 서비스 / 이용문의</Text>
-        <Text style={styles.footer}>02-2272-1122</Text>
-        <Text style={styles.footer}>카카오톡: @링크샵스 판매자 센터</Text>
+        <View style={styles.section}>
+          <Text style={styles.name} numberOfLines={1}>{_.get(brand, 'name.ko')}</Text>
+          <Text style={styles.main}>{'http://www.linkshops.com/'}</Text>
+          <Text style={styles.main}>{_.toLower(_.get(brand, 'pathname'))}</Text>
+          <View style={{ height: 45 }} />
+          <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#4C4C4C' }}>{_.get(brand, 'data.location.building.name.ko')}</Text>
+          <Text style={styles.main}>{_.get(brand, 'data.location.floor')} {_.get(brand, 'data.location.flatNumber')}</Text>
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.footer}>친절하고 빠른 서비스 / 이용문의</Text>
+          <Text style={styles.footer}>02-2272-1122</Text>
+          <Text style={styles.footer}>카카오톡: @링크샵스 판매자 센터</Text>
+        </View>
       </View>
     );
   }
@@ -56,7 +61,12 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    marginTop: 90,
+    marginBottom: 40,
+  },
+  section: {
+    alignItems: 'center',
   },
   signoutContainer: {
     backgroundColor: '#1fcbf6',
