@@ -64,6 +64,14 @@ export default React.createClass({
           />
         </OpenUrlButton>
       );
+    } else {
+      return (
+        <OpenUrlButton url={`https://m.linkshops.com/products/${product.id}`}>
+          <View style={[styles.thumbnail, { alignItems: 'center', justifyContent: 'center' }]}>
+            <Text style={{ fontSize: 11, color: '#999999' }}>No Image</Text>
+          </View>
+        </OpenUrlButton>
+      );
     }
   },
   renderReasonModal() {
