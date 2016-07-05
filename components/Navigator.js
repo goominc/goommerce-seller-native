@@ -118,7 +118,8 @@ const styles = StyleSheet.create({
   },
   scene: {
     flex: 1,
-    paddingTop: Platform.OS === 'ios' ? 64 : 56, // NavigationBar
+    // paddingTop: Platform.OS === 'ios' ? 64 : 56, // NavigationBar
+    paddingTop: 64, // forced ios style.
     backgroundColor: 'white',
   },
   navBar: {
