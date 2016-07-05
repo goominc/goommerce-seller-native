@@ -88,7 +88,7 @@ export default React.createClass({
           <View style={styles.descContainer}>
             <Text style={styles.descText} numberOfLines={1}>{name()}</Text>
             {price()}
-            {status === 'awaiting' && <Text style={[styles.annotText, { color: '#999999' }]}>(매출수수료, VAT포함)</Text>}
+            {status === 'awaiting' && <Text style={[styles.annotText, { color: '#999999' }]}>(VAT불포함)</Text>}
           </View>
           <View style={styles.dateContainer}>
             {date()}

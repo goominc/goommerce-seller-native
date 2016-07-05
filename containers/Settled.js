@@ -207,7 +207,7 @@ const Settled = React.createClass({
         </View>
         <View style={{ height: 1, backgroundColor: '#E7E7E7' }}/>
         <View style={styles.headerRow}>
-          <Text style={styles.boldOrange}>정산금액(VAT포함)</Text>
+          <Text style={styles.boldOrange}>정산금액(VAT불포함)</Text>
           <Text style={styles.boldOrange}>{numeral(_.sumBy(this.props.orders, (o) => _.toInteger(o.settledKRW))).format('0,0')}원</Text>
         </View>
       </View>

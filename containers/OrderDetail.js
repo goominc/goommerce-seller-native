@@ -104,7 +104,7 @@ const OrderDetail = React.createClass({
             <Text style={{ fontSize: 11, color: '#4C4C4C', fontWeight: 'bold' }}>{numeral(totalQuantity).format('0,0')}개</Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'column', marginHorizontal: 10 }}>
-            <Text style={{ fontSize: 12, color: '#FF6C00', textAlign: 'right', fontWeight: 'bold' }}>입금예정금액(VAT포함)</Text>
+            <Text style={{ fontSize: 12, color: '#FF6C00', textAlign: 'right', fontWeight: 'bold' }}>입금예정금액(VAT불포함)</Text>
             <Text style={{ fontSize: 12, color: '#FF6C00', textAlign: 'right', fontWeight: 'bold' }}>{numeral(totalKRW).format('0,0')}원</Text>
           </View>
         </View>
