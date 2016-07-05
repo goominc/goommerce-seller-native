@@ -14,15 +14,19 @@ const Signin = React.createClass({
   },
   signin() {
     const { email, password } = this.state;
-    OneSignal.idsAvailable(({ pushToken, playerId, userId }) => {
-      this.props.login(email, password, pushToken && (playerId || userId)).then(
-        (auth) => auth && AsyncStorage.setItem('bearer', auth.bearer),
-        (err) => Alert.alert(
-          '에러',
-          '아이디 / 비밀번호가 일치하지 않습니다.',
-          [{ text: '확인', onPress: () => this.props.resetError() }],
-        ),
-      );
+    const { login, resetError } = this.props;
+    // Getting idsAvailable
+    OneSignal.configure({
+      onIdsAvailable({ userId, pushToken }) {
+        login(email, password, pushToken && userId).then(
+          (auth) => auth && AsyncStorage.setItem('bearer', auth.bearer),
+          (err) => Alert.alert(
+            '에러',
+            '아이디 / 비밀번호가 일치하지 않습니다.',
+            [{ text: '확인', onPress: () => resetError() }],
+          ),
+        );
+      },
     });
   },
   render() {

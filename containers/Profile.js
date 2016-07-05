@@ -15,13 +15,13 @@ const Profile = React.createClass({
   statics: {
     rightButton: ({ dispatch }) => {
       const logout = bindActionCreators(authActions.logout, dispatch);
-      const signout = () => {
-        OneSignal.idsAvailable(({ pushToken, userId }) => {
+      const signout = () => OneSignal.configure({
+        onIdsAvailable({ userId, pushToken }) {
           logout(pushToken && userId).then(
             () => AsyncStorage.removeItem('bearer')
           );
-        });
-      };
+        },
+      });
       return (
         <Button onPress={signout}>
           <View style={{ padding: 5 }}>
