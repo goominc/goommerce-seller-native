@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 4,
     paddingHorizontal: 20,
-    marginVertical: 8,
+    marginVertical: 10,
   },
   sectionText: {
     color: '#4c4c4c',
