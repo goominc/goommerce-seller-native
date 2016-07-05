@@ -47,6 +47,7 @@ const Settled = React.createClass({
       start: now.startOf('month').format('YYYY.MM.DD'),
       end: now.endOf('month').format('YYYY.MM.DD'),
       showSelector: false,
+      showMask: false,
     };
   },
   onRefresh(hideSelector) {
@@ -54,7 +55,12 @@ const Settled = React.createClass({
     loadBrandOrders(brandId, 'settled', {
       start: moment(this.state.start, 'YYYY.MM.DD').format('YYYY-MM-DD'),
       end: moment(this.state.end, 'YYYY.MM.DD').format('YYYY-MM-DD'),
-    }).then(() => hideSelector && this.refs.selector.bounceOutUp());
+    }).then(() => {
+      if (hideSelector) {
+        this.setState({ showMask: false });
+        this.refs.selector.bounceOutUp();
+      }
+    });
   },
   renderRow({ orders, date }, sectionID, rowID, highlightRow) {
     const { brandId, push } = this.props;
@@ -100,6 +106,9 @@ const Settled = React.createClass({
       />
     );
   },
+  renderMask() {
+    return <View style={styles.mask} />;
+  },
   renderSelector() {
     const { start, end } = this.state;
     return (
@@ -126,7 +135,10 @@ const Settled = React.createClass({
               조회
             </Button>
             <View style={styles.selectorLastColumn}>
-              <Button onPress={() => this.refs.selector.bounceOutUp()}>
+              <Button onPress={() => {
+                this.setState({ showMask: false });
+                this.refs.selector.bounceOutUp();
+              }}>
                 <Icon name='close' size={23} style={{ padding: 4 }}/>
               </Button>
             </View>
@@ -195,6 +207,7 @@ const Settled = React.createClass({
               padding: 6,
             }}
             onPress={() => {
+              this.setState({ showMask: true })
               if (showSelector) {
                 this.refs.selector.bounceInDown();
               } else {
@@ -230,6 +243,7 @@ const Settled = React.createClass({
           onRefresh={this.onRefresh}
           enableEmptySections
         />
+        {this.state.showMask && this.renderMask()}
         {this.state.showSelector && this.renderSelector()}
       </View>
     );
@@ -291,13 +305,19 @@ const styles = StyleSheet.create({
     height: null,
     marginHorizontal: 2,
   },
-  selectorContainer: {
+  mask: {
     position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+  selectorContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
   },
   selectorFirstColumn: {
     width: 70,

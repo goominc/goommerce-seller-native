@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
   footer: {
     backgroundColor: 'white',
     marginHorizontal: 8,
+    marginBottom: 8,
   },
   footerDescContainer: {
     flexDirection: 'row',
