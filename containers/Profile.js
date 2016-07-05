@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { AsyncStorage, StyleSheet, Text, View } from 'react-native';
+import { AsyncStorage, Platform, StyleSheet, Text, View } from 'react-native';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import OneSignal from 'react-native-onesignal';
@@ -23,10 +23,12 @@ const Profile = React.createClass({
         },
       });
       return (
-        <Button onPress={signout}>
-          <View style={{ padding: 5 }}>
-            <Icon name='log-out' size={23} color='white' />
-          </View>
+        <Button
+          style={{ fontSize: 11, color: 'white', margin: 5, paddingVertical: 2 }}
+          containerStyle={{ marginTop: Platform.OS === 'android' ? 5 : 3 }}
+          onPress={signout}
+        >
+          로그아웃
         </Button>
       );
     },
