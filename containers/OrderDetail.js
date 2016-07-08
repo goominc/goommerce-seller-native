@@ -93,9 +93,10 @@ const OrderDetail = React.createClass({
   renderFooter() {
     const { order, changeable } = this.props;
     const { orderProducts } = order;
-    const totalQuantity = _.sumBy(orderProducts, (o) => _.get(o, 'data.stock.quantity', o.quantity));
+    const quantity = (o) => _.get(o, 'finalQuantity', _.get(o, 'data.stock.quantity', o.quantity));
+    const totalQuantity = _.sumBy(orderProducts, quantity);
     const totalKRW = _.reduce(orderProducts,
-      (sum, o) => sum.add(Decimal(o.KRW || 0).mul(_.get(o, 'data.stock.quantity', o.quantity))), new Decimal(0)).toNumber();
+      (sum, o) => sum.add(Decimal(o.KRW || 0).mul(quantity(o))), new Decimal(0)).toNumber();
     return (
       <View style={styles.footer}>
         <View style={styles.footerDescContainer}>
